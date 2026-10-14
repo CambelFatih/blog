@@ -1,0 +1,10 @@
+@font-face {
+  font-family: 'H5PFontIcons';
+  src:  url('/wp-content/uploads/h5p/libraries/H5P.FontIcons-1.0/fonts/h5p.eot?105');
+  src:  url('/wp-content/uploads/h5p/libraries/H5P.FontIcons-1.0/fonts/h5p.eot?105#iefix') format('embedded-opentype'),
+    url('/wp-content/uploads/h5p/libraries/H5P.FontIcons-1.0/fonts/h5p.ttf?105') format('truetype'),
+    url('/wp-content/uploads/h5p/libraries/H5P.FontIcons-1.0/fonts/h5p.woff?105') format('woff'),
+    url('/wp-content/uploads/h5p/libraries/H5P.FontIcons-1.0/fonts/h5p.svg?105#H5PFontIcons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
