@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>E-book v1.0</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+	<script src="https://unpkg.com/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+	<script src="https://unpkg.com/tippy.js@6"></script>
+	<link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+	<div class=modbutton>
+		<button onclick="toggleMode()">
+			<img id="icon" src="../../dw/Ebook-img/brightness.png" alt="icon" width="30"
+				height="30">
+		</button>
+	</div>
+	<div id="page-container">
+		<div id="loading">
+			<img src="gif.gif" alt="Loading...">
+		  </div>
+		  
+	</div>
+	<div>
+  <button id="prev-btn"class="prev-button">&lt;</button>
+	<button id="next-btn"class="next-button">&gt;</button>
+
+	<input type="number" id="page-input">
+	</div>
+  <script src="./app.js"></script>
+</body>
+</html>

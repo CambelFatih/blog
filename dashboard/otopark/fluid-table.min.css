@@ -1,0 +1,154 @@
+/*! fluid-table.css v1.0.0 | MIT License | github.com/amalfra/fluid-table */
+.fluid-table {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    word-break: break-all;
+    border-spacing: 0
+}
+
+@media only screen and (max-width:940px) {
+    .fluid-table thead {
+        display: none
+    }
+
+    .fluid-table tr {
+        display: block
+    }
+
+    .fluid-table td {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        display: block;
+        clear: both;
+        width: 100% !important;
+        max-width: none !important;
+        white-space: normal !important;
+        text-align: right
+    }
+
+    .fluid-table td:before {
+        content: attr(data-label);
+        float: left;
+        font-weight: 700
+    }
+}
+
+@media only screen and (max-width: 324px) {
+    .fluid-table thead th {
+        display: none; /* Başlıkları gizle */
+    }
+
+    .fluid-table thead {
+        display: table-row; /* Tablo başlıklarını satır olarak görüntüle */
+    }
+
+    .fluid-table tr {
+        display: block;
+    }
+
+    .fluid-table td {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        display: block;
+        clear: both;
+        width: 100% !important;
+        max-width: none !important;
+        white-space: normal !important;
+        text-align: center;
+    }
+
+    .fluid-table td:before {
+        content: attr(data-label);
+        float: none; /* float özelliğini kaldır */
+        font-weight: 700;
+        display: block;
+        text-align: center;
+    }      
+    canvas {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 130px;
+      } 
+      table tr {
+        margin-bottom: 1.250rem;
+        padding-bottom: 1.250rem;
+        border-bottom: 1px solid #ddd !important;
+    }
+
+    table td {
+        border-top: 0 !important;
+        border-bottom: 1px solid #ddd !important;
+    }
+
+    table td:last-child,
+    table tr:last-child {
+        border-bottom: 0 !important;
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }    
+    #map {
+        height: 200px;
+      }
+}
+@media only screen and (min-width:320px) and (max-width:759px) {
+    .carbon-text {
+        font-size: 14px
+    }      
+    #map {
+        height: 250px;
+      }
+}
+
+@media only screen and (min-width:941px)  {
+    canvas {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 130px;
+      }    
+
+    .fluid-table td {
+
+        text-align: center;
+    }
+
+    .fluid-table td:before {
+        float: center;
+    }
+    #map {
+        height: 350px;
+      }
+}
+
+@media only screen and (max-width: 940px) and (min-width: 324px) { /* 768*/
+    table tr {
+        margin-bottom: 1.250rem;
+        padding-bottom: 1.250rem;
+        border-bottom: 1px solid #ddd !important;
+    }
+
+    table td {
+        border-top: 0 !important;
+        border-bottom: 1px solid #ddd !important;
+    }
+
+    table td:last-child,
+    table tr:last-child {
+        border-bottom: 0 !important;
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }    
+    canvas {
+        display: block;
+        margin-left: auto;
+        margin-right: 0;
+        max-width: 130px;
+      }    
+      #map {
+        height: 250px;
+      }
+}

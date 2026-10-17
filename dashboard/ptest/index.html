@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Basılı Tutup Çekme Olayı</title>
+  <style>
+    #myElement {
+      width: 760px;
+      height: 760px;
+      background-color: blue;
+    }
+    
+    #myLabel {
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+    
+    .right {
+      text-align: right;
+    }
+    
+    .left {
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <label id="myLabel">Orjinal İsim</label>
+  <div id="myElement"></div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+  <script>
+    var myElement = document.getElementById('myElement');
+    var hammer = new Hammer(myElement);
+    var label = document.getElementById('myLabel');
+    
+    hammer.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL });
+    
+    hammer.on("panstart", function() {
+      // Basılı tutma ve çekme başladığında çalışacak kod
+      console.log("Basılı tutma ve çekme başladı.");
+    });
+
+    hammer.on("panend", function(event) {
+      // Basılı tutma ve çekme sona erdiğinde çalışacak kod
+      console.log("Basılı tutma ve çekme bitti.");
+      
+      // Label'ın içeriğini belirle
+      if (event.direction === Hammer.DIRECTION_RIGHT) {
+        label.textContent = "Sağa Doğru";
+        label.classList.add('right');
+        label.classList.remove('left');
+      } else if (event.direction === Hammer.DIRECTION_LEFT) {
+        label.textContent = "Sola Doğru";
+        label.classList.add('left');
+        label.classList.remove('right');
+      }
+      
+      // Bir süre sonra label'ın içeriğini ve sınıflarını eski haline getir
+      setTimeout(function() {
+        label.classList.remove('right', 'left');
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

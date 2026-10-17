@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Otopark APP</title>
+  <link href="./fluid-table.min.css" media="all" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="search-container">
+      <input type="text" placeholder="Arama yap...">
+      <button type="submit">Ara</button>
+    </div>
+    
+    <table class="fluid-table">
+      <thead>
+        <tr>
+          <th>Park Adı</th>
+          <th>Kapasite</th>
+          <th>Boş Kapasite</th>
+          <th>Çalışma Saatleri</th>
+          <th>Otopark Türü</th>
+          <th>Ücretsiz Süre</th>
+          <th>İlçe</th>
+          <th>Açık mı?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="Park Adı">Acıbadem Açık Otoparkı</td>
+          <td data-label="Kapasite">100 Araç</td>
+          <td data-label="Boş Kapasite"> <canvas id="myChart"></canvas></td>
+          <td data-label="Çalışma Saatleri">06:30-16:30</td>
+          <td data-label="Otopark Türü">AÇIK OTOPARK</td>
+          <td data-label="Ücretsiz Süre">0DK</td>
+          <td data-label="İlçe">Üsküdar</td>
+          <td data-label="Açık mı?">Evet</td>
+        </tr>
+      </tbody>
+    </table>
+   <!----> <div id="map"></div>
+  </div>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LLWL5N9CSM"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="./script.js"></script>
+</body>
+
+</html>

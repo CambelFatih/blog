@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>E-book v1.0</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://unpkg.com/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+	<script src="https://unpkg.com/tippy.js@6"></script>
+	<link rel="stylesheet" href="./style.css">
+	<style>
+		#myElement {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 90%;
+			height: 90%;
+			z-index: 9999;
+			/* İsteğe bağlı: Diğer öğelerin üzerinde kalması gerekiyorsa z-index değerini ayarlayın */
+			background-color: transparent;
+			/* İsteğe bağlı: TouchSwipe'in çalışması için gereken stil ayarları */
+		}
+
+		#myElement>div {
+			width: 100%;
+			height: 100%;
+			/* İsteğe bağlı: TouchSwipe'in çalışması için gereken stil ayarları */
+		}
+	</style>
+</head>
+
+<body>
+	<div class=modbutton>
+		<button onclick="toggleMode()">
+			<img id="icon" src="../../dw/Ebook-img/brightness.png" alt="icon" width="30" height="30">
+		</button>
+	</div>
+	<div id="myElement">
+	<div id="page-container">
+		<div id="loading">
+			<img src="gif.gif" alt="Loading...">
+		</div>
+	</div>
+	<div>
+		<button id="prev-btn" class="prev-button">&lt;</button>
+		<button id="next-btn" class="next-button">&gt;</button>
+
+		<input type="number" id="page-input">
+	</div>
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js"></script>
+	<script src="./app.js"></script>
+</body>
+
+</html>

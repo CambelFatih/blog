@@ -1,0 +1,254 @@
+.ozel-stil {
+	height: 700px; /* yükseklik belirlendi */
+	display: flex; /* flexbox kullanıldı */
+	justify-content: center; /* yatayda ortalandı */
+	align-items: center; /* dikeyde ortalandı */
+  }
+
+  .tooltip {
+	position: relative;
+	font-size: inherit;
+	font-weight: bold;
+	padding: 0.5em;
+	cursor: help;
+	white-space: normal;
+	width: auto;
+	max-width: 100%;
+  }
+  
+  .tooltip:hover::before {
+	position: absolute;
+	content: '';
+	height: 0;
+	width: 0;
+	border-top: 0.5em  #9caad8;
+	border-left: 0.5em solid transparent;
+	border-right: 0.5em solid transparent;
+	margin: auto;
+	left: 0;
+	right: 0;
+	bottom: 1.1em;
+	z-index: -1;
+  }
+  
+  .tooltip:after {
+	content: attr(data-tooltip);
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	max-width: 20em;
+	background-color: #1c1c1c;
+	color: white;
+	padding: 1em;
+	font-size: 11.5px; /* adjust the font size */
+	line-height: 1.5;
+	text-align: center;
+	border-radius: 0.2em;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease, visibility 0.3s ease;
+	z-index: 999;
+	white-space: normal;
+	word-wrap: break-word;
+	width: 15em; /* adjust the width of the tooltip box */
+  }
+  
+  .tooltip:hover::after {
+	opacity: 1;
+	visibility: visible;
+  }
+
+/* Gündüz modu stilleri */
+.gunduz {
+  background-color: white;
+  color: black;
+}
+
+/* Gece modu stilleri */
+.gece {
+  background-color: #1c1c1c;
+  color: #f0f0f0;
+}
+
+/* Gündüz/Gece modu geçiş animasyonları */
+
+/* Mobil cihazlar için stiller */
+@media only screen and (max-width: 767px) {
+  body {
+	text-align: justify;
+	margin-left: 5%;
+	margin-right: 5%;
+	padding: 0 ;
+	font-size: 16px;
+	font-family: Arial, sans-serif;
+	transition: background-color 0.5s ease;
+	transition: color 0.5s ease;
+	overflow-x: hidden;
+	line-height: 1.4;
+  }
+
+  .prev-button{
+	background-color: #000000;
+	color: rgb(255, 255, 255);
+	padding: 1rem;
+	border: none;
+	cursor: pointer;
+	margin: 0.1rem;
+	position: fixed;
+	bottom: 0;
+	left: 18px;
+	transform: translateX(-50%);
+	margin-bottom: 1%;
+}
+
+.next-button {
+	background-color: #000000;
+	color: rgb(255, 255, 255);
+	padding: 1rem;
+	border: none;
+	cursor: pointer;
+	margin: 0.1rem;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	margin-bottom: 1%;
+}
+
+.prev-button:hover,
+.next-button:hover {
+	background-color: #3e8e87;
+}
+.modbutton{
+	position: fixed;
+	top: 0;
+	left: 1%;
+	margin-top: 1%;
+}
+.text-left{
+	font-size: 8;
+}
+.page h1 {
+	font-size: 3rem;
+	margin-top: 0rem;
+	text-align: center;
+}
+}
+
+@media only screen and (min-width: 768px) {
+  /* Buraya stil düzenlemelerini yaz masaüstü için */
+  body {
+	text-align: justify;
+    margin-left: 20%;
+	margin-right: 20%;
+	padding: 0 ;
+	font-size: 1.5rem;
+	font-family: Arial, sans-serif;
+	transition: background-color 0.5s ease;
+	transition: color 0.5s ease;
+	line-height: 1.4;
+  }
+  /*
+  .buttons {
+	position: fixed;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	margin-bottom: 1%;
+  }
+  .prev-button,
+.next-button {
+	background-color: #000000;
+	color: rgb(255, 255, 255);
+	padding: 1rem;
+	border: none;
+	cursor: pointer;
+	margin: 0.1rem;
+}*/
+.prev-button{
+	background-color: #000000;
+	color: rgb(255, 255, 255);
+	padding: 1rem;
+	border: none;
+	cursor: pointer;
+	margin: 0.1rem;
+	position: fixed;
+	bottom: 0;
+	left: 18px;
+	transform: translateX(-50%);
+	margin-bottom: 1%;
+}
+
+.next-button {
+	background-color: #000000;
+	color: rgb(255, 255, 255);
+	padding: 1rem;
+	border: none;
+	cursor: pointer;
+	margin: 0.1rem;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	margin-bottom: 1%;
+}
+
+.prev-button:hover,
+.next-button:hover {
+	background-color: #3e8e87;
+}
+.modbutton{
+	position: fixed;
+	top: 0;
+	left: 10%;
+	margin-top: 1%;
+	
+}
+.page h1 {
+	font-size: 3rem;
+	margin-top: 3rem;
+	text-align: center;
+}
+
+
+  
+}
+
+
+.book {
+	position: relative;
+	height: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+
+.page {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+
+.page.active {
+	display: block;
+}
+a[title] {
+	font-weight: bold; /* istediğiniz font ağırlığını seçin */
+  }
+  #page-input {
+	width: 80px;
+	height: 30px;
+	font-size: 16px;
+	text-align: center;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-shadow: 1px 1px 3px #ccc;
+	position: fixed;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+  }

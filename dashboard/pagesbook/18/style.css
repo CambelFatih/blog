@@ -1,0 +1,325 @@
+#loading {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255, 255, 255, 0.5);
+	z-index: 9999;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  }
+  
+  #loading img {
+	width: 50px;
+	height: 50px;
+  }
+  
+.ozel-stil {
+	height: 700px; /* yükseklik belirlendi */
+	display: flex; /* flexbox kullanıldı */
+	justify-content: center; /* yatayda ortalandı */
+	align-items: center; /* dikeyde ortalandı */
+  }
+.tooltip-trigger{
+	text-decoration: underline;
+}
+  .tooltip-audio-button{
+    border: none;
+    background-color: transparent;
+  }
+  .tooltip-audio-button img{
+    width: 20px;
+    height: 20px;
+  }
+  .tooltip-definition{
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+  }
+  .tooltip-header{
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+  }
+/* Gündüz modu stilleri */
+.gunduz {
+  background-color: white;
+  color: black;
+}
+
+/* Gece modu stilleri */
+.gece {
+  background-color: #1c1c1c;
+  color: #f0f0f0;
+}
+
+/* Gündüz/Gece modu geçiş animasyonları */
+
+/* Mobil cihazlar için stiller */
+@media only screen and (max-width: 767px) {
+  body {
+	text-align: justify;
+	margin-left: 11%;
+	margin-right: 11%;
+	font-size: 16px;
+	font-family: Arial, sans-serif;
+	transition: background-color 0.5s ease;
+	transition: color 0.5s ease;
+	overflow-x: hidden;
+	line-height: 1.5;
+  }
+
+  .prev-button{
+	width: 25;
+	height: 25;
+	background-color: #000000;
+	color: rgb(255, 255, 255);
+	padding: 1rem;
+	border: none;
+	cursor: pointer;
+	margin: 0.1rem;
+	position: fixed;
+	bottom: 0;
+	left: 0px;
+	margin-bottom: 50%;
+	opacity: 0.4;
+}
+
+.next-button {
+	width: 25;
+	height: 25;
+	background-color: #000000;
+	color: rgb(255, 255, 255);
+	padding: 1rem;
+	border: none;
+	cursor: pointer;
+	margin: 0.1rem;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	margin-bottom: 50%;
+	opacity: 0.4;
+}
+
+.prev-button:hover,
+.next-button:hover {
+	background-color: #3e8e87;
+}
+.modbutton{
+	position: fixed;
+	top: 0;
+	left: 1%;
+	margin-top: 1%;
+}
+.text-left{
+	font-size: 8;
+}
+.page h1 {
+	font-size: 3rem;
+	margin-top: 0rem;
+	text-align: center;
+}
+.page p{
+	margin-left: 10%;
+	margin-right: 10%;
+}
+  .pageimg{
+	width: 350px;
+	height: 350px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+	/* Küçük ekranlar için stil tanımlamaları */
+	.fangresim{
+		width:300px;
+		height:300px;
+	}
+  }
+  @media screen and (min-width: 321px) and (max-width: 767px) {
+	/* Orta boy ekranlar için stil tanımlamaları */
+	.fangresim{
+		width: 350px;
+		height:350px;
+	}
+  }
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+	/* Büyük ekranlar için stil tanımlamaları */
+	.fangresim{
+		width:400px;
+		height:400px;
+	}
+  }
+  @media screen and (min-width: 1024px) and (max-width: 1439px) {
+	/* Çok büyük ekranlar için stil tanımlamaları */
+	.fangresim{
+		width:450px;
+		height: 450px;
+	}
+  }
+  @media screen and (min-width: 1440px) and (max-width: 1919px) {
+	/* Daha büyük ekranlar için stil tanımlamaları */
+	.fangresim{
+		width:500px;
+		height:500px;
+	}
+  }
+  @media screen and (min-width: 1920px) {
+	/* En büyük ekranlar için stil tanımlamaları */
+	.fangresim{
+		width:800px;
+		height:800px;
+	}
+
+  }
+  .aciklama-buton {
+	margin-left: 0%; /* butonların sağa kaydırılması */
+	margin-bottom: 0%;
+  }
+@media only screen and (min-width: 768px) {
+  /* Buraya stil düzenlemelerini yaz masaüstü için */
+  body {
+	text-align: justify;
+	margin-left: 20%;
+	margin-right: 20%;
+	padding: 0 ;
+	font-size: 1.5rem;
+	font-family: Arial, sans-serif;
+	transition: background-color 0.5s ease;
+	transition: color 0.5s ease;
+	line-height: 1.4;
+  }
+  .page-container{
+	margin-left: 20%;
+	margin-right: 20%;
+  }
+.prev-button{
+	background-color: #000000;
+	color: rgb(255, 255, 255);
+	padding: 1rem;
+	border: none;
+	cursor: pointer;
+	margin: 0.1rem;
+	position: fixed;
+	bottom: 0;
+	left: 18px;
+	transform: translateX(-50%);
+	margin-bottom: 20%;
+}
+
+.next-button {
+	background-color: #000000;
+	color: rgb(255, 255, 255);
+	padding: 1rem;
+	border: none;
+	cursor: pointer;
+	margin: 0.1rem;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	margin-bottom: 20%;
+}
+
+.prev-button:hover,
+.next-button:hover {
+	background-color: #3e8e87;
+}
+.modbutton{
+	position: fixed;
+	top: 0;
+	left: 10%;
+	margin-top: 1%;
+	
+}
+.page h1 {
+	font-size: 3rem;
+	margin-top: 3rem;
+	text-align: center;
+}  
+  .pageimg {
+	width: 750px;
+	height: 750px;
+  }
+}
+
+
+.book {
+	position: relative;
+	height: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+
+.page {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+
+.page.active {
+	display: block;
+}
+a[title] {
+	font-weight: bold; /* istediğiniz font ağırlığını seçin */
+  }
+  #page-input {
+	width: 80px;
+	height: 30px;
+	font-size: 16px;
+	text-align: center;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-shadow: 1px 1px 3px #ccc;
+	position: fixed;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	opacity: 0.2;
+  }
+
+
+  .modbutton button {
+	background-color: transparent;
+	border: none;
+	padding: 0px;
+	font-size: 16px;
+	font-weight: bold;
+	border-radius: 0px;
+	background-size: cover;
+	background-position: center center;
+  }
+  .gece .modbutton {
+	background-color: transparent;
+  }
+  .aciklama-buton {
+	margin-bottom:3%;
+	width: 25px;
+    height: 25px;
+	background-image: url('https://www.kuyza.com/dw/Ebook-img/info.png');
+	background-size: cover;
+	background-position: center center;
+	border: none;
+	border-radius: 50%;
+	cursor: pointer;
+  }
+  .ytb{
+	max-width: 100%;
+	max-height: 100%;
+  }
+
+.test-btn{
+	float: right;
+	background-color: transparent;
+	border: none;
+	background-image: url('tests/test.png');
+	background-size: 35px  35px;
+	width: 35px;
+	height: 35px;
+	cursor: pointer;
+}
