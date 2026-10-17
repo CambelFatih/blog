@@ -1,0 +1,8 @@
+# START YOAST BLOCK
+# ---------------------------
+User-agent: *
+Disallow:
+
+Sitemap: https://cambelfatih.github.io/blog/sitemap_index.xml
+# ---------------------------
+# END YOAST BLOCK
