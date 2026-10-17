@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Digital and Analog Clock</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        body {
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .analog-clock {
+            position: relative;
+            width: 345px;
+            height: 345px;
+            margin-bottom: 20px;
+        }
+
+        .clock-face {
+            width: 100%;
+            height: 100%;
+        }
+
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            background: #17D4FE;
+        }
+
+        .hour {
+            width: 6px;
+            height: 80px;
+            transform: rotate(90deg);
+        }
+
+        .minute {
+            width: 4px;
+            height: 110px;
+            transform: rotate(180deg);
+        }
+
+        .second {
+            width: 2px;
+            height: 140px;
+            background: red;
+            transform: rotate(270deg);
+        }
+
+        .clock {
+            color: #ffffff;
+            text-align: center;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            font-size: 60px;
+            letter-spacing: 7px;
+        }
+
+        @media (max-width: 768px) {
+            .clock {
+                font-size: 40px;
+                letter-spacing: 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .clock {
+                font-size: 40px;
+                letter-spacing: 5px;
+            }
+        }
+
+        .hand.hour,
+        .hand.minute {
+            background: black;
+        }
+
+        .hand.second {
+            background: rgb(255, 0, 0);
+        }
+
+        .analog-clock img.clock-face {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .button {
+            padding: 8px 20px;
+            background-color: dodgerblue;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .button:hover {
+            background-color: #007bff;
+        }
+
+        #timeInput {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 70px;
+            margin-bottom: 10px;
+        }
+
+        #timeInput:focus {
+            outline: none;
+            border-color: dodgerblue;
+            box-shadow: 0 0 5px dodgerblue;
+        }
+
+        #countdownDisplay {
+            font-size: 40px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        #MyClockDisplay {
+            font-size: 60px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        #countdownInput {
+            margin-right: 10px;
+            width: 60px;
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #gerisayimupdate {
+            padding: 8px 20px;
+            background-color: dodgerblue;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #gerisayimupdate:hover {
+            background-color: #007bff;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        #toggleVisibilityButton {
+            opacity: 0.3;
+            background-color: dodgerblue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        #toggleVisibilityButton:hover {
+            opacity: 0.7;
+            background-color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div>
+            <input type="number" id="countdownInput" value="130" min="1">
+            <button id="updateCountdownButton" class="button">Değiştir</button>
+            <button id="toggleCountdownButton" class="button">Başlat</button>
+        </div>
+        <div>
+            <span id="countdownDisplay"></span>
+            <br>
+        </div>
+
+        <div class="analog-clock">
+            <img src="clock.png" class="clock-face" alt="Clock Face">
+            <div class="hand hour" id="hourHand"></div>
+            <div class="hand minute" id="minuteHand"></div>
+            <div class="hand second" id="secondHand"></div>
+        </div>
+        <div id="digitalClock" class="clock"></div>
+        <div class="buttons">
+            <button id="startClockButton" class="button">Başlat</button>
+            <button id="resetClockButton" class="button">Sıfırla</button>
+            <button id="toggleVisibilityButton" class="button">Gizle</button>
+        </div>
+        <br>
+
+        <label for="timeInput">Zamanı Girin (saat:dakika:saniye):</label>
+        <input type="text" id="timeInput" value="10:15:00">
+        <button id="updateTimeButton" class="button">Güncelle</button>
+        <span id="timeInputError" style="color: red; display: none;">Geçerli bir saat:dakika:saniye formatı girin (örn:
+            10:15:00).</span>
+    </div>
+
+    <div id="overlay"></div>
+
+    <script>
+        var countdownValue = 0;
+        var countdownInterval;
+        var countdownRunning = false;
+
+        var hour = parseInt(localStorage.getItem("hour")) || 10;
+        var minute = parseInt(localStorage.getItem("minute")) || 15;
+        var second = parseInt(localStorage.getItem("second")) || 0;
+        var isPaused = localStorage.getItem("isPaused") === "true" || true;
+
+        var updateTimeButton = document.getElementById("updateTimeButton");
+        var startClockButton = document.getElementById("startClockButton");
+        var resetClockButton = document.getElementById("resetClockButton");
+        var toggleVisibilityButton = document.getElementById("toggleVisibilityButton");
+        var countdownInput = document.getElementById("countdownInput");
+        var updateCountdownButton = document.getElementById("updateCountdownButton");
+        var toggleCountdownButton = document.getElementById("toggleCountdownButton");
+
+        // Initialize the page
+        function init() {
+            document.getElementById("timeInput").value = hour + ":" + minute + ":" + second;
+            countdownValue = parseInt(localStorage.getItem("countdownValue")) || 130 * 60;
+            updateCountdownDisplay();
+            updateTime();
+            toggleVisibility();
+        }
+
+        function updateTime() {
+            var inputTime = document.getElementById("timeInput").value;
+            var regex = /^([01]?[0-9]|2[0-3]):([0-5]?[0-9]):([0-5]?[0-9])$/;
+
+            if (!regex.test(inputTime)) {
+                document.getElementById("timeInputError").style.display = "inline";
+                return;
+            }
+
+            document.getElementById("timeInputError").style.display = "none";
+
+            var timeParts = inputTime.split(":");
+            hour = parseInt(timeParts[0]);
+            minute = parseInt(timeParts[1]);
+            second = parseInt(timeParts[2]);
+        }
+
+        function updateCountdown() {
+            var newCountdownValueInMinutes = parseInt(countdownInput.value);
+            if (isNaN(newCountdownValueInMinutes)) return;
+            countdownValue = newCountdownValueInMinutes * 60;
+            localStorage.setItem("countdownValue", countdownValue);
+            updateCountdownDisplay();
+        }
+
+        function toggleCountdown() {
+            if (countdownRunning) {
+                clearInterval(countdownInterval);
+                countdownRunning = false;
+                toggleCountdownButton.innerText = "Başlat";
+            } else {
+                countdownInterval = setInterval(decrementCountdown, 1000);
+                countdownRunning = true;
+                toggleCountdownButton.innerText = "Durdur";
+            }
+        }
+
+        function decrementCountdown() {
+            if (countdownValue > 0) {
+                countdownValue--;
+                updateCountdownDisplay();
+            } else {
+                clearInterval(countdownInterval);
+                countdownRunning = false;
+                toggleCountdownButton.innerText = "Başlat";
+            }
+        }
+
+        function updateCountdownDisplay() {
+            var minutes = Math.floor(countdownValue / 60);
+            var seconds = countdownValue % 60;
+            document.getElementById("countdownDisplay").innerText = minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0');
+            localStorage.setItem("countdownValue", countdownValue);
+        }
+
+        function showTime() {
+            var session = "";
+            if (hour == 0) {
+                hour = 12;
+            }
+            if (hour > 12) {
+                session = "";
+            } else {
+                session = "";
+            }
+            var hDisplay = (hour < 10) ? "0" + hour : hour;
+            var mDisplay = (minute < 10) ? "0" + minute : minute;
+            var sDisplay = (second < 10) ? "0" + second : second;
+            var time = hDisplay + ":" + mDisplay + ":" + sDisplay + " " + session;
+            document.getElementById("digitalClock").innerText = time;
+
+            var hourHand = document.getElementById('hourHand');
+            var minuteHand = document.getElementById('minuteHand');
+            var secondHand = document.getElementById('secondHand');
+
+            var hourRotation = (hour % 12) * 30 + minute * 0.5;
+            var minuteRotation = minute * 6;
+            var secondRotation = second * 6;
+
+            hourHand.style.transform = `rotate(${hourRotation}deg)`;
+            minuteHand.style.transform = `rotate(${minuteRotation}deg)`;
+            secondHand.style.transform = `rotate(${secondRotation}deg)`;
+
+            if (!isPaused) {
+                second++;
+                if (second == 60) {
+                    second = 0;
+                    minute++;
+                    if (minute == 60) {
+                        minute = 0;
+                        hour++;
+                        if (hour == 13) {
+                            hour = 1;
+                        }
+                    }
+                }
+            }
+
+            localStorage.setItem("hour", hour);
+            localStorage.setItem("minute", minute);
+            localStorage.setItem("second", second);
+        }
+
+        function startClock() {
+            if (isPaused == true) {
+                clearInterval(countdownInterval);
+                isPaused = false;
+                localStorage.setItem("isPaused", isPaused.toString());
+                startClockButton.innerText="Durdur";
+                showTime();
+                countdownInterval = setInterval(showTime, 1000);
+            }
+            else {
+                clearInterval(countdownInterval);
+                isPaused = true;
+                localStorage.setItem("isPaused", isPaused.toString());
+                startClockButton.innerText="Başlat";
+            }
+
+        }
+
+        function resetClock() {
+            clearInterval(countdownInterval);
+            hour = 10;
+            minute = 15;
+            second = 0;
+            isPaused = false;
+            localStorage.setItem("isPaused", isPaused.toString());
+            showTime();
+        }
+
+        function toggleVisibility() {
+            var elementsToToggle = ["timeInputLabel", "timeInput", "updateTimeButton", "timeInputError", "startClockButton", "resetClockButton", "countdownInput", "updateCountdownButton", "toggleCountdownButton"];
+
+            elementsToToggle.forEach(function (elementId) {
+                var element = document.getElementById(elementId);
+                if (element && element.style.visibility === "hidden") {
+                    element.style.visibility = "visible";
+                } else if (element) {
+                    element.style.visibility = "hidden";
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", init);
+        updateTimeButton.addEventListener("click", updateTime);
+        startClockButton.addEventListener("click", startClock);
+        resetClockButton.addEventListener("click", resetClock);
+        toggleVisibilityButton.addEventListener("click", toggleVisibility);
+        updateCountdownButton.addEventListener("click", updateCountdown);
+        toggleCountdownButton.addEventListener("click", toggleCountdown);
+    </script>
+</body>
+
+</html>

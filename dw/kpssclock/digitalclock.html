@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Digital and Analog Clock</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="digitalclock.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="analog-clock">
+      <img src="clock.png" class="clock-face" alt="Clock Face">
+      <div class="hand hour" id="hour"></div>
+      <div class="hand minute" id="minute"></div>
+      <div class="hand second" id="second"></div>
+    </div>
+    <div id="MyClockDisplay" class="clock"></div>
+    <div class="buttons">
+      <button onclick="startClock()">Başlat</button>
+      <button onclick="pauseClock()">Duraklat</button>
+      <button onclick="resetClock()">Yenile</button>
+    </div>
+  </div>
+
+  <script src="digitalclock.js"></script>
+  <script>
+    var h = localStorage.getItem("hour") || 10;
+    var m = localStorage.getItem("minute") || 15;
+    var s = localStorage.getItem("second") || 0;
+    var interval;
+    var isPaused = (localStorage.getItem("isPaused") === "true");
+
+    function showTime() {
+      var session = "";
+
+      if (h == 0) {
+        h = 12;
+      }
+      if (h > 12) {
+        session = "";
+      } else {
+        session = "";
+      }
+
+      var hDisplay = (h < 10) ? "0" + h : h;
+      var mDisplay = (m < 10) ? "0" + m : m;
+      var sDisplay = (s < 10) ? "0" + s : s;
+
+      var time = hDisplay + ":" + mDisplay + ":" + sDisplay + " " + session;
+      document.getElementById("MyClockDisplay").innerText = time;
+      document.getElementById("MyClockDisplay").textContent = time;
+
+      var hourHand = document.getElementById('hour');
+      var minuteHand = document.getElementById('minute');
+      var secondHand = document.getElementById('second');
+
+      var hourRotation = (h % 12) * 30 + m * 0.5;
+      var minuteRotation = m * 6;
+      var secondRotation = s * 6;
+
+      hourHand.style.transform = `rotate(${hourRotation}deg)`;
+      minuteHand.style.transform = `rotate(${minuteRotation}deg)`;
+      secondHand.style.transform = `rotate(${secondRotation}deg)`;
+
+      if (!isPaused) {
+        s++;
+        if (s == 60) {
+          s = 0;
+          m++;
+          if (m == 60) {
+            m = 0;
+            h++;
+            if (h == 13) {
+              h = 1;
+            }
+          }
+        }
+      }
+
+      localStorage.setItem("hour", h);
+      localStorage.setItem("minute", m);
+      localStorage.setItem("second", s);
+      localStorage.setItem("isPaused", isPaused);
+    }
+
+    function startClock() {
+      clearInterval(interval);
+      isPaused = false;
+      showTime();
+      interval = setInterval(showTime, 1000);
+    }
+
+    function pauseClock() {
+      clearInterval(interval);
+      isPaused = true;
+    }
+
+    function resetClock() {
+      clearInterval(interval);
+      h = 10;
+      m = 15;
+      s = 0;
+      isPaused = false;
+      showTime();
+    }
+
+    window.onload = function() {
+      if (!isPaused) {
+        startClock();
+      } else {
+        showTime();
+      }
+    };
+  </script>
+</body>
+</html>
