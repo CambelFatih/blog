@@ -4,7 +4,7 @@
   height: 100%;
 }
 .h5p-image > .h5p-placeholder {
-  background: url('/wp-content/uploads/h5p/libraries/H5P.Image-1.1/placeholder.svg');
+  background: url('https://cambelfatih.github.io/blog/wp-content/uploads/h5p/libraries/H5P.Image-1.1/placeholder.svg');
   background-size: cover;
 }
 .h5p-image .h5p-image-tooltip {

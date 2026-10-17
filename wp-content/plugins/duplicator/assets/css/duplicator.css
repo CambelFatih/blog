@@ -2001,7 +2001,7 @@ p + .dup-styles .stat {
 }
 .dup-styles .ui-widget-content {
   border: 1px solid #aaa;
-  background: #fff url(/wp-content/plugins/duplicator/assets/css/images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
+  background: #fff url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
   color: #222;
 }
 .dup-styles .ui-widget-content a {
@@ -2009,7 +2009,7 @@ p + .dup-styles .stat {
 }
 .dup-styles .ui-widget-header {
   border: 1px solid #aaa;
-  background: #ccc url(/wp-content/plugins/duplicator/assets/css/images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
+  background: #ccc url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
   color: #222;
   font-weight: bold;
 }
@@ -2018,7 +2018,7 @@ p + .dup-styles .stat {
 }
 .dup-styles .ui-state-default, .dup-styles .ui-widget-content .ui-state-default, .dup-styles .ui-widget-header .ui-state-default {
   border: 1px solid #d3d3d3;
-  background: #e6e6e6 url(/wp-content/plugins/duplicator/assets/css/images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x;
+  background: #e6e6e6 url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x;
   font-weight: normal;
   color: #555;
 }
@@ -2028,7 +2028,7 @@ p + .dup-styles .stat {
 }
 .dup-styles .ui-state-hover, .dup-styles .ui-widget-content .ui-state-hover, .dup-styles .ui-widget-header .ui-state-hover, .dup-styles .ui-state-focus, .dup-styles .ui-widget-content .ui-state-focus, .dup-styles .ui-widget-header .ui-state-focus {
   border: 1px solid #999;
-  background: #dadada url(/wp-content/plugins/duplicator/assets/css/images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;
+  background: #dadada url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;
   font-weight: normal;
   color: #212121;
 }
@@ -2038,7 +2038,7 @@ p + .dup-styles .stat {
 }
 .dup-styles .ui-state-active, .dup-styles .ui-widget-content .ui-state-active, .dup-styles .ui-widget-header .ui-state-active {
   border: 1px solid #aaa;
-  background: #fff url(/wp-content/plugins/duplicator/assets/css/images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
+  background: #fff url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
   font-weight: normal;
   color: #212121;
 }
@@ -2048,7 +2048,7 @@ p + .dup-styles .stat {
 }
 .dup-styles .ui-state-highlight, .dup-styles .ui-widget-content .ui-state-highlight, .dup-styles .ui-widget-header .ui-state-highlight {
   border: 1px solid #fcefa1;
-  background: #fbf9ee url(/wp-content/plugins/duplicator/assets/css/images/ui-bg_glass_55_fbf9ee_1x400.png) 50% 50% repeat-x;
+  background: #fbf9ee url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-bg_glass_55_fbf9ee_1x400.png) 50% 50% repeat-x;
   color: #363636;
 }
 .dup-styles .ui-state-highlight a, .dup-styles .ui-widget-content .ui-state-highlight a, .dup-styles .ui-widget-header .ui-state-highlight a {
@@ -2056,7 +2056,7 @@ p + .dup-styles .stat {
 }
 .dup-styles .ui-state-error, .dup-styles .ui-widget-content .ui-state-error, .dup-styles .ui-widget-header .ui-state-error {
   border: 1px solid #cd0a0a;
-  background: #fef1ec url(/wp-content/plugins/duplicator/assets/css/images/ui-bg_glass_95_fef1ec_1x400.png) 50% 50% repeat-x;
+  background: #fef1ec url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-bg_glass_95_fef1ec_1x400.png) 50% 50% repeat-x;
   color: #cd0a0a;
 }
 .dup-styles .ui-state-error a, .dup-styles .ui-widget-content .ui-state-error a, .dup-styles .ui-widget-header .ui-state-error a {
@@ -2086,25 +2086,25 @@ p + .dup-styles .stat {
   height: 16px;
 }
 .dup-styles .ui-icon, .dup-styles .ui-widget-content .ui-icon {
-  background-image: url(/wp-content/plugins/duplicator/assets/css/images/ui-icons_222222_256x240.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-icons_222222_256x240.png);
 }
 .dup-styles .ui-widget-header .ui-icon {
-  background-image: url(/wp-content/plugins/duplicator/assets/css/images/ui-icons_222222_256x240.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-icons_222222_256x240.png);
 }
 .dup-styles .ui-state-default .ui-icon {
-  background-image: url(/wp-content/plugins/duplicator/assets/css/images/ui-icons_888888_256x240.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-icons_888888_256x240.png);
 }
 .dup-styles .ui-state-hover .ui-icon, .dup-styles .ui-state-focus .ui-icon {
-  background-image: url(/wp-content/plugins/duplicator/assets/css/images/ui-icons_454545_256x240.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-icons_454545_256x240.png);
 }
 .dup-styles .ui-state-active .ui-icon {
-  background-image: url(/wp-content/plugins/duplicator/assets/css/images/ui-icons_454545_256x240.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-icons_454545_256x240.png);
 }
 .dup-styles .ui-state-highlight .ui-icon {
-  background-image: url(/wp-content/plugins/duplicator/assets/css/images/ui-icons_2e83ff_256x240.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-icons_2e83ff_256x240.png);
 }
 .dup-styles .ui-state-error .ui-icon, .dup-styles .ui-state-error-text .ui-icon {
-  background-image: url(/wp-content/plugins/duplicator/assets/css/images/ui-icons_cd0a0a_256x240.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-icons_cd0a0a_256x240.png);
 }
 .dup-styles .ui-icon-blank {
   background-position: 16px 16px;
@@ -2644,14 +2644,14 @@ p + .dup-styles .stat {
   border-bottom-right-radius: 4px;
 }
 .dup-styles .ui-widget-overlay {
-  background: #aaa url(/wp-content/plugins/duplicator/assets/css/images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
+  background: #aaa url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
   opacity: 0.3;
   filter: Alpha(Opacity=30);
 }
 .dup-styles .ui-widget-shadow {
   margin: -8px 0 0 -8px;
   padding: 8px;
-  background: #aaa url(/wp-content/plugins/duplicator/assets/css/images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
+  background: #aaa url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
   opacity: 0.3;
   filter: Alpha(Opacity=30);
   border-radius: 8px;
@@ -6100,7 +6100,7 @@ p + .dup-styles .stat {
 }
 .dup-styles .jstree-snap .jstree-node,
 .dup-styles .jstree-snap .jstree-icon {
-  background-image: url(/wp-content/plugins/duplicator/assets/css/images/32px.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/32px.png);
 }
 .dup-styles .jstree-snap .jstree-last {
   background: transparent;
@@ -6198,13 +6198,13 @@ p + .dup-styles .stat {
   background-position: 0 0;
 }
 .dup-styles .jstree-snap > .jstree-container-ul .jstree-loading > .jstree-ocl {
-  background: url(/wp-content/plugins/duplicator/assets/css/images/throbber.gif) center center no-repeat;
+  background: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/throbber.gif) center center no-repeat;
 }
 .dup-styles .jstree-snap .jstree-file {
-  background: url(/wp-content/plugins/duplicator/assets/css/images/32px.png) -100px -68px no-repeat;
+  background: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/32px.png) -100px -68px no-repeat;
 }
 .dup-styles .jstree-snap .jstree-folder {
-  background: url(/wp-content/plugins/duplicator/assets/css/images/32px.png) -260px -4px no-repeat;
+  background: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/32px.png) -260px -4px no-repeat;
 }
 .dup-styles .jstree-snap > .jstree-container-ul > .jstree-node {
   margin-left: 0;
@@ -6248,7 +6248,7 @@ p + .dup-styles .stat {
 }
 .dup-styles .jstree-snap-small .jstree-node,
 .dup-styles .jstree-snap-small .jstree-icon {
-  background-image: url(/wp-content/plugins/duplicator/assets/css/images/32px.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/32px.png);
 }
 .dup-styles .jstree-snap-small .jstree-last {
   background: transparent;
@@ -6346,13 +6346,13 @@ p + .dup-styles .stat {
   background-position: 0 0;
 }
 .dup-styles .jstree-snap-small > .jstree-container-ul .jstree-loading > .jstree-ocl {
-  background: url(/wp-content/plugins/duplicator/assets/css/images/throbber.gif) center center no-repeat;
+  background: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/throbber.gif) center center no-repeat;
 }
 .dup-styles .jstree-snap-small .jstree-file {
-  background: url(/wp-content/plugins/duplicator/assets/css/images/32px.png) -103px -71px no-repeat;
+  background: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/32px.png) -103px -71px no-repeat;
 }
 .dup-styles .jstree-snap-small .jstree-folder {
-  background: url(/wp-content/plugins/duplicator/assets/css/images/32px.png) -263px -7px no-repeat;
+  background: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/32px.png) -263px -7px no-repeat;
 }
 .dup-styles .jstree-snap-small > .jstree-container-ul > .jstree-node {
   margin-left: 0;
@@ -6396,7 +6396,7 @@ p + .dup-styles .stat {
 }
 .dup-styles .jstree-snap-large .jstree-node,
 .dup-styles .jstree-snap-large .jstree-icon {
-  background-image: url(/wp-content/plugins/duplicator/assets/css/images/32px.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/32px.png);
 }
 .dup-styles .jstree-snap-large .jstree-last {
   background: transparent;
@@ -6494,13 +6494,13 @@ p + .dup-styles .stat {
   background-position: 0 0;
 }
 .dup-styles .jstree-snap-large > .jstree-container-ul .jstree-loading > .jstree-ocl {
-  background: url(/wp-content/plugins/duplicator/assets/css/images/throbber.gif) center center no-repeat;
+  background: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/throbber.gif) center center no-repeat;
 }
 .dup-styles .jstree-snap-large .jstree-file {
-  background: url(/wp-content/plugins/duplicator/assets/css/images/32px.png) -96px -64px no-repeat;
+  background: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/32px.png) -96px -64px no-repeat;
 }
 .dup-styles .jstree-snap-large .jstree-folder {
-  background: url(/wp-content/plugins/duplicator/assets/css/images/32px.png) -256px 0px no-repeat;
+  background: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/32px.png) -256px 0px no-repeat;
 }
 .dup-styles .jstree-snap-large > .jstree-container-ul > .jstree-node {
   margin-left: 0;
@@ -6520,7 +6520,7 @@ p + .dup-styles .stat {
 }
 .dup-styles #jstree-dnd.jstree-snap .jstree-ok,
 .dup-styles #jstree-dnd.jstree-snap .jstree-er {
-  background-image: url(/wp-content/plugins/duplicator/assets/css/images/32px.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/32px.png);
   background-repeat: no-repeat;
   background-color: transparent;
 }
@@ -6542,7 +6542,7 @@ p + .dup-styles .stat {
 }
 .dup-styles #jstree-dnd.jstree-snap-small .jstree-ok,
 .dup-styles #jstree-dnd.jstree-snap-small .jstree-er {
-  background-image: url(/wp-content/plugins/duplicator/assets/css/images/32px.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/32px.png);
   background-repeat: no-repeat;
   background-color: transparent;
 }
@@ -6564,7 +6564,7 @@ p + .dup-styles .stat {
 }
 .dup-styles #jstree-dnd.jstree-snap-large .jstree-ok,
 .dup-styles #jstree-dnd.jstree-snap-large .jstree-er {
-  background-image: url(/wp-content/plugins/duplicator/assets/css/images/32px.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/32px.png);
   background-repeat: no-repeat;
   background-color: transparent;
 }
@@ -6593,12 +6593,12 @@ p + .dup-styles .stat {
     height: 40px;
   }
   .dup-styles #jstree-dnd.jstree-dnd-responsive > .jstree-ok {
-    background-image: url(/wp-content/plugins/duplicator/assets/css/images/40px.png);
+    background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/40px.png);
     background-position: 0 -200px;
     background-size: 120px 240px;
   }
   .dup-styles #jstree-dnd.jstree-dnd-responsive > .jstree-er {
-    background-image: url(/wp-content/plugins/duplicator/assets/css/images/40px.png);
+    background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/40px.png);
     background-position: -40px -200px;
     background-size: 120px 240px;
   }
@@ -6609,7 +6609,7 @@ p + .dup-styles .stat {
     margin-top: -10px;
   }
   .dup-styles .jstree-snap-responsive .jstree-icon {
-    background-image: url(/wp-content/plugins/duplicator/assets/css/images/40px.png);
+    background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/40px.png);
   }
   .dup-styles .jstree-snap-responsive .jstree-node,
   .dup-styles .jstree-snap-responsive .jstree-leaf > .jstree-ocl {
@@ -6712,7 +6712,7 @@ p + .dup-styles .stat {
   .dup-styles .jstree-snap-responsive .jstree-node > .jstree-ocl,
   .dup-styles .jstree-snap-responsive .jstree-themeicon,
   .dup-styles .jstree-snap-responsive .jstree-checkbox {
-    background-image: url(/wp-content/plugins/duplicator/assets/css/images/40px.png);
+    background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/40px.png);
     background-size: 120px 240px;
   }
   .dup-styles .jstree-snap-responsive .jstree-last {
@@ -6730,11 +6730,11 @@ p + .dup-styles .stat {
     background-position: 0 0;
   }
   .dup-styles .jstree-snap-responsive .jstree-file {
-    background: url(/wp-content/plugins/duplicator/assets/css/images/40px.png) 0 -160px no-repeat;
+    background: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/40px.png) 0 -160px no-repeat;
     background-size: 120px 240px;
   }
   .dup-styles .jstree-snap-responsive .jstree-folder {
-    background: url(/wp-content/plugins/duplicator/assets/css/images/40px.png) -40px -40px no-repeat;
+    background: url(https://cambelfatih.github.io/blog/wp-content/plugins/duplicator/assets/css/images/40px.png) -40px -40px no-repeat;
     background-size: 120px 240px;
   }
 }

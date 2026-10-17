@@ -172,11 +172,11 @@
 }
 .rsmt-bulk .warning,
 .rsmt-alert .warning{
-  background-image: url(/wp-content/plugins/resmushit-image-optimizer/images/warning.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/resmushit-image-optimizer/images/warning.png);
 }
 .rsmt-bulk .ok,
 .rsmt-alert .ok{
-  background-image: url(/wp-content/plugins/resmushit-image-optimizer/images/ok.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/resmushit-image-optimizer/images/ok.png);
 }
 .rsmt-bulk .bulk--back-progressionbar{
   background: #F1F1F1;
@@ -236,12 +236,12 @@
   }
 
 .rsmt-bigfiles .info{
-  background-image: url(/wp-content/plugins/resmushit-image-optimizer/images/info.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/resmushit-image-optimizer/images/info.png);
 
 }
 .rsmt-bigfiles h4{
   cursor: pointer;
-  background-image: url(/wp-content/plugins/resmushit-image-optimizer/images/toggle.png);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/plugins/resmushit-image-optimizer/images/toggle.png);
   background-repeat: no-repeat;
   padding-left: 20px;
   background-position: 0 1px;

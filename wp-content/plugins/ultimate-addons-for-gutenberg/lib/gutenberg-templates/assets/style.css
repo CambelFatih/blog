@@ -1,11 +1,11 @@
 @font-face {
 	font-family: ast-block-templates;
-	src: url("/wp-content/plugins/ultimate-addons-for-gutenberg/lib/gutenberg-templates/assets/fonts/ast-block-templates.eot?p3u0q1");
+	src: url("https://cambelfatih.github.io/blog/wp-content/plugins/ultimate-addons-for-gutenberg/lib/gutenberg-templates/assets/fonts/ast-block-templates.eot?p3u0q1");
 	src:
-		url("/wp-content/plugins/ultimate-addons-for-gutenberg/lib/gutenberg-templates/assets/fonts/ast-block-templates.eot?p3u0q1#iefix") format( "embedded-opentype" ),
-		url("/wp-content/plugins/ultimate-addons-for-gutenberg/lib/gutenberg-templates/assets/fonts/ast-block-templates.ttf?p3u0q1") format( "truetype" ),
-		url("/wp-content/plugins/ultimate-addons-for-gutenberg/lib/gutenberg-templates/assets/fonts/ast-block-templates.woff?p3u0q1") format( "woff" ),
-		url("/wp-content/plugins/ultimate-addons-for-gutenberg/lib/gutenberg-templates/assets/fonts/ast-block-templates.svg?p3u0q1#ast-block-templates") format( "svg" );
+		url("https://cambelfatih.github.io/blog/wp-content/plugins/ultimate-addons-for-gutenberg/lib/gutenberg-templates/assets/fonts/ast-block-templates.eot?p3u0q1#iefix") format( "embedded-opentype" ),
+		url("https://cambelfatih.github.io/blog/wp-content/plugins/ultimate-addons-for-gutenberg/lib/gutenberg-templates/assets/fonts/ast-block-templates.ttf?p3u0q1") format( "truetype" ),
+		url("https://cambelfatih.github.io/blog/wp-content/plugins/ultimate-addons-for-gutenberg/lib/gutenberg-templates/assets/fonts/ast-block-templates.woff?p3u0q1") format( "woff" ),
+		url("https://cambelfatih.github.io/blog/wp-content/plugins/ultimate-addons-for-gutenberg/lib/gutenberg-templates/assets/fonts/ast-block-templates.svg?p3u0q1#ast-block-templates") format( "svg" );
 	font-weight: 400;
 	font-style: normal;
 	font-display: block;

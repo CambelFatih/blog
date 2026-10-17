@@ -124,7 +124,7 @@ code.kb-btn {
   height: 16px;
   margin-right: 3px;
   background-size: contain;
-  background-image: url("/wp-content/plugins/wp-githuber-md/assets/css/copy.svg");
+  background-image: url("https://cambelfatih.github.io/blog/wp-content/plugins/wp-githuber-md/assets/css/copy.svg");
   background-repeat: no-repeat;
   position: relative;
   top: 3px;

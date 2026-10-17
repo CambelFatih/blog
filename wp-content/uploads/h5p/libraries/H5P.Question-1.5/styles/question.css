@@ -341,10 +341,10 @@
   transition: opacity 150ms linear, transform 150ms linear;
 }
 .h5p-question-plus-one {
-  background-image: url(/wp-content/uploads/h5p/libraries/H5P.Question-1.5/images/plus-one.svg);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/uploads/h5p/libraries/H5P.Question-1.5/images/plus-one.svg);
 }
 .h5p-question-minus-one {
-  background-image: url(/wp-content/uploads/h5p/libraries/H5P.Question-1.5/images/minus-one.svg);
+  background-image: url(https://cambelfatih.github.io/blog/wp-content/uploads/h5p/libraries/H5P.Question-1.5/images/minus-one.svg);
 }
 .h5p-question-hidden-one {
   opacity: 0;

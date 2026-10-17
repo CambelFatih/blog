@@ -36,22 +36,22 @@
   background-repeat: no-repeat;
 }
 .cropper-rotate-left {
-  background-image: url("/wp-content/plugins/h5p/h5p-editor-php-library/images/cropper/rotate-left.svg");
+  background-image: url("https://cambelfatih.github.io/blog/wp-content/plugins/h5p/h5p-editor-php-library/images/cropper/rotate-left.svg");
 }
 .cropper-rotate-right {
-  background-image: url("/wp-content/plugins/h5p/h5p-editor-php-library/images/cropper/rotate-right.svg");
+  background-image: url("https://cambelfatih.github.io/blog/wp-content/plugins/h5p/h5p-editor-php-library/images/cropper/rotate-right.svg");
 }
 .cropper-crop {
-  background-image: url("/wp-content/plugins/h5p/h5p-editor-php-library/images/cropper/crop.svg");
+  background-image: url("https://cambelfatih.github.io/blog/wp-content/plugins/h5p/h5p-editor-php-library/images/cropper/crop.svg");
 }
 .cropper-confirm {
-  background-image: url("/wp-content/plugins/h5p/h5p-editor-php-library/images/cropper/confirm.svg");
+  background-image: url("https://cambelfatih.github.io/blog/wp-content/plugins/h5p/h5p-editor-php-library/images/cropper/confirm.svg");
 }
 .cropper-confirm-text {
   color: #a0e9a3;
 }
 .cropper-cancel {
-  background-image: url("/wp-content/plugins/h5p/h5p-editor-php-library/images/cropper/cancel.svg");
+  background-image: url("https://cambelfatih.github.io/blog/wp-content/plugins/h5p/h5p-editor-php-library/images/cropper/cancel.svg");
 }
 .cropper-cancel-text {
   color: #fcaaaa;
