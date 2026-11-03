@@ -1,13 +1,14 @@
 ---
 layout: "post"
-title: "Hangfire, Onion Architecture, Adapter Design Pattern, Design Pattern - Factory Pattern"
+title: "Onion Architecture, Adapter ve Factory Pattern, Hangfire"
 date: "2023-06-17 19:34:02 +0000"
 last_modified_at: "2023-06-17 20:02:18 +0000"
-categories: ["softw", "tech"]
+categories: ["softw", "net"]
+tags: ["Onion Architecture", "Design Patterns", "Factory Pattern", "Adapter Pattern", "Hangfire"]
+description: "Soğan mimarisinin (Onion Architecture) katmanları, Adapter ve Factory tasarım desenleri ve arka plan işleri için Hangfire: örneklerle kısa rehber."
 image: "/wp-content/uploads/2023/06/1_0Pg6_UsaKiiEqUV3kf2HXg.png"
 ---
-<h1>Soğan Mimarisi (Onion Architecture)</h1>
-<p>yazılım uygulamalarının katmanlı bir şekilde tasarlanmasını sağlayan bir mimari yaklaşımdır. Temel amacı, uygulamanın iş mantığını ve işlemlerini bağımsız ve yeniden kullanılabilir hale getirmektir.</p>
+<h2>Soğan Mimarisi (Onion Architecture)</h2><p>yazılım uygulamalarının katmanlı bir şekilde tasarlanmasını sağlayan bir mimari yaklaşımdır. Temel amacı, uygulamanın iş mantığını ve işlemlerini bağımsız ve yeniden kullanılabilir hale getirmektir.</p>
 <p>Soğan Mimarisi, bir soğanın katmanlarına benzer şekilde, iç içe geçmiş katmanlarla tanımlanır. Her katmanın belirli bir sorumluluğu vardır ve dış katmanlar, iç katmanları bilmekte ve bağımlı olmaktadır. Bu tasarım prensibi, yüksek bağımsızlık, kolay test edilebilirlik ve değişikliklere daha dirençli bir yapı sağlamayı amaçlar.</p>
 <p>Soğan Mimarisi genellikle aşağıdaki katmanları içerir:</p>
 <ol>
@@ -27,8 +28,7 @@ image: "/wp-content/uploads/2023/06/1_0Pg6_UsaKiiEqUV3kf2HXg.png"
 <p>Soğan Mimarisi, dıştan içe doğru bir bağımlılık düzeni oluşturarak, bağımlılıkların yönünü kontrol eder. Bu sayede iç katmanlar, dış katmanlardan bağımsızdır ve dış katmanlardaki değişiklikler iç katmanları etkilemez. Bu yapı, kodun daha kolay test edilmesini, bakımının yapılmasını ve yeniden kullanılmasını sağlar.</p>
 <p>Soğan Mimarisi, temiz bir kod yazma prensibi olan SOLID prensiplerine uygunluğuyla da dikkat çeker. Kodun düzenli, okunabilir ve sürdürülebilir olmasını sağlayarak uzun vadeli proje başarılarına katkıda bulunur.</p>
 <p>Bu şekilde Soğan Mimarisi, yazılım uygulamalarını modüler, esnek ve sürdürülebilir hale getiren bir yaklaşımdır. Uygulamanın iş mantığını, bağımsızlık ve test edilebilirlik ilkelerine dayanarak tasarlamayı hedefler.</p>
-<h1>Adapter Design Pattern</h1>
-<p>Adapter (Adaptör) Tasarım Deseni, farklı arayüze sahip olan sınıfların birbirleriyle uyumlu çalışmasını sağlamak için kullanılan bir tasarım desenidir. Bu desen, uyumsuz arayüzleri olan sınıfları bir araya getirerek işbirliği yapmalarını sağlayan bir adaptör sınıfı kullanır.</p>
+<h2>Adapter Design Pattern</h2><p>Adapter (Adaptör) Tasarım Deseni, farklı arayüze sahip olan sınıfların birbirleriyle uyumlu çalışmasını sağlamak için kullanılan bir tasarım desenidir. Bu desen, uyumsuz arayüzleri olan sınıfları bir araya getirerek işbirliği yapmalarını sağlayan bir adaptör sınıfı kullanır.</p>
 <p>Adapter Tasarım Deseni'nin temel amacı, bir sınıfın arabirimini başka bir sınıfın beklediği arabirime dönüştürmektir. Bu sayede, uyumlu olmayan sınıfların birlikte çalışabilmesi sağlanır. Adaptör, bir sınıfın işlevselliğini değiştirmeden, onu beklenen arayüze uyacak şekilde sarar.</p>
 <p>Adapter Tasarım Deseni genellikle aşağıdaki bileşenleri içerir:</p>
 <ol>
@@ -50,8 +50,7 @@ image: "/wp-content/uploads/2023/06/1_0Pg6_UsaKiiEqUV3kf2HXg.png"
 <li>Kod tekrarını önler ve daha esnek bir yapı oluşturur.</li>
 </ul>
 <p>Adapter Tasarım Deseni, mevcut bir kod tabanında veya farklı bileşenlerin bir araya  gelmesi gereken senaryolarda kullanılır. Örneğin, bir uygulama farklı bir dış API ile iletişim kurarken veya mevcut bir sınıf başka bir çerçeve veya kütüphane ile entegre olurken Adapter Tasarım Deseni kullanılabilir.</p>
-<h1>Factory Tasarım Deseni (Factory design pattern)</h1>
-<p>nesne oluşturma işlemlerini soyutlamak ve bu işlemleri alt sınıflara bırakmak için kullanılan bir tasarım desenidir. Bu desen, bir süper sınıfın alt sınıflarının nasıl oluşturulacağını belirleyen bir fabrika işlevi (factory method) kullanır.</p>
+<h2>Factory Tasarım Deseni (Factory design pattern)</h2><p>nesne oluşturma işlemlerini soyutlamak ve bu işlemleri alt sınıflara bırakmak için kullanılan bir tasarım desenidir. Bu desen, bir süper sınıfın alt sınıflarının nasıl oluşturulacağını belirleyen bir fabrika işlevi (factory method) kullanır.</p>
 <p>Factory Tasarım Deseni'nin temel amacı, nesne oluşturma sürecini bir istemciden soyutlayarak esneklik ve genişletilebilirlik sağlamaktır. Bu sayede, istemcilerin doğrudan nesneleri oluşturmasını engelleyerek, nesnelerin oluşturma sürecindeki karmaşıklığı gizleyebilir ve istemciyi sadece oluşturulan nesneye odaklanmasını sağlayabiliriz.</p>
 <p>Factory Tasarım Deseni genellikle aşağıdaki bileşenleri içerir:</p>
 <ol>
@@ -73,8 +72,7 @@ image: "/wp-content/uploads/2023/06/1_0Pg6_UsaKiiEqUV3kf2HXg.png"
 <li>İstemci, oluşturulan nesnelerin gerçek sınıflarını bilmek zorunda değildir, sadece üst sınıfın arayüzüne odaklanır.</li>
 </ul>
 <p>Factory Tasarım Deseni, karmaşık nesne oluşturma süreçlerinin yönetimi için idealdir. Örneğin, veritabanı bağlantı nesneleri, dosya işleme nesneleri veya ağ bağlantısı nesneleri gibi durumlarda kullanılabilir. Nesne oluşturma sürecinin soyutlanması, uygulamanın genel mimarisini geliştirmeye ve bakımını kolaylaştırmaya yardımcı olur.</p>
-<h1>Hangfire</h1>
-<p>.NET tabanlı bir açık kaynaklı iş sırası (job queue) yöneticisi ve arka plan görevleri yönetimi çözümüdür. Hangfire, uzun süren veya zamanlanmış görevleri arka planda çalıştırmanızı sağlar ve bu görevleri güvenilir bir şekilde planlamanıza, takip etmenize ve yönetmenize yardımcı olur.</p>
+<h2>Hangfire</h2><p>.NET tabanlı bir açık kaynaklı iş sırası (job queue) yöneticisi ve arka plan görevleri yönetimi çözümüdür. Hangfire, uzun süren veya zamanlanmış görevleri arka planda çalıştırmanızı sağlar ve bu görevleri güvenilir bir şekilde planlamanıza, takip etmenize ve yönetmenize yardımcı olur.</p>
 <p>Hangfire'in temel özellikleri şunlardır:</p>
 <ol>
 <li>

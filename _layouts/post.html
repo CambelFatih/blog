@@ -49,9 +49,11 @@ layout: default
   </footer>
 
   {%- assign cat = page.categories | first -%}
+  {%- assign catname = site.data.categories[cat].name | default: cat -%}
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Ana Sayfa","item":"{{ '/' | absolute_url }}"},{"@type":"ListItem","position":2,"name":{{ catname | jsonify }},"item":"{{ '/category/' | append: cat | append: '/' | absolute_url }}"},{"@type":"ListItem","position":3,"name":{{ page.title | jsonify }}}]}</script>
   {%- if cat %}
   <section class="related container">
-    <h2 class="section-title">{{ site.data.categories[cat].name | default: cat }} kategorisinden</h2>
+    <h2 class="section-title">{{ catname }} kategorisinden</h2>
     <div class="grid">
       {%- assign n = 0 -%}
       {%- for post in site.categories[cat] -%}

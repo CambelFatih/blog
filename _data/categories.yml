@@ -2,52 +2,52 @@
 # Adding a category = add an entry here AND a stub file category/<slug>/index.html (see CLAUDE.md).
 softw:
   name: "Yazılım"
-  description: "Yazılım geliştirme, mimari, tasarım desenleri ve araçlar."
+  description: "Yazılım geliştirme, Clean Architecture, tasarım desenleri, test, CI/CD ve front-end üzerine Türkçe rehberler ve notlar."
 net:
   name: ".NET"
-  description: "C#, .NET ve Entity Framework üzerine notlar."
+  description: "C#, .NET, EF Core, LINQ ve Windows Forms üzerine örnek kodlu Türkçe rehberler: koleksiyonlar, sayfalama, unit test ve daha fazlası."
 tech:
   name: "Teknoloji"
-  description: "Teknoloji dünyasından konular ve incelemeler."
+  description: "Yazılım mimarileri, web teknolojileri, Raspberry Pi, 3D tasarım ve bilgisayar bilimi üzerine teknoloji yazıları."
 eng:
   name: "İngilizce"
-  description: "İngilizce gramer, kelime, telaffuz ve alıştırmalar."
+  description: "İngilizce gramer, zamanlar, kalıp cümleler, telaffuz ve kelime öğrenme rehberleri; etkileşimli kartlar ve alıştırmalarla İngilizce çalış."
 german:
   name: "Almanca"
-  description: "Almanca öğrenme notları ve alıştırmalar."
+  description: "Almanca günlük ifadeler, mevsimler ve hava durumu kelimeleri: İngilizce karşılıklarıyla etkileşimli Almanca çalışma kartları."
 finance:
   name: "Finans"
-  description: "Yatırım, piyasalar ve finansal okuryazarlık."
+  description: "Yatırım stratejileri, portföy yönetimi, piyasa sinyalleri, CANSLIM, altın ve borsa üzerine finansal okuryazarlık yazıları."
 entrepreneurship:
   name: "Girişimcilik"
-  description: "Girişimcilik, ürün ve iş dünyası üzerine düşünceler."
+  description: "Girişimcilik ilkeleri, ürün geliştirme, vizyon ve ölçüm üzerine düşünceler: fikirden ürüne giden yolda notlar."
 self-improvement:
   name: "Kişisel Gelişim"
-  description: "Öğrenme, alışkanlıklar ve kişisel gelişim."
+  description: "Öğrenme yöntemleri, kitap önerileri, yatırım psikolojisi, alışkanlıklar ve sınav hazırlığı üzerine kişisel gelişim yazıları."
 popular-science:
   name: "Popüler Bilim"
-  description: "Fizik, kuantum, evren ve bilimin merak uyandıran yanları."
+  description: "Kuantum fiziği, Standart Model, evreni açıklayan teoriler ve bilimin merak uyandıran sorularına sade Türkçe anlatımlar."
 philosophy:
   name: "Felsefe"
-  description: "Felsefi sorular ve düşünce tarihi."
+  description: "Epistemoloji, varlık ve zaman, algının sınırları gibi felsefi sorular üzerine düşündüren denemeler."
 history:
   name: "Tarih"
-  description: "Tarih, medeniyetler ve kayıp uygarlıklar."
+  description: "Sümerler, Atatürk, kayıp uygarlıklar ve epik savaşlar: tarih, medeniyetler ve tarihi belgeseller üzerine yazılar."
 films:
   name: "Filmler"
-  description: "Film önerileri ve incelemeleri."
+  description: "Into the Wild, Hachi ve epik tarihi savaş filmleri gibi izlenmeye değer filmler üzerine öneriler ve incelemeler."
 music:
   name: "Müzik"
-  description: "Müzik, nota ve vokal teknikleri."
+  description: "Gitar notaları, nota süreleri ve vokal teknikleri: müzik öğrenenler için anlaşılır anlatımlar."
 art:
   name: "Sanat"
-  description: "Sanat ve hikâyeler."
+  description: "Sanat, eleştiri ve hayata dair ders veren kısa hikâyeler."
 math:
   name: "Matematik"
-  description: "Matematik ve matematikçiler."
+  description: "Lineer cebir, regresyon ve matematikçilerin hayatları üzerine yazılar."
 bio:
   name: "Biyoloji"
-  description: "Canlılar dünyası ve biyoloji."
+  description: "Hayvanların olağanüstü anatomisi, fosiller ve canlılar dünyası üzerine yazılar."
 biography:
   name: "Biyografi"
-  description: "İlham veren hayat hikâyeleri."
+  description: "Gilbert Strang ve Atatürk gibi ilham veren isimlerin hayat hikâyeleri."

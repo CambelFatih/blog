@@ -315,3 +315,8 @@ h1, h2, h3, h4 { line-height: 1.25; letter-spacing: -.015em; margin: 0 0 .5em; }
 @media (max-width: 760px) { .footer-inner { grid-template-columns: 1fr 1fr; } .footer-about { grid-column: 1 / -1; } }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* Card list under H5P flashcards (indexable text version of the cards) */
+.prose details.card-list { margin: 1.5em 0; border: 1px solid var(--border); border-radius: 12px; padding: 4px 16px; background: var(--card); }
+.prose details.card-list summary { cursor: pointer; font-weight: 600; padding: 10px 0; }
+.prose details.card-list[open] summary { margin-bottom: 8px; }

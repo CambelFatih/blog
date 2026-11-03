@@ -59,6 +59,18 @@ Bu site **Claude tarafından yönetilir**. Kullanıcı bir konu ve/veya ham meti
 - YouTube: `<iframe src="https://www.youtube.com/embed/ID" allowfullscreen></iframe>` (CSS otomatik 16:9 yapar).
 - Geniş tablolar otomatik yatay kaydırılır; ek bir şey gerekmez.
 
+### SEO kuralları (her yeni yazıda uygula)
+
+- **`title` ≤ 60 karakter**, benzersiz; aranacak anahtar kelime başa yakın ("X Nedir? …", "X ile Y Nasıl Yapılır?"). Sitede aynı başlık olmasın.
+- **`description` 140–160 karakter**, düz Türkçe cümle; içeriği gerçekten özetlesin, anahtar kelimeyi içersin. Anahtar kelime listesi ya da gövdeden kopya ilk cümle olmasın.
+- **İlk kategori = ana konu.** C#/.NET'e özgü yazılarda `net`, genel yazılımda `softw` önce gelsin.
+- Tamamen İngilizce yazılarda front matter'a `lang: "en_US"` ekle; başlık ve açıklama da İngilizce olsun. Türkçe öğrenenlere yönelik İngilizce–Türkçe içerik Türkçe sayılır.
+- Gövdede h1 yok, bölümler `##`. Her görselde anlamlı alt metin olsun.
+- 1–2 ilgili eski yazıya **iç bağlantı** ver (konu kümesi oluşturur). Arşiv veya arama ile ilgili yazıyı bul.
+- Sohbet kalıntısı bırakma: "Tabii!", "Elbette!", "Harika soru", "senin için hazırladım", `utm_source=chatgpt.com`.
+- Neredeyse boş sayfa (yalnızca video/quiz) yayınlama; en az birkaç cümlelik açıklayıcı giriş yaz.
+- Şablon tarafı hazır, ek bir şey gerekmez: `jekyll-seo-tag` (canonical, Open Graph, BlogPosting JSON-LD), yazılarda BreadcrumbList, `sitemap.xml`, `feed.xml`, arama ve 404 sayfaları `noindex`. Görseli olmayan sayfalar `assets/og-default.jpg` kullanır.
+
 ## Kategoriler
 
 Mevcut slug'lar `_data/categories.yml` içinde: `softw, net, tech, eng, german, finance, entrepreneurship, self-improvement, popular-science, philosophy, history, films, music, art, math, bio, biography`. Önce bunlardan seç.
