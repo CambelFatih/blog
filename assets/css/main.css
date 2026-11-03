@@ -81,8 +81,10 @@ h1, h2, h3, h4 { line-height: 1.25; letter-spacing: -.015em; margin: 0 0 .5em; }
   :root:not([data-theme="light"]) .i-moon { display: none; }
 }
 @media (max-width: 760px) {
-  .header-inner { flex-wrap: wrap; height: auto; padding-top: 10px; gap: 8px 16px; }
-  .header-actions { margin-left: auto; }
+  .header-inner { flex-wrap: wrap; height: auto; padding-top: 10px; gap: 6px 10px; }
+  .brand { flex: 1; min-width: 0; font-size: 1rem; gap: 8px; }
+  .brand-name { overflow: hidden; text-overflow: ellipsis; }
+  .header-actions { margin-left: auto; flex: none; }
   .site-nav { order: 3; width: 100%; margin: 0 -12px; padding-bottom: 8px; }
 }
 
