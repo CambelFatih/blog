@@ -20,6 +20,7 @@ Bu site **Claude tarafından yönetilir**. Kullanıcı bir konu ve/veya ham meti
 | `wp-content/` | **Dokunma.** Eski yazıların görselleri + H5P quiz çalışma zamanı |
 | `dashboard/`, `dw/` | **Dokunma.** Bağımsız uygulamalar (saat, EnglishStory, CV…); Jekyll olduğu gibi kopyalar |
 | `tools/cover.js` | Kapak görseli üreteci |
+| `google40725d501500b265.html` | **Silme.** Google Search Console doğrulama dosyası; silinirse site doğrulaması düşer |
 
 ## Yeni yazı ekleme (ana iş akışı)
 
