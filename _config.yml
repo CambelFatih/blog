@@ -70,6 +70,4 @@ nav:
   - { title: Ana Sayfa, url: / }
   - { title: Kategoriler, url: /category/ }
   - { title: Arşiv, url: /archive/ }
-  - { title: İngilizce, url: /category/eng/ }
-  - { title: Saat, url: /dw/time/clock.html }
   - { title: Hakkımda, url: /about/ }
