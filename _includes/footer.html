@@ -1,7 +1,7 @@
 <footer class="site-footer">
   <div class="container footer-inner">
     <div class="footer-about">
-      <a class="brand" href="{{ '/' | relative_url }}"><span class="brand-mark" aria-hidden="true">K</span><span class="brand-name">{{ site.title }}</span></a>
+      <a class="brand" href="{{ '/' | relative_url }}"><img class="brand-mark" src="{{ '/assets/favicon.svg' | relative_url }}" alt="" width="32" height="32"><span class="brand-name">{{ site.title }}</span></a>
       <p>{{ site.description }}</p>
       <p class="muted"><em>“{{ site.motto }}”</em></p>
     </div>
@@ -14,9 +14,10 @@
     </div>
     <div class="footer-links">
       <h2>Site</h2>
-      <a href="{{ '/about/' | relative_url }}">Hakkında</a>
+      <a href="{{ '/about/' | relative_url }}">Hakkımda</a>
       <a href="{{ '/privacy/' | relative_url }}">Gizlilik</a>
       <a href="{{ '/dw/time/clock.html' | relative_url }}">Saat</a>
+      <a href="https://github.com/CambelFatih" rel="me noopener">GitHub</a>
     </div>
   </div>
   <div class="container footer-bottom">© {{ site.time | date: '%Y' }} {{ site.title }}</div>
