@@ -1,0 +1,53 @@
+# slug (used in posts' `categories:` and in /category/<slug>/ URL) -> display name + description.
+# Adding a category = add an entry here AND a stub file category/<slug>/index.html (see CLAUDE.md).
+softw:
+  name: "Yazılım"
+  description: "Yazılım geliştirme, mimari, tasarım desenleri ve araçlar."
+net:
+  name: ".NET"
+  description: "C#, .NET ve Entity Framework üzerine notlar."
+tech:
+  name: "Teknoloji"
+  description: "Teknoloji dünyasından konular ve incelemeler."
+eng:
+  name: "İngilizce"
+  description: "İngilizce gramer, kelime, telaffuz ve alıştırmalar."
+german:
+  name: "Almanca"
+  description: "Almanca öğrenme notları ve alıştırmalar."
+finance:
+  name: "Finans"
+  description: "Yatırım, piyasalar ve finansal okuryazarlık."
+entrepreneurship:
+  name: "Girişimcilik"
+  description: "Girişimcilik, ürün ve iş dünyası üzerine düşünceler."
+self-improvement:
+  name: "Kişisel Gelişim"
+  description: "Öğrenme, alışkanlıklar ve kişisel gelişim."
+popular-science:
+  name: "Popüler Bilim"
+  description: "Fizik, kuantum, evren ve bilimin merak uyandıran yanları."
+philosophy:
+  name: "Felsefe"
+  description: "Felsefi sorular ve düşünce tarihi."
+history:
+  name: "Tarih"
+  description: "Tarih, medeniyetler ve kayıp uygarlıklar."
+films:
+  name: "Filmler"
+  description: "Film önerileri ve incelemeleri."
+music:
+  name: "Müzik"
+  description: "Müzik, nota ve vokal teknikleri."
+art:
+  name: "Sanat"
+  description: "Sanat ve hikâyeler."
+math:
+  name: "Matematik"
+  description: "Matematik ve matematikçiler."
+bio:
+  name: "Biyoloji"
+  description: "Canlılar dünyası ve biyoloji."
+biography:
+  name: "Biyografi"
+  description: "İlham veren hayat hikâyeleri."

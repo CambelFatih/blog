@@ -1,0 +1,108 @@
+---
+layout: "post"
+title: "Singleton Design Pattern"
+date: "2023-08-27 14:54:42 +0000"
+last_modified_at: "2023-09-05 11:36:06 +0000"
+categories: ["net", "softw", "tech"]
+description: "Singleton Design Pattern, bir sınıfın tek bir örneğini oluşturur ve global erişim sağlar. Test edilebilirlik konusunda zorluklar olabilir."
+image: "/wp-content/uploads/2023/08/singleton.png"
+thumbnail: "/wp-content/uploads/2023/08/singleton-768x480.png"
+---
+<h1>Singleton Design Pattern: Kullanım Alanları, Avantajlar ve Dezavantajlar</h1>
+<p>
+Singleton Design Pattern, yazılım geliştirmede karşılaşılan çeşitli sorunları çözmek için kullanılan bir kalıptır. Ancak her şeyin iki yüzü olduğu gibi, Singleton'ın da olumlu ve olumsuz yanları bulunmaktadır. Bu kılavuzda, Singleton'ın ne zaman ve nasıl kullanılması gerektiğine, avantajlarına, dezavantajlarına ve bu tasarım kalıbının nasıl test edileceğine dair derinlemesine bir inceleme yapacağız.
+</p>
+<p><!-- İçindekiler Menüsü --></p>
+<div id="table-of-contents">
+<h2>İçindekiler</h2>
+<ol>
+<li><a href="#neden-singleton">Neden Singleton Design Pattern Kullanılır?</a></li>
+<li><a href="#kullan%C4%B1m-senaryolar%C4%B1">Singleton Design Pattern Kullanım Senaryoları</a>
+<ul>
+<li><a href="#global-durum-y%C3%B6netimi">Singleton ile Global Durum Yönetimi</a></li>
+<li><a href="#tek-bir-ba%C4%9Flant%C4%B1-noktas%C4%B1">Tek Bir Bağlantı Noktası</a></li>
+<li><a href="#servislerin-y%C3%B6netimi">Servislerin Yönetimi</a></li>
+<li><a href="#dependency-injection">Dependency Injection</a></li>
+<li><a href="#thread-pool-y%C3%B6netimi">Thread Pool Yönetimi</a></li>
+</ul>
+</li>
+<li><a href="#avantajlar">Avantajlar</a></li>
+<li><a href="#dezavantajlar">Dezavantajlar</a></li>
+<li><a href="#sin%C4%B1rl%C4%B1l%C4%B1klar">Singleton Design Pattern Sınırlılıkları</a></li>
+<li><a href="#test-edilebilirlik-sorunlar%C4%B1">Test Edilebilirlik Sorunları</a></li>
+</ol><ul>
+<li><a href="#global-gurum">Global Durum sorunu</a></li>
+<li><a href="#mocking-zorluklar%C4%B1">Mocking Zorlukları sorunu</a></li>
+<li><a href="#paralel-testler">Paralel Testler sorunu</a></li>
+<li><a href="#kod-karma%C5%9F%C4%B1kl%C4%B1%C4%9F%C4%B1">Kod Karmaşıklığı sorunu</a></li>
+</ul>
+<li><a href="#nas%C4%B1l-kodlar%C4%B1z">Peki Nasıl kodlarız?</a></li>
+
+</div>
+<h2 id="neden-singleton">Neden Singleton Design Pattern Kullanılır?</h2>
+<ul>
+<li>Bir iş Konseptinde, bazı verilerin sistemde sadece tek bir instance'da saklanması gerekebilmektedir.</li>
+<li>Bu verilerin tutulacağı modellerin Singleton Pattern'ına göre tasarlanması daha uygundur.</li>
+<li>Kimi sınıflar vardır ki, yaptığı işi uygulama seviyesinde sade ve sadece tek bir instance ile giderebilmektedirler. Haliyle bu sınıfların işlevselliklerine ihtiyaç duyduğumuzda yeni bir nesne üretmek yerine üretilmiş önceki nesneyi kullanmak maliyet açısından oldukça performanslı olacaktır.</li>
+<li>
+<p>Temel olarak, bir sınıfın yalnızca bir örneğinin(instance) oluşturulmasını ve bu tek örneğin(instance) global olarak erişilebilir olmasını sağlar. Bu işlevi sayesinde, Singleton çeşitli kullanım senaryolarında oldukça işlevsel olabilir.</p>
+<h2 id="kullanım-senaryoları">Singleton Design Pattern Kullanım Senaryoları</h2>
+<ul>
+<li>
+<h3 id="global-durum-yönetimi">Singleton ile Global Durum Yönetimi</h3>
+<p> Singleton, bir uygulama boyunca farklı bileşenler veya modüller arasında paylaşılan global durumu yönetmek için etkili bir araçtır. Örneğin, bir yapılandırma dosyası, uygulamanın farklı bölümleri tarafından okunabilir ve bu verilere erişim için Singleton sınıfı kullanılabilir.</p></li>
+<li>
+<h3 id="tek-bir-bağlantı-noktası">Tek Bir Bağlantı Noktası</h3>
+<p>Veritabanı bağlantıları, ağ soketleri veya diğer dış servislerle yapılan bağlantılar, kaynak yoğun işlemler olabilir. Bu tür bağlantılar için Singleton tasarım deseni, tüm uygulama boyunca yalnızca bir bağlantı noktası oluşturmayı ve böylece kaynakların etkin kullanılmasını sağlar.</p></li>
+<li>
+<h3 id="servislerin-yönetimi">Servislerin Yönetimi</h3>
+<p>Servisler sıklıkla Singleton tasarım deseni ile tasarlanır. Özellikle, servislerin uygulama boyunca bir kez başlatılıp tekrar tekrar kullanılması gerektiğinde, Singleton bu durumu çok daha yönetilebilir hale getirir.</p></li>
+<li>
+<h3 id="dependency-injection">Dependency Injection</h3>
+<p>Bazı modern yazılım geliştirme çerçeveleri, Singleton desenini Dependency Injection ile birleştirerek, servislerin veya diğer kaynakların uygulama boyunca yalnızca bir kez oluşturulmasını ve her yerde kolaylıkla kullanılabilmesini sağlar.</p></li>
+<li>
+<h3 id="thread-pool-yönetimi">Thread Pool Yönetimi</h3>
+<p>Multi-threaded uygulamalarda, thread'lerin yönetimi için Singleton tasarım deseni kullanılabilecek bir başka örnek olabilir. Bir thread pool'un bir kere oluşturulup, farklı işlemler tarafından tekrar tekrar kullanılması sistem kaynaklarını etkin bir şekilde kullanmayı sağlar.</p></li>
+</ul>
+</li>
+</ul>
+<h2 id="avantajlar">Avantajlar</h2>
+<ul>
+<li><strong>Merkezi Erişim</strong>: Singleton, ilgili sınıfın tek bir örneğine uygulama boyunca merkezi bir erişim sağlar.</li>
+<li><strong>Kaynak Optimizasyonu</strong>: Yalnızca bir nesne oluşturularak kaynak kullanımı optimize edilir.</li>
+</ul>
+<h2 id="dezavantajlar">Dezavantajlar</h2>
+<ul>
+<li><strong>Tek Sorumluluk İhlali</strong>: Bu tasarım kalıbı genellikle tek sorumluluk ilkesini ihlal eder.</li>
+<li><strong>Test Edilebilirlik Sorunları</strong>: Singleton'lar  Constructor erişilemez olacağından dolayı <a href="https://www.gencayyildiz.com/blog/net-core-unit-test-nedir-nasil-yapilir-derinlemesine-inceleyelim/" target="_blank" rel="noopener">unit</a> test'ler sırasında bazı sorunlara yol açabilir.</li>
+<li><strong>Asenkron Sorunları</strong>: Bu pattern, asenkron süreçlerde birden fazla instance oluşturabilme ihtimaline sahiptir. Bundan dolayı özel bir işlem gerektirmektedir.</li>
+</ul>
+<h2 id="sinırlılıklar">Singleton Design Pattern Sınırlılıklar</h2>
+<p>Singleton'un birçok avantajı olsa da, bazı sınırlılıkları da vardır. Bunlar arasında ölçeklenebilirlik ve test edilebilirlik gibi konular bulunmaktadır.</p>
+<h2 id="test-edilebilirlik-sorunları">Test Edilebilirlik Sorunları</h2>
+<p>Singleton tasarım deseni, birçok kullanım senaryosunda yararlı olsa da, test edilebilirlik konusunda bazı zorluklar yaratabilir. İşte bu konudaki bazı önemli noktalar:</p>
+<ul>
+<li>
+<h3 id="global-gurum">Global Durum sorunu</h3>
+<p> Singleton, genellikle global bir durumu temsil ettiğinden, bir test durumundan diğerine sızıntı yapabilir. Bu, bağımsız testlerin birbirini etkilemesine neden olabilir.</p></li>
+<li>
+<h3 id="mocking-zorlukları">Mocking Zorlukları sorunu</h3>
+<p> Singleton nesnelerinin doğrudan inşa edilmesi, birim testleri sırasında mock (taklit) nesneler kullanmayı zorlaştırabilir. Bu, özellikle dış servisler veya veritabanı bağlantıları gibi bağımlılıkları olan Singleton sınıflarında problem yaratabilir. </p></li>
+<li>
+<h3 id="paralel-testler">Paralel Testler sorunu</h3>
+<p> Singleton, aynı nesnenin birden fazla iş parçacığı (thread) tarafından paylaşıldığı senaryolarda, paralel test yapmayı zorlaştırabilir.</p></li>
+<li>
+<h3 id="kod-karmaşıklığı">Kod Karmaşıklığı sorunu</h3>
+<p> Aynı Singleton instance'ını birden fazla test senaryosunda yeniden kullanmak, karmaşık başlangıç (initialization) ve yıkım (teardown) prosedürlerine yol açabilir. Bu da kod karmaşıklığını ve sürdürülebilirlik zorluklarını (maintainability challenges) artırabilir.</p>
+</li><li>
+<h3 id="tasarım-sınırlamaları">Tasarım Sınırlamaları sorunu</h3>
+<p> Singleton, sınıfın yalnızca bir kez oluşturulduğu için, bu sınıfın farklı bağlamlarda farklı yapılandırmalarla test edilmesini zorlaştırabilir.</p></li>
+</ul>
+<h2 id="nasıl-kodlarız">
+Peki Nasıl kodlarız?<br>
+</h2>
+<p>Singleton Desenini C#'ta Uygulamak<br>
+<a href="https://csharpindepth.com/Articles/Singleton" target="_blank" rel="noopener">öğrenmek için tıklayın(ingilizce)</a>,<br>
+<a href="https://www.gencayyildiz.com/blog/cta-singleton-design-patternsingleton-tasarim-deseni/" target="_blank" rel="noopener">öğrenmek için tıklayın(Türkçe)</a></p>
+<p>
+<a href="https://cambelfatih.github.io/blog/category/softw/">for more information</a></p>

@@ -1,0 +1,23 @@
+{%- comment -%} Post card. Params: post, class (optional, e.g. "card-featured"), eager (optional) {%- endcomment -%}
+{%- assign p = include.post -%}
+{%- assign cat = p.categories | first -%}
+{%- assign words = p.content | strip_html | number_of_words -%}
+<article class="card {{ include.class }}">
+  <a class="card-media" href="{{ p.url | relative_url }}" tabindex="-1" aria-hidden="true">
+    {%- assign img = p.thumbnail | default: p.image -%}
+    {%- if include.class == 'card-featured' %}{% assign img = p.image | default: p.thumbnail %}{% endif -%}
+    {%- if img %}
+    <img src="{{ img | relative_url }}" alt="" {% unless include.eager %}loading="lazy" {% endunless %}decoding="async">
+    {%- else %}
+    <span class="card-placeholder">{{ p.title | slice: 0 }}</span>
+    {%- endif %}
+  </a>
+  <div class="card-body">
+    {%- if cat %}
+    <a class="chip" href="{{ '/category/' | append: cat | append: '/' | relative_url }}">{{ site.data.categories[cat].name | default: cat }}</a>
+    {%- endif %}
+    <h3 class="card-title"><a href="{{ p.url | relative_url }}">{{ p.title }}</a></h3>
+    <p class="card-excerpt">{{ p.description | default: p.content | strip_html | normalize_whitespace | truncatewords: 32 }}</p>
+    <div class="meta">{% include date.html date=p.date %}<span aria-hidden="true">·</span><span>{{ words | divided_by: 200 | plus: 1 }} dk okuma</span></div>
+  </div>
+</article>

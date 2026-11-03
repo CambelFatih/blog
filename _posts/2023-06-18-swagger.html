@@ -1,0 +1,62 @@
+---
+layout: "post"
+title: "Microservis mimarisi ve yazılım geliştirme prensipleri"
+date: "2023-06-18 11:50:53 +0000"
+last_modified_at: "2023-06-23 21:32:02 +0000"
+categories: ["softw", "tech"]
+image: "/wp-content/uploads/2023/06/microservices-logical.png"
+thumbnail: "/wp-content/uploads/2023/06/microservices-logical-768x310.png"
+---
+<h3>Microservis mimarisi</h3>
+<p>bir uygulamayı küçük, bağımsız ve özerk hizmetlere bölerek geliştirmeyi ve dağıtmayı hedefleyen bir yazılım geliştirme yaklaşımıdır. Bu yaklaşım, büyük ve karmaşık uygulamaların parçalara ayrılmasını sağlar ve her bir parçanın kendi işlevselliğini ve veritabanını içeren bir hizmet haline gelmesini sağlar.</p>
+<p>Microservisler, tek bir uygulamanın yerine geçen ve birbiriyle bağlantılı hizmetlerin bir kombinasyonudur. Her bir microservis, belirli bir işlevselliği sunmak için tasarlanmıştır ve bağımsız olarak geliştirilebilir, dağıtılabilir ve ölçeklendirilebilir.</p>
+<p>Microservis mimarisinin bazı temel özellikleri şunlardır:</p>
+<p>Bağımsız Geliştirme ve Dağıtım: Her bir microservis, bağımsız olarak geliştirilebilir ve dağıtılabilir. Bu, farklı ekiplerin aynı anda farklı hizmetleri güncelleyebileceği anlamına gelir.</p>
+<p>Hizmet Odaklılık: Her bir microservis, belirli bir işlevselliği sunar ve bu işlevselliğe odaklanır. Bu, hizmetlerin daha küçük ve daha özgün olmasını sağlar.</p>
+<p>Bağımsız Veritabanları: Her bir microservis, kendi veritabanını kullanır. Bu, hizmetlerin kendi verilerini yönetmesini ve veritabanı teknolojilerini seçmesini sağlar.</p>
+<p>Ölçeklenebilirlik: Microservisler, ihtiyaç duyulduğunda bağımsız olarak ölçeklendirilebilir. Bu, yüksek trafik veya işlem yoğunluğu durumlarında sistem performansını artırmanın daha kolay olduğu anlamına gelir.</p>
+<p>Teknoloji Çeşitliliği: Her bir microservis, farklı teknolojileri ve dilleri kullanabilir. Bu, geliştiricilere en uygun teknolojileri seçme özgürlüğü sağlar.</p>
+<p>Microservis mimarisi, büyük ve karmaşık sistemlerin daha esnek, ölçeklenebilir ve sürdürülebilir bir şekilde geliştirilmesini sağlar. Ancak, bu yaklaşımın getirdiği karmaşıklık ve yönetim zorlukları da dikkate alınmalıdır.</p>
+<h3>Front-end için mikroservis yapısı</h3>
+<h5>Mikroservis mimarisi, genellikle backend tarafında daha yaygın olarak kullanılan bir mimari yaklaşımdır. Ancak, frontend tarafında da bazı tasarım patternleri ve metodolojiler kullanılabilir. İşte frontend için mikroservis mimarisine uygun bazı yaklaşımlar:</h5>
+<p>Tek Sorumluluk İlkesi (Single Responsibility Principle): Her bir frontend mikroservisi, belirli bir işlevselliği yerine getirmelidir. Örneğin, kullanıcı girişi ve kimlik doğrulama ile ilgili bir mikroservis, diğerleriyle bağlantılı olmadan bu işlevselliği sağlamalıdır.</p>
+<p>Bağımsız Geliştirme: Her bir frontend mikroservisi, bağımsız olarak geliştirilebilir. Bu, farklı ekiplerin aynı anda farklı mikroservisleri güncelleyebileceği anlamına gelir.</p>
+<p>API Gateway: Mikroservis mimarisinde, frontend tarafında API Gateway kullanılabilir. API Gateway, tüm mikroservislerin birleştirildiği ve istemcilere sunulan tek bir noktadır. API Gateway, istemcilerin tüm mikroservisleri yönetmesini ve iletişimini kolaylaştırır.</p>
+<p>Komponent Tabanlı Geliştirme: Frontend mikroservislerini geliştirirken komponent tabanlı geliştirme yaklaşımını kullanabilirsiniz. Komponentler, bağımsız olarak geliştirilebilen ve yeniden kullanılabilen yapı taşlarıdır. Her bir mikroservis, kendi komponentlerini içerebilir ve bu komponentler diğer mikroservislerle entegre edilebilir.</p>
+<p>UI Frameworkleri: Frontend mikroservisleri geliştirirken popüler UI frameworkleri ve kütüphaneleri kullanabilirsiniz. Örneğin, React, Angular veya Vue.js gibi frameworkler, komponent tabanlı geliştirmeyi destekler ve mikroservis mimarisiyle uyumlu olabilir.</p>
+<p>Durum Yönetimi: Mikroservis mimarisinde, her bir frontend mikroservisi kendi durumunu yönetmelidir. Bunun için durum yönetimi kütüphaneleri kullanılabilir. Örneğin, React için Redux veya MobX gibi durum yönetimi kütüphaneleri kullanılabilir.</p>
+<p>Bağımsız Dağıtım: Frontend mikroservisleri, bağımsız olarak dağıtılabilir. Bu, her bir mikroservisin kendi sunucularında veya servislerinde çalışabilmesi anlamına gelir. Bu şekilde, mikroservislerin ölçeklenebilirliği artırılabilir.</p>
+<p>Mikroservis mimarisi, genellikle backend tarafında daha fazla kullanılsa da, frontend tarafında da benzer prensipler ve yaklaşımlar kullanılabilir. Özellikle komponent tabanlı geliştirme, bağımsız geliştirme ve bağımsız dağıtım gibi yaklaşımlar, frontend mikroservislerini daha esnek</p>
+<h2>Swagger</h2>
+<p>API belgelendirme, test etme ve keşfetme için kullanılan bir açık kaynaklı araçtır. Swagger, RESTful API'lerin tanımlanması, tasarlanması ve belgelendirilmesi için bir dizi standart ve araç sağlar. API'lerin tasarımını, geliştirmesini ve belgelendirmesini kolaylaştırır. Swagger, OpenAPI Specification adı verilen bir standart kullanarak API'lerin tanımlanmasını sağlar. Bu tanımlama sayesinde, API'ye yapılan isteklerin nasıl yapılacağı, hangi parametrelerin kullanılacağı ve ne tür yanıtların beklendiği gibi bilgileri belirtilebilir. Swagger ayrıca interaktif bir API dokümantasyonu oluşturma ve API testi yapma imkanı sunar.</p>
+<h3>MVC (Model-View-Controller)</h3>
+<p>yazılım geliştirme sürecinde kullanılan bir tasarım desenidir. Bu desen, bir uygulamanın farklı bileşenlerini (veri, kullanıcı arayüzü ve iş mantığı) birbirinden bağımsız şekilde yönetmeyi sağlar. MVC, uygulamanın karmaşıklığını azaltarak daha sürdürülebilir, esnek ve bakımı kolay bir yapı oluşturmayı hedefler.</p>
+<h5>MVC'nin temel bileşenleri şunlardır:</h5>
+<p>Model (Model): Verilerin temsil edildiği bileşendir. Veri işleme, saklama ve güncelleme işlemlerini gerçekleştirir. Model, iş mantığını içerir ve veritabanı veya harici kaynaklardan veri alışverişi yapabilir.</p>
+<p>Görünüm (View): Kullanıcı arayüzünün temsil edildiği bileşendir. Verileri kullanıcıya görsel olarak sunar ve kullanıcının etkileşimde bulunmasını sağlar. Görünüm, kullanıcı tarafından gerçekleştirilen olayları kontrolere iletebilir.</p>
+<p>Denetleyici (Controller): Model ve görünüm arasında iletişimi sağlayan bileşendir. Kullanıcının etkileşimlerini algılar, ilgili iş mantığını modelle ilişkilendirir ve güncellemeleri görünüme ileterek kullanıcı arayüzünün güncellenmesini sağlar.</p>
+<p>MVC, uygulamanın farklı katmanlarını birbirinden bağımsız tutarak modüler bir yapı oluşturmayı sağlar. Bu da kodun daha kolay okunmasını, yeniden kullanılmasını ve bakımının yapılmasını sağlar. Ayrıca, farklı uzmanlık alanlarına sahip geliştiricilerin birlikte çalışmasını da kolaylaştırır.</p>
+<h3>Tasarım desenleri ve yazılım geliştirme kavramları:</h3>
+<ul>
+<li>
+<p>Persistence (Kalıcılık): Bir uygulamanın verilerini uzun süreli olarak saklamak için kullanılan bir kavramdır. Veritabanı veya dosya sistemleri gibi kalıcı depolama yöntemleri kullanarak verilerin korunmasını sağlar.</p>
+</li>
+<li>
+<p>Providers (Sağlayıcılar): Bir bileşenin veya hizmetin diğer bileşenlere ihtiyaç duyduğu kaynakları veya hizmetleri sağlamak için kullanılan yapısal bir desendir. Dependency injection prensiplerine dayanarak, bağımlılıkları yönetir ve gereksinim duyulan nesnelerin sağlanmasını sağlar.</p>
+</li>
+<li>
+<p>Repository (Depo): Veritabanı işlemlerini yönetmek için kullanılan bir desendir. Veri erişim katmanında kullanılır ve veri kaynağından verileri almak, kaydetmek, güncellemek veya silmek gibi işlemleri gerçekleştirir. Repository deseni, veritabanı işlemlerinin uygulama mantığından ayrılmasını sağlar ve kodun daha temiz, düzenli ve test edilebilir olmasını sağlar.</p>
+</li>
+<li>
+<p>Features (Özellikler): Bir yazılım projesinde yer alan farklı işlevleri veya modülleri temsil eder. Her bir özellik, belirli bir işlevi yerine getirmek için gerekli olan bileşenleri ve servisleri içerir. Özellikler, yazılımın bölünmüş ve yönetilebilir bir yapıda olmasını sağlar.</p>
+</li>
+<li>
+<p>Services (Hizmetler): Bir uygulamanın belirli bir işlevi yerine getirmek için kullanılan iş mantığını içeren bileşenlerdir. Hizmetler, veri işleme, hesaplama, dış kaynaklara erişim gibi çeşitli işlemleri gerçekleştirebilir. Genellikle iş kurallarını uygulamak veya dış sistemlerle etkileşimde bulunmak gibi görevleri üstlenirler.</p>
+</li>
+<li>
+<p>Repository Pattern (Depo Deseni): Bir yazılım tasarım deseni olan Repository deseni, veritabanı işlemlerini soyutlayarak, veri erişim kodunun uygulama kodundan ayrılmasını sağlar. Böylece veritabanı işlemlerinin daha kolay değiştirilebilir, test edilebilir ve sürdürülebilir olmasını sağlar. Domain Driven Design (DDD) yaklaşımında sıkça kullanılan bir desendir ve veri erişim katmanında kullanılır.</p>
+</li>
+<li>
+<p>Domain Driven Design (DDD) (Alan Odaklı Tasarım): Bir yazılım geliştirme metodolojisi olan DDD, yazılımın temelindeki iş süreçlerini ve iş kurallarını modellemek için bir dizi prensibi ve deseni içerir. Bu yaklaşım, yazılımı alan (domain) bilgisine dayandırır ve karmaşık iş mantığını daha anlaşılır ve modüler bir şekilde tasarlamayı hedefler.</p>
+</li>
+</ul>

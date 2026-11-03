@@ -1,0 +1,96 @@
+---
+layout: "post"
+title: "Yatırım konusunda kendimi nasıl geliştirebilirim?"
+date: "2023-01-09 20:35:49 +0000"
+last_modified_at: "2023-04-12 14:43:55 +0000"
+categories: ["self-improvement"]
+image: "/wp-content/uploads/2023/01/yatirimaraci-blog-v1.png"
+thumbnail: "/wp-content/uploads/2023/01/yatirimaraci-blog-v1-768x365.png"
+---
+<p class="text-align: justify;">
+</p><p>Yatırım konusunda kendinizi geliştirmek için birçok farklı adım atabilirsiniz. İşte size öneriler:</p>
+<ul>
+<li>
+<p>Warren Buffet'ın yıllık raporlarını, kitaplarını ve toplantılarını takip etmek, onun stratejilerini ve düşünce tarzını anlamak için faydalıdır.</p>
+</li>
+<li>
+<p>Yatırım alanındaki önemli isimlerin kitaplarını okumak da faydalıdır. Charlie Munger, Ken Fisher, Mohnish Pabrai, Benjamin Graham, Howard Marks ve Bruce Greenwald gibi isimlerin kitaplarına göz atabilirsiniz.</p>
+</li>
+<li>
+<p>Hangi sektörlerde daha iyi bilgi sahibi olduğunuzu fark edin ve bu sektörlere odaklanın. Başarılı olmak için, spesifik sektörlerde ortalamanın üzerinde bilgi sahibi olmanız gerektiğini unutmayın.</p>
+</li>
+<li>
+<p>Davranışsal finans alanına ilgi duyabilirsiniz. Kendi yatırım kararlarınızda yaptığınız hataları tespit ederek, daha rasyonel kararlar vermeye çalışabilirsiniz.</p>
+</li>
+<li>
+<p>Belirsizlik ortamlarında dahi, olasılıkları hesaba katarak düşünme yeteneğinizi geliştirmeye çalışın. Sürprizler genellikle &quot;long-tail&quot; olaylarından kaynaklandığı için, bu konuda kendinizi eğitmeniz önemlidir.</p>
+</li>
+<li>
+<p>Başarılı yatırımcıları takip ederek, neden neye yatırım yaptıklarını anlamaya çalışın ve tersine mühendislik yaparak kendi stratejilerinizi oluşturun.</p>
+</li>
+<li>
+<p>Tüm bu adımların yanı sıra, finansal piyasaları takip etmek, ekonomik gelişmeleri izlemek, şirket bilançolarını analiz etmek ve portföy çeşitlendirmesi yapmak da önemlidir. Bunların yanı sıra, yatırım konusunda birçok farklı eğitim programı ve kurslar da mevcuttur. Kendinizi sürekli olarak geliştirerek, yatırım dünyasında daha başarılı olabilirsiniz.</p>
+</li>
+</ul>
+<p>Yatırım konusunda kendinizi geliştirmek için aşağıdaki adımlar da faydalı olabilir:</p>
+<ul>
+<li>Yatırım simülasyonları yaparak pratik yapın ve karar verme becerilerinizi geliştirin.</li>
+</ul>
+<pre><code class="language-python">import random
+
+starting_balance = 10000
+years = 10
+growth_rates = [random.uniform(-0.1, 0.3) for i in range(years)]
+
+balance = starting_balance
+for i in range(years):
+    year_growth = growth_rates[i]
+    balance += balance * year_growth
+
+print(&quot;Son bakiye: &quot;, balance)</code></pre>
+<ul>
+<li>Yatırım yapacağınız şirketleri analiz etmek için finansal veri toplama araçlarından yararlanın.</li>
+</ul>
+<pre><code class="language-python"># Örnek veri toplama kodu
+import yfinance as yf
+
+# Apple hisse senedi verilerini çekme
+apple_stock = yf.Ticker(&quot;AAPL&quot;)
+historical_data = apple_stock.history(period=&quot;max&quot;)
+
+# Hisse senedi verilerini CSV dosyasına yazma
+historical_data.to_csv(&quot;apple_stock_data.csv&quot;)</code></pre>
+<ul>
+<li>Finansal verileri görselleştirerek daha iyi analiz edin.</li>
+</ul>
+<pre><code class="language-python"># Örnek veri görselleştirme kodu
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Apple hisse senedi verilerini çekme
+apple_stock = yf.Ticker(&quot;AAPL&quot;)
+historical_data = apple_stock.history(period=&quot;max&quot;)
+
+# Kapanış fiyatlarından çizgi grafiği oluşturma
+plt.plot(historical_data.index, historical_data[&quot;Close&quot;])
+plt.title(&quot;Apple Hisse Senedi Kapanış Fiyatları&quot;)
+plt.xlabel(&quot;Tarih&quot;)
+plt.ylabel(&quot;Fiyat ($)&quot;)
+plt.show()</code></pre>
+<ul>
+<li>Yatırımın temel prensiplerini anlamak için online eğitim videolarından yararlanın.</li>
+<li>Yatırım yapacağınız şirketlerin haberlerini ve gelişmelerini takip etmek için haber akışı API'leri kullanın.</li>
+</ul>
+<pre><code class="language-python"># Örnek haber akışı API kodu
+import requests
+
+# Apple haberlerini çekme
+query = &quot;Apple&quot;
+url = f&quot;https://newsapi.org/v2/everything?q={query}&amp;apiKey=YOUR_API_KEY&quot;
+response = requests.get(url)
+data = response.json()
+
+# İlk 10 haber başlığını yazdırma
+articles = data[&quot;articles&quot;]
+for i in range(10):
+    print(articles[i][&quot;title&quot;])</code></pre>

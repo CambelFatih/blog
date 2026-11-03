@@ -1,0 +1,62 @@
+# Kuyza — Jekyll site built natively by GitHub Pages (Settings → Pages → Deploy from branch: main).
+# How to add content: see CLAUDE.md.
+title: Kuyza
+tagline: No one is in charge of your happiness except you
+description: Yazılım, İngilizce, finans, bilim, tarih ve kişisel gelişim üzerine notlar ve yazılar.
+url: https://cambelfatih.github.io
+baseurl: /blog
+lang: tr_TR
+timezone: UTC
+author:
+  name: Kuyza
+logo: /assets/icon-512.png
+twitter:
+  card: summary_large_image
+
+permalink: /:year/:month/:day/:title/
+future: true          # posts dated later today still publish
+excerpt_separator: "" # excerpts unused; avoids splitting {% raw %} blocks in legacy posts
+paginate: 13          # 1 featured + 12 grid cards per page
+paginate_path: /page/:num/
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter_opts:
+    disable: true     # Prism highlights both Markdown and legacy HTML code blocks
+
+plugins:
+  - jekyll-paginate
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
+
+feed:
+  path: feed.xml
+
+defaults:
+  - scope: { path: "", type: posts }
+    values: { layout: post }
+  - scope: { path: "wp-content" }
+    values: { sitemap: false }
+  - scope: { path: "dashboard" }
+    values: { sitemap: false }
+  - scope: { path: "dw" }
+    values: { sitemap: false }
+
+exclude:
+  - CLAUDE.md
+  - README.md
+  - vendor
+  - tools
+  - .jekyll-cache
+
+months: [Ocak, Şubat, Mart, Nisan, Mayıs, Haziran, Temmuz, Ağustos, Eylül, Ekim, Kasım, Aralık]
+
+nav:
+  - { title: Ana Sayfa, url: / }
+  - { title: Kategoriler, url: /category/ }
+  - { title: Arşiv, url: /archive/ }
+  - { title: İngilizce, url: /category/eng/ }
+  - { title: Saat, url: /dw/time/clock.html }
+  - { title: Hakkında, url: /about/ }

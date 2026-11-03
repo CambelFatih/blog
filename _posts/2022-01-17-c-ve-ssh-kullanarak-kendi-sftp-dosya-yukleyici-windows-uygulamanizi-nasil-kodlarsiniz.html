@@ -1,0 +1,10 @@
+---
+layout: "post"
+title: "C# ve SSH Kullanarak Kendi SFTP Dosya Yükleyici Windows Uygulamanızı Nasıl Kodlarsınız?"
+date: "2022-01-17 04:42:03 +0000"
+categories: ["softw"]
+image: "/wp-content/uploads/2022/01/rebex.png"
+thumbnail: "/wp-content/uploads/2022/01/rebex-768x295.png"
+---
+<p>SFTP Programının istenildiği gibi çalışıp çalışmadığını öncelikle test edebilmek için Rebex Tiny SFTP Server Adlı program bilgisayara kurulmuştur. Daha Sonra C# ile geçen hafta araştırılan ssh.net kütüphanesi fonksiyonları kullanılarak Form sftp protokolü ile dosya gönderme uygulaması gerçekleştirilmiştir. Rebex ile test edilen Sftp dosya gönderme uygulaması raspberry pi zero ile test edilmeye çalışılmıştır.</p>
+<p>Form uygulamasının arayüzü soldaki resimde görüldüğü gibidir. sftp.UploadSFTPFile(host, username, password, source, destination, port); Fonksiyonu kullanılarak dosya sunucuya başarılı bir şekilde gönderilmiştir.<sup>12</sup> Dircoctory isimli textboxın boş olmasının sebebi serverdeki ana dizine dosyanın gönderilmek istenmesidir. <b></b></p>

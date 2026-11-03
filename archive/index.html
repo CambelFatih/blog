@@ -1,0 +1,28 @@
+---
+layout: default
+title: Arşiv
+description: Kuyza'daki tüm yazıların yıllara göre listesi.
+---
+<section class="container narrow">
+  <header class="page-header">
+    <h1>Arşiv</h1>
+    <p class="lead">{{ site.posts.size }} yazının tamamı, en yeniden en eskiye.</p>
+  </header>
+  {%- assign years = site.posts | group_by_exp: "p", "p.date | date: '%Y'" %}
+  <nav class="year-nav" aria-label="Yıllar">
+    {%- for y in years %}<a href="#y{{ y.name }}">{{ y.name }}</a>{% endfor %}
+  </nav>
+  {%- for y in years %}
+  <h2 class="archive-year" id="y{{ y.name }}">{{ y.name }} <span class="muted">{{ y.items.size }}</span></h2>
+  <ul class="archive-list">
+    {%- for post in y.items %}
+    {%- assign cat = post.categories | first %}
+    <li>
+      <span class="archive-date">{% include date.html date=post.date %}</span>
+      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      {%- if cat %}<span class="archive-cat">{{ site.data.categories[cat].name | default: cat }}</span>{% endif %}
+    </li>
+    {%- endfor %}
+  </ul>
+  {%- endfor %}
+</section>

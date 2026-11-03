@@ -1,0 +1,431 @@
+---
+layout: "post"
+title: "Clean Architecture: Yazılımın Omurgasını Yeniden Keşfetmek"
+date: "2025-10-28 17:28:46 +0000"
+last_modified_at: "2025-10-29 22:06:26 +0000"
+categories: ["softw", "tech"]
+description: "Birçok geliştirici için “mimari” sadece katmanlardan ibaret görünür:Controller → Service → Repository → Database.Ama bu"
+image: "/wp-content/uploads/2025/10/Nedir-Bu-Onion-Architecture-1.png"
+---
+<hr>
+<h1>🧱 <a href="https://www.gencayyildiz.com/blog/nedir-bu-onion-architecture-tam-teferruatli-inceleyelim/">Clean Architecture</a>: Yazılımın Omurgasını Yeniden Keşfetmek</h1>
+<blockquote>
+<p>“Bir mimarinin en büyük amacı, <strong>değişime karşı dayanıklı</strong> olmaktır.”<br>
+— <em>Robert C. Martin (Uncle Bob)</em></p>
+</blockquote>
+<hr>
+<h2>🧭 1️⃣ Giriş: Mimari Nedir, Neden Vardır?</h2>
+<p>Birçok geliştirici için “mimari” sadece katmanlardan ibaret görünür:<br>
+Controller → Service → Repository → Database.<br>
+Ama bu <strong>bir katman dizisi değildir</strong> — bu sadece bir <em>akış</em>tır.</p>
+<p>Gerçek anlamda mimari;</p>
+<ul>
+<li><strong>Zamana karşı direnen</strong>,</li>
+<li><strong>Teknolojiden bağımsız kalabilen</strong>,</li>
+<li><strong>Davranışı (iş mantığını) veriden (altyapıdan) ayıran</strong> bir yapıdır.</li>
+</ul>
+<p>Yani Clean Architecture’ın amacı:</p>
+<blockquote>
+<p>“Kodun yönünü tersine çevirmek.”</p>
+</blockquote>
+<hr>
+<h2>🧩 2️⃣ Tarihsel Gelişim</h2>
+<p>Clean Architecture bir anda ortaya çıkmadı.<br>
+Aslında <strong>yazılım mimarisi evriminin</strong> ürünüdür.</p>
+<table>
+<thead>
+<tr>
+<th>Dönem</th>
+<th>Mimari Yaklaşım</th>
+<th>Temel Fikir</th>
+<th>Zayıf Noktası</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1980s</td>
+<td><strong>Layered Architecture</strong></td>
+<td>UI – Business – Data</td>
+<td>Sıkı bağımlılıklar</td>
+</tr>
+<tr>
+<td>1990s</td>
+<td><strong>N-Tier Architecture</strong></td>
+<td>Sunucu katmanları ayrımı</td>
+<td>Teknik odaklı, domain kayboldu</td>
+</tr>
+<tr>
+<td>2000s</td>
+<td><strong>Hexagonal (Ports &amp; Adapters)</strong></td>
+<td>Domain merkeze alındı</td>
+<td>Uygulaması karmaşık</td>
+</tr>
+<tr>
+<td>2010s</td>
+<td><strong>Onion Architecture</strong></td>
+<td>Domain &amp; Core merkezde</td>
+<td>Infrastructure soyutlandı</td>
+</tr>
+<tr>
+<td>2012+</td>
+<td><strong>Clean Architecture</strong></td>
+<td>Tüm kavramların birleşimi</td>
+<td>Öğrenme eğrisi yüksek</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Clean Architecture, Onion ve Hexagonal mimarinin birleşimidir, ama bir adım ötesine geçer:<br>
+Yönelim sadece <em>bağımlılıkların yönünü değil, sorumlulukların sınırını</em> da tanımlar.</p>
+</blockquote>
+<hr>
+<h2>🧠 3️⃣ Clean Architecture’ın Kalbi: <strong>Dependency Rule</strong></h2>
+<blockquote>
+<p>“Hiçbir şey, <em>merkezdeki</em> katmanlara <em>bağımlı olamaz.</em><br>
+Bağımlılıklar <strong>her zaman içeriye</strong> akar.”</p>
+</blockquote>
+<p><img decoding="async" src="https://mermaid.ink/img/pako%5C:eNplks1uwjAMhl8l5sM2AS4WW6Xb0MQYB8zADZ2SclCk1ElCchH37biBJ2CF_3a__4vEhiwTWprDTGJmfU5lUUb3hSuqKt5Ra2vJhKxBNQw0gNipdo12PMvLaHch9wjSYZVR0tiHgcYyxzzxwgbmWBJUpvKWnK03y8Q64ENyGRIXYtw6fPhOsXfQ7u5oSvfXG7b7_JF0gW9vw7l4aDh3sXuvybD1XOCIF4uJbMNhU4ikIl2ZQ3RZhf_UqS-nv5M-K5xS9J2P2_PAOYtTFA" alt=""></p>
+<p>Yani:</p>
+<ul>
+<li><strong>Domain</strong> (iş mantığı) hiçbir şeye bağlı değildir.</li>
+<li><strong>Application</strong> sadece domain arabirimlerini kullanır.</li>
+<li><strong>Infrastructure</strong> ve <strong>UI</strong> <em>bağımlıdır</em>, ama dışta kalır.</li>
+</ul>
+<p>Bu yön, <strong>zamanla kırılmayan kodun</strong> temelidir.</p>
+<hr>
+<h2>⚙️ 4️⃣ Katmanlar ve Sorumlulukları</h2>
+<table>
+<thead>
+<tr>
+<th>Katman</th>
+<th>Açıklama</th>
+<th>Örnek Dosyalar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Entities (Domain)</strong></td>
+<td>İş kuralları, saf modeller, aggregate’ler</td>
+<td><code>Order</code>, <code>User</code>, <code>Quiz</code>, <code>ValueObjects</code></td>
+</tr>
+<tr>
+<td><strong>Use Cases (Application)</strong></td>
+<td>Domain’i kullanan iş senaryoları</td>
+<td><code>CreateOrderHandler</code>, <code>ScheduleQuizCommand</code></td>
+</tr>
+<tr>
+<td><strong>Interface Adapters</strong></td>
+<td>Use Case’leri dış dünyaya bağlar</td>
+<td><code>Controllers</code>, <code>Presenters</code>, <code>Gateways</code></td>
+</tr>
+<tr>
+<td><strong>Frameworks &amp; Drivers (Infrastructure)</strong></td>
+<td>Veritabanı, API, Message Broker</td>
+<td><code>EFCoreRepository</code>, <code>RedisScheduler</code>, <code>KafkaBus</code></td>
+</tr>
+</tbody>
+</table>
+<p>Bu yapı sadece bir <em>dizayn deseni</em> değil —<br>
+<strong>bağımlılık akışının garantisidir.</strong></p>
+<hr>
+<h2>🧱 5️⃣ Bağımlılık Kuralları: Gerçek Yönler</h2>
+<pre><code class="language-plaintext">Infrastructure  →  Application  →  Domain
+Presentation    →  Application  →  Domain</code></pre>
+<p>Ters bağımlılık prensibi:</p>
+<ul>
+<li>Domain, Application dışındaki hiçbir şeye dokunmaz.</li>
+<li>Application, sadece abstraction kullanır.</li>
+<li>Infrastructure, bu abstraction’ları <strong>uygular.</strong></li>
+</ul>
+<h3>Örnek:</h3>
+<pre><code class="language-csharp">// Application katmanında
+public interface IOrderRepository
+{
+    Task SaveAsync(Order order);
+    Task&lt;Order&gt; GetByIdAsync(Guid id);
+}</code></pre>
+<pre><code class="language-csharp">// Infrastructure katmanında
+public class EfOrderRepository : IOrderRepository
+{
+    private readonly AppDbContext _context;
+    public Task SaveAsync(Order order) =&gt; _context.Orders.AddAsync(order);
+}</code></pre>
+<blockquote>
+<p>Domain “OrderRepository”nin <em>var olduğunu bilir</em>, ama <em>nasıl</em> olduğunu bilmez.<br>
+Infrastructure ise <em>nasıl</em> kısmını çözer, ama <em>neden</em> kısmını bilmez.</p>
+</blockquote>
+<hr>
+<h2>🧩 6️⃣ Clean Architecture ≠ Katmanlı Mimari</h2>
+<p>Birçok kişi Clean Architecture’ı klasik “3 katmanlı” modelle karıştırır.<br>
+Ancak fark <strong>katmanların yönünde</strong> değil, <strong>bağımlılık akışındadır.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Özellik</th>
+<th>3-Tier</th>
+<th>Clean Architecture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bağımlılıklar</td>
+<td>Yukarıdan aşağı</td>
+<td>Dıştan içe</td>
+</tr>
+<tr>
+<td>Odak</td>
+<td>Teknoloji</td>
+<td>Domain</td>
+</tr>
+<tr>
+<td>Test edilebilirlik</td>
+<td>Zor</td>
+<td>Kolay</td>
+</tr>
+<tr>
+<td>Değişime direnç</td>
+<td>Düşük</td>
+<td>Yüksek</td>
+</tr>
+<tr>
+<td>UI değişimi</td>
+<td>Riskli</td>
+<td>Kolay</td>
+</tr>
+<tr>
+<td>DB değişimi</td>
+<td>Riskli</td>
+<td>Kolay</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧠 7️⃣ SOLID ve Clean Architecture</h2>
+<p>Clean Architecture sadece katmanlardan ibaret değildir;<br>
+<strong>SOLID prensiplerinin mimari seviyedeki yansımasıdır.</strong></p>
+<table>
+<thead>
+<tr>
+<th>SOLID Prensibi</th>
+<th>Mimari Karşılığı</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>S</strong> – Single Responsibility</td>
+<td>Her katman tek bir amaca hizmet eder</td>
+</tr>
+<tr>
+<td><strong>O</strong> – Open/Closed</td>
+<td>Use Case’ler yeni özelliklere açık, değişime kapalı</td>
+</tr>
+<tr>
+<td><strong>L</strong> – Liskov Substitution</td>
+<td>Interface Adapters soyutlamaları güvenli</td>
+</tr>
+<tr>
+<td><strong>I</strong> – Interface Segregation</td>
+<td>Her modül kendi abstraction’ını kullanır</td>
+</tr>
+<tr>
+<td><strong>D</strong> – Dependency Inversion</td>
+<td>Tüm bağımlılıklar Domain/Application’a değil, abstraction’lara yönelir</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🔍 8️⃣ Clean Architecture + DDD = Kusursuz Uyum</h2>
+<p>Domain Driven Design (DDD), Clean Architecture’ın doğal partneridir.<br>
+Çünkü ikisi de “<strong>iş mantığı merkezdedir</strong>” der.</p>
+<table>
+<thead>
+<tr>
+<th>DDD Kavramı</th>
+<th>Clean Architecture Katmanı</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entity / Value Object</td>
+<td>Domain</td>
+</tr>
+<tr>
+<td>Aggregate / Domain Service</td>
+<td>Domain</td>
+</tr>
+<tr>
+<td>Application Service / Command Handler</td>
+<td>Application</td>
+</tr>
+<tr>
+<td>Repository</td>
+<td>Interface Adapter / Infrastructure</td>
+</tr>
+<tr>
+<td>Domain Event</td>
+<td>Application / Messaging</td>
+</tr>
+</tbody>
+</table>
+<p>Yani Clean Architecture, DDD’nin <strong>teknik kabını</strong> oluşturur.</p>
+<hr>
+<h2>🧩 9️⃣ Clean Architecture’ın Gerçek Hayatta Önemi</h2>
+<h3>1️⃣ Framework bağımlılığını azaltır</h3>
+<p>Hiçbir iş kuralı Entity Framework veya ASP.NET Core’a bağımlı değildir.<br>
+Yarın farklı ORM veya web framework’üne geçebilirsin.</p>
+<h3>2️⃣ Test edilebilirliği arttırır</h3>
+<p>Domain + Application katmanları saf C# sınıflarıdır.<br>
+Test etmek için veritabanına ihtiyaç yoktur.</p>
+<h3>3️⃣ Değişime dayanıklıdır</h3>
+<p>UI’yi Blazor’dan React’a, veritabanını PostgreSQL’den MongoDB’ye çevirebilirsin —<br>
+iş mantığın etkilenmez.</p>
+<h3>4️⃣ Takım ölçeklenebilirliğini kolaylaştırır</h3>
+<p>Her ekip farklı katman veya modül üzerinde bağımsız çalışabilir.<br>
+(Özellikle modüler monolith mimarilerde mükemmel çalışır.)</p>
+<hr>
+<h2>⚙️ 10️⃣ Clean Architecture ve Infrastructure</h2>
+<p>Infrastructure “gereklidir” ama “önemsizdir”.<br>
+Çünkü teknoloji gelir geçer; iş mantığı kalır.</p>
+<p>Infrastructure sadece <strong>uygulama için gereklidir, domain için değil.</strong></p>
+<p>Örnek:</p>
+<ul>
+<li>EFCore, Redis, Kafka, Elasticsearch, SMTP, HTTP Client, gRPC...</li>
+<li>Tümü Infrastructure’dadır.</li>
+<li>Domain ve Application bu araçları sadece abstraction olarak bilir.</li>
+</ul>
+<hr>
+<h2>🧱 11️⃣ Clean Architecture’ın Anti-Pattern’leri</h2>
+<table>
+<thead>
+<tr>
+<th>Anti-pattern</th>
+<th>Açıklama</th>
+<th>Neden Tehlikeli</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fat Controller</strong></td>
+<td>Controller içinde iş mantığı</td>
+<td>Presentation sızar</td>
+</tr>
+<tr>
+<td><strong>Fat Service</strong></td>
+<td>Application Service her şeyi yapar</td>
+<td>Use Case sınırları bulanık</td>
+</tr>
+<tr>
+<td><strong>Domain bağımlı EF Core attribute’ları</strong></td>
+<td><code>[Table]</code>, <code>[ForeignKey]</code> Domain’de</td>
+<td>Persistence sızması</td>
+</tr>
+<tr>
+<td><strong>Static helper’lar</strong></td>
+<td>Global state yaratır</td>
+<td>Test edilemezlik</td>
+</tr>
+<tr>
+<td><strong>Doğrudan ILogger kullanımı (ör. hot path)</strong></td>
+<td>Async pattern kırılır</td>
+<td>Performans düşer</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🚀 12️⃣ Clean Architecture’ın Evrimi: Modern Yaklaşımlar</h2>
+<p>Bugün Clean Architecture artık statik bir model değil,<br>
+dinamik bir yaklaşıma dönüşmüş durumda.</p>
+<table>
+<thead>
+<tr>
+<th>Yaklaşım</th>
+<th>Ne ekler</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CQRS</strong></td>
+<td>Command ve Query ayrımı</td>
+</tr>
+<tr>
+<td><strong>Event Sourcing</strong></td>
+<td>Uygulama durumunu event’lerle tutmak</td>
+</tr>
+<tr>
+<td><strong>Modular Monolith</strong></td>
+<td>Domain sınırlarını modüllerle belirlemek</td>
+</tr>
+<tr>
+<td><strong>Feature Flags / Configurable Pipelines</strong></td>
+<td>Davranış değişimini koddan bağımsız hale getirmek</td>
+</tr>
+<tr>
+<td><strong>Cross-cutting Observability (BufferedLogger)</strong></td>
+<td>Performans kaybı olmadan gözlemlenebilirlik</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Clean Architecture artık sadece “katman” değil, bir <strong>düşünme biçimi.</strong></p>
+</blockquote>
+<hr>
+<h2>🧩 13️⃣ Sonuç: Gerçek Temizlik</h2>
+<p>Clean Architecture sana şunu öğretir:</p>
+<blockquote>
+<p>“Kodun değil, bağımlılığın temiz olmalı.”</p>
+</blockquote>
+<p>Bir mimari:</p>
+<ul>
+<li>Veritabanı değişse bile sağlam kalıyorsa,</li>
+<li>UI framework’ü değişse bile iş kuralları korunuyorsa,</li>
+<li>Logging stratejisi değiştiğinde bile business logic etkilenmiyorsa,<br>
+o zaman gerçekten <strong>temizdir.</strong></li>
+</ul>
+<hr>
+<h2>📚 14️⃣ Özet: Clean Architecture Öz Kimliği</h2>
+<table>
+<thead>
+<tr>
+<th>Alan</th>
+<th>Tanım</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Amaç</strong></td>
+<td>Değişime dayanıklı yazılım üretmek</td>
+</tr>
+<tr>
+<td><strong>Köken</strong></td>
+<td>Onion + Hexagonal + DDD birleşimi</td>
+</tr>
+<tr>
+<td><strong>Prensip</strong></td>
+<td>Bağımlılıklar merkeze akar</td>
+</tr>
+<tr>
+<td><strong>Odak</strong></td>
+<td>Domain iş kuralları</td>
+</tr>
+<tr>
+<td><strong>Yarar</strong></td>
+<td>Framework bağımsızlık, test edilebilirlik, uzun ömür</td>
+</tr>
+<tr>
+<td><strong>Uygulama Alanı</strong></td>
+<td>API, Monolith, Microservice, Serverless hepsi</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🔮 15️⃣ Epilog: Clean ≠ Pretty</h2>
+<p>Clean Architecture, “güzel” kodla ilgili değildir.<br>
+“Dayanıklı”, “bağımsız” ve “uzun ömürlü” kodla ilgilidir.</p>
+<p>Ve tıpkı iyi bir bina gibi,<br>
+güzelliği dıştan değil, <strong>taşıyıcı kolonlarından</strong> gelir.</p>
+<hr>
+<blockquote>
+<p>“Architecture is about <strong>intent and isolation</strong>, not about folders.”<br>
+— <em>DotNet Senior Developer (C#)</em></p>
+</blockquote>
+<hr>

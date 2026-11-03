@@ -1,0 +1,33 @@
+---
+layout: default
+title: Sayfa bulunamadı
+permalink: /404.html
+sitemap: false
+---
+<script>
+// Old WordPress URLs -> new locations (pagination, author/tag/date archives, sub-categories).
+(function () {
+  var base = "{{ site.baseurl }}", p = location.pathname.slice(base.length), m, to = null;
+  if ((m = p.match(/^\/blog\/page\/(\d+)\/?$/))) to = "/page/" + m[1] + "/";
+  else if (/^\/(blog|anasayfa|author\/[^/]+)(\/page\/\d+)?\/?$/.test(p)) to = "/";
+  else if ((m = p.match(/^\/tag\/([^/]+)/))) to = "/search/?q=" + encodeURIComponent(decodeURIComponent(m[1]).replace(/-/g, " "));
+  else if ((m = p.match(/^\/category\/([^/]+)\/(technology|teknoloji)\/?/))) to = "/category/" + m[1] + "/";
+  else if ((m = p.match(/^\/category\/([^/]+)\/page\/\d+\/?$/))) to = "/category/" + m[1] + "/";
+  else if ((m = p.match(/^\/(\d{4})(\/\d{2})?(\/\d{2})?(\/page\/\d+)?\/?$/))) to = "/archive/#y" + m[1];
+  else if ((m = p.match(/^\/page\/\d+\/?$/))) to = "/";
+  if (to) location.replace(base + to);
+})();
+</script>
+<section class="container narrow notfound">
+  <p class="eyebrow">404</p>
+  <h1>Aradığın sayfa burada değil.</h1>
+  <p class="lead">Taşınmış ya da kaldırılmış olabilir. Aramayı dene veya ana sayfaya dön.</p>
+  <form class="search-form" action="{{ '/search/' | relative_url }}" method="get" role="search">
+    <input type="search" name="q" id="nf-q" placeholder="Yazılarda ara…" aria-label="Yazılarda ara">
+    <button type="submit">Ara</button>
+  </form>
+  <p><a class="button" href="{{ '/' | relative_url }}">← Ana sayfa</a></p>
+</section>
+<script>
+(function () { var s = location.pathname.split("/").filter(Boolean).pop() || ""; var i = document.getElementById("nf-q"); if (i && !/^\d+$/.test(s)) i.value = decodeURIComponent(s).replace(/[-_]/g, " ").replace(/\.html?$/, ""); })();
+</script>

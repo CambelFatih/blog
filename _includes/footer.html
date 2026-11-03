@@ -1,0 +1,23 @@
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-about">
+      <a class="brand" href="{{ '/' | relative_url }}"><span class="brand-mark" aria-hidden="true">K</span><span class="brand-name">{{ site.title }}</span></a>
+      <p>{{ site.description }}</p>
+      <p class="muted"><em>“{{ site.tagline }}”</em></p>
+    </div>
+    <div class="footer-links">
+      <h2>Keşfet</h2>
+      <a href="{{ '/category/' | relative_url }}">Kategoriler</a>
+      <a href="{{ '/archive/' | relative_url }}">Arşiv</a>
+      <a href="{{ '/search/' | relative_url }}">Arama</a>
+      <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+    </div>
+    <div class="footer-links">
+      <h2>Site</h2>
+      <a href="{{ '/about/' | relative_url }}">Hakkında</a>
+      <a href="{{ '/privacy/' | relative_url }}">Gizlilik</a>
+      <a href="{{ '/dw/time/clock.html' | relative_url }}">Saat</a>
+    </div>
+  </div>
+  <div class="container footer-bottom">© {{ site.time | date: '%Y' }} {{ site.title }}</div>
+</footer>

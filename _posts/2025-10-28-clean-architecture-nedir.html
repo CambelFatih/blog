@@ -1,0 +1,383 @@
+---
+layout: "post"
+title: "Clean Architecture-1"
+date: "2025-10-28 15:32:46 +0000"
+last_modified_at: "2025-10-28 17:02:43 +0000"
+categories: ["softw", "tech"]
+description: "Infrastructure Nasıl Olmalıdır? Infrastructure = “Uygulamanın donanım, framework, teknoloji detaylarını” içerir."
+image: "/wp-content/uploads/2025/10/cleanarchitecture.png"
+thumbnail: "/wp-content/uploads/2025/10/cleanarchitecture-768x483.png"
+---
+<p>Harika — bu soruyu sorman, artık mimariyi “kullanmak” değil <strong>anlamak</strong> istediğini gösteriyor 🔥<br>
+Şimdi çok derin ama kalıcı bir şekilde açıklayacağım:<br>
+<strong>Clean Architecture</strong>, <strong>katmanların rolleri</strong>, <strong>bağımlılık yönü</strong>, <strong>Core’un görevi</strong>, <strong>Infrastructure’ın yeri</strong>, ve <strong>modüler monolith</strong> ile ilişkisini.<br>
+Hazırsan kahveni al ☕ ve başlıyoruz 👇</p>
+<hr>
+<h2>🧭 1️⃣ Clean Architecture Nedir?</h2>
+<p>Clean Architecture, <strong>bağımlılık yönünü</strong> tersine çevirerek <strong>iş kurallarını merkezde tutan</strong> bir yazılım mimarisidir.</p>
+<p>Amaç:</p>
+<blockquote>
+<p>“Uygulamanın <strong>kalbinde</strong> iş kuralları yaşar.<br>
+Framework’ler, veri tabanı, UI ve üçüncü parti servisler sadece <strong>ayrılabilir detaylardır</strong>.”</p>
+</blockquote>
+<h3>🔹 Katmanlar (içten dışa)</h3>
+<pre><code>        +----------------------------+
+        |        Presentation        |  → UI, API, Web, Console
+        +----------------------------+
+        |       Infrastructure       |  → DB, Redis, HTTP, FileSystem, Telegram
+        +----------------------------+
+        |       Application          |  → Use Cases, Orchestration
+        +----------------------------+
+        |          Domain            |  → Entities, ValueObjects, Rules
+        +----------------------------+</code></pre>
+<hr>
+<h2>🧩 2️⃣ Katmanların Anlamı</h2>
+<h3><strong>1. Domain (Enterprise Rules)</strong></h3>
+<ul>
+<li>Saf iş kuralları ve model (business logic).</li>
+<li>Persistence, logging, HTTP bilmez.</li>
+<li>Framework bağımsız.</li>
+<li>En <strong>stabil</strong> katman.</li>
+</ul>
+<p><strong>İçerik:</strong></p>
+<ul>
+<li><code>Entities</code></li>
+<li><code>ValueObjects</code></li>
+<li><code>DomainEvents</code></li>
+<li><code>Aggregates</code></li>
+<li><code>Specifications</code></li>
+<li><code>Interfaces (IDomainEventHandler)</code></li>
+</ul>
+<p><strong>Örnek:</strong></p>
+<pre><code class="language-csharp">public class Quiz : Entity
+{
+    public string Title { get; private set; }
+    public void Start()
+    {
+        if (IsStarted) throw new InvalidOperationException(&quot;Quiz already started.&quot;);
+        IsStarted = true;
+        AddDomainEvent(new QuizStartedEvent(Id));
+    }
+}</code></pre>
+<p>🟢 <strong>Bağımlılığı yok.</strong><br>
+Sadece .NET standard kütüphanesine bağlı olabilir.</p>
+<hr>
+<h3><strong>2. Application (Use Cases + Orchestration)</strong></h3>
+<ul>
+<li>“Domain”i kullanarak <strong>iş akışını (use case)</strong> oluşturur.</li>
+<li>Dış sistemlere erişmek için sadece <strong>abstractions</strong> kullanır (örneğin <code>IQuizRepository</code>, <code>IEventBus</code>, <code>IBufferedLogger</code>).</li>
+<li>Domain kurallarını uygular ama dış dünyayı bilmez.</li>
+<li>CQRS, Validation, Mediator gibi pattern’ler burada yaşar.</li>
+</ul>
+<p><strong>İçerik:</strong></p>
+<ul>
+<li><code>Commands / Queries</code></li>
+<li><code>Handlers</code></li>
+<li><code>DTOs</code></li>
+<li><code>Behaviors (Pipelines)</code></li>
+<li><code>Interfaces</code> (IRepository, IEventBus, IScheduler)</li>
+</ul>
+<p><strong>Örnek:</strong></p>
+<pre><code class="language-csharp">public class StartQuizCommandHandler : IRequestHandler&lt;StartQuizCommand&gt;
+{
+    private readonly IQuizRepository _repository;
+    private readonly IEventBus _eventBus;
+
+    public StartQuizCommandHandler(IQuizRepository repository, IEventBus eventBus)
+    {
+        _repository = repository;
+        _eventBus = eventBus;
+    }
+
+    public async Task Handle(StartQuizCommand request, CancellationToken ct)
+    {
+        var quiz = await _repository.GetByIdAsync(request.QuizId, ct);
+        quiz.Start();
+        await _repository.SaveAsync(quiz, ct);
+        await _eventBus.PublishAsync(new QuizStartedEvent(quiz.Id));
+    }
+}</code></pre>
+<p>🟢 Application katmanı sadece <strong>abstractions’a</strong> (interface) bağımlı olmalı.<br>
+🛑 Infrastructure’a <strong>direkt bağımlı olamaz!</strong></p>
+<hr>
+<h3><strong>3. Infrastructure (Frameworks + Implementation)</strong></h3>
+<ul>
+<li>Dış dünya ile tüm etkileşim burada.</li>
+<li>Veri tabanı, Redis, API çağrıları, dosya sistemi, e-posta, logging, telemetry…</li>
+<li>Bu katman, Application katmanında tanımlı <strong>interface’leri</strong> uygular.</li>
+</ul>
+<p><strong>İçerik:</strong></p>
+<ul>
+<li><code>EFCoreRepositories</code></li>
+<li><code>RedisCacheService</code></li>
+<li><code>TelegramApiClient</code></li>
+<li><code>BufferedLoggerService</code></li>
+<li><code>OutboxProcessor</code></li>
+<li><code>FileStorageService</code></li>
+</ul>
+<p><strong>Örnek:</strong></p>
+<pre><code class="language-csharp">public class QuizRepository : IQuizRepository
+{
+    private readonly AppDbContext _context;
+    public QuizRepository(AppDbContext context) =&gt; _context = context;
+
+    public Task&lt;Quiz?&gt; GetByIdAsync(Guid id, CancellationToken ct)
+        =&gt; _context.Quizzes.FirstOrDefaultAsync(q =&gt; q.Id == id, ct);
+
+    public Task SaveAsync(Quiz quiz, CancellationToken ct)
+        =&gt; _context.SaveChangesAsync(ct);
+}</code></pre>
+<p>🟡 Bu katman dış dünyaya bağımlıdır (EF, Redis, Kafka vs.).<br>
+🟢 Ancak bağımlılıklar <strong>Application → Interface</strong>, <strong>Infrastructure → Implementation</strong> yönündedir.<br>
+🛑 Infrastructure hiçbir zaman Domain veya Application’dan <strong>bağımsız olamaz</strong>, ama <strong>tersine bağımlıdır</strong>.</p>
+<hr>
+<h3><strong>4. Presentation (Interface Adapters / UI Layer)</strong></h3>
+<ul>
+<li>Kullanıcıdan (veya başka sistemden) gelen girdiyle Application katmanını çağırır.</li>
+<li>ASP.NET Core Controllers, gRPC Services, CLI, SignalR, WebUI olabilir.</li>
+<li>Request → DTO → Command → Application → Domain → Response akışı.</li>
+</ul>
+<p><strong>Örnek:</strong></p>
+<pre><code class="language-csharp">[ApiController]
+[Route(&quot;api/quizzes&quot;)]
+public class QuizController : ControllerBase
+{
+    private readonly IMediator _mediator;
+    public QuizController(IMediator mediator) =&gt; _mediator = mediator;
+
+    [HttpPost(&quot;{quizId}/start&quot;)]
+    public async Task&lt;IActionResult&gt; Start(Guid quizId)
+    {
+        await _mediator.Send(new StartQuizCommand(quizId));
+        return Ok();
+    }
+}</code></pre>
+<p>🟢 Presentation sadece Application’a bağımlı olabilir.<br>
+🛑 Application veya Domain <strong>Presentation’a</strong> asla bağımlı olamaz.</p>
+<hr>
+<h2>🧭 3️⃣ Core Katmanı Nedir?</h2>
+<p><code>Core</code> genellikle <strong>Domain</strong> + <strong>Application</strong> katmanlarının birleşimidir.</p>
+<pre><code>Core/
+├── Domain/
+│   ├── Entities/
+│   ├── ValueObjects/
+│   └── Events/
+└── Application/
+    ├── Interfaces/
+    ├── Commands/
+    ├── Queries/
+    └── Services/</code></pre>
+<p><strong>Core = İşin kalbi.</strong><br>
+Yani:</p>
+<ul>
+<li><strong>Uygulamanın iş mantığı</strong> burada.</li>
+<li><strong>Framework bağımlılığı yok.</strong></li>
+<li><strong>En stabil kısım.</strong></li>
+</ul>
+<p>💡 Bu yüzden:</p>
+<blockquote>
+<p>Core içinde <strong>Infrastructure</strong> olmamalı,<br>
+çünkü Infrastructure dış dünyaya bağımlı, değişken bir detaydır.</p>
+</blockquote>
+<hr>
+<h2>🧩 4️⃣ Neden Core içinde Infrastructure olmamalı?</h2>
+<h3>🔴 Sebep 1: <strong>Dependency Rule (Bağımlılık Yönü)</strong></h3>
+<blockquote>
+<p>“Kod bağımlılığı hep içeriye (Domain’e) doğru olmalı.”</p>
+</blockquote>
+<p><strong>Yanlış yön:</strong></p>
+<pre><code>Core → Infrastructure ❌</code></pre>
+<p><strong>Doğru yön:</strong></p>
+<pre><code>Infrastructure → Core ✅</code></pre>
+<p><strong>Eğer Core içinde Infrastructure varsa:</strong></p>
+<ul>
+<li>Domain veya Application, EF, Redis, Telegram gibi framework’lere bağımlı hale gelir.</li>
+<li>Test edilebilirlik düşer.</li>
+<li>Değişim maliyeti artar.</li>
+<li>SOLID prensipleri (özellikle DIP) bozulur.</li>
+</ul>
+<hr>
+<h3>🔴 Sebep 2: <strong>Değişim Sıklığı</strong></h3>
+<ul>
+<li>Infrastructure (örneğin Redis, Kafka, EF) <strong>sık değişir</strong>.</li>
+<li>Core (iş mantığı) <strong>seyrek değişir</strong>.</li>
+<li>Farklı değişim frekansına sahip kodlar <strong>aynı yerde</strong> olursa, stabilite bozulur.</li>
+</ul>
+<hr>
+<h3>🔴 Sebep 3: <strong>Test Edilebilirlik</strong></h3>
+<p>Core içinde Infrastructure olursa:</p>
+<ul>
+<li>Unit test’ler EF veya Redis’e bağımlı hale gelir.</li>
+<li>Mock edilemez hale gelir.</li>
+<li>Pure business logic testleri zorlaşır.</li>
+</ul>
+<hr>
+<h3>🔴 Sebep 4: <strong>Portability (Taşınabilirlik)</strong></h3>
+<ul>
+<li>Core bağımsız olmalı ki aynı iş mantığını başka ortamlara taşıyabilesin.</li>
+<li>Örneğin:<br>
+Web API, Worker Service, Azure Function, CLI, Mobile App hepsi aynı Core’u kullanabilir.</li>
+</ul>
+<hr>
+<h2>🧩 5️⃣ Modüler Monolith ve Core’un Rolü</h2>
+<p><strong>Modüler Monolith</strong> = Tek deployable uygulama, ama <strong>bağımsız modüller</strong> halinde organize edilmiş.</p>
+<p>Her modül, küçük bir “Clean Architecture”’tır.</p>
+<p>Örnek:</p>
+<pre><code>src/
+├── Modules/
+│   ├── Quiz/
+│   │   ├── Quiz.Domain/
+│   │   ├── Quiz.Application/
+│   │   ├── Quiz.Infrastructure/
+│   │   └── Quiz.API/
+│   ├── User/
+│   │   ├── User.Domain/
+│   │   ├── User.Application/
+│   │   ├── User.Infrastructure/
+│   │   └── User.API/
+│   └── Shared/
+│       └── SharedKernel/
+└── Host/
+    └── WebHost/</code></pre>
+<p>Avantaj:</p>
+<ul>
+<li>Her modül kendi mini-Core’una sahip olur (Domain + Application).</li>
+<li>Tüm modüller Infrastructure katmanını paylaşabilir.</li>
+<li>Tek database ama <strong>bağımsız bounded context’ler</strong>.</li>
+</ul>
+<hr>
+<h2>⚙️ 6️⃣ Bağımlılıklar Nasıl Yönetilir?</h2>
+<h3>📌 Proje Referans Yönü</h3>
+<pre><code>Presentation  →  Application  →  Domain
+      ↓               ↑
+ Infrastructure  ←────┘</code></pre>
+<table>
+<thead>
+<tr>
+<th>Katman</th>
+<th>Referans verebilir</th>
+<th>Referans veremez</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Domain</strong></td>
+<td>Hiçbirine</td>
+<td>Hepsine ❌</td>
+</tr>
+<tr>
+<td><strong>Application</strong></td>
+<td>Domain</td>
+<td>Infrastructure ❌</td>
+</tr>
+<tr>
+<td><strong>Infrastructure</strong></td>
+<td>Application, Domain</td>
+<td>Presentation ❌</td>
+</tr>
+<tr>
+<td><strong>Presentation</strong></td>
+<td>Application</td>
+<td>Infrastructure ❌</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>📚 7️⃣ Katmanların İsmi Ne Anlama Geliyor?</h2>
+<table>
+<thead>
+<tr>
+<th>Katman</th>
+<th>Anlamı</th>
+<th>Temel Sorumluluk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Domain</strong></td>
+<td>“Ne iş yapıyorum?”</td>
+<td>İş kuralları, entity davranışları</td>
+</tr>
+<tr>
+<td><strong>Application</strong></td>
+<td>“Ne zaman / nasıl yapıyorum?”</td>
+<td>İş akışı, orchestration, use-case’ler</td>
+</tr>
+<tr>
+<td><strong>Infrastructure</strong></td>
+<td>“Nerede / hangi araçla yapıyorum?”</td>
+<td>DB, API, Redis, Logging</td>
+</tr>
+<tr>
+<td><strong>Presentation</strong></td>
+<td>“Kiminle konuşuyorum?”</td>
+<td>Kullanıcı / dış sistem arayüzü</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧠 8️⃣ Infrastructure Nasıl Olmalıdır?</h2>
+<p>Infrastructure = “Uygulamanın donanım, framework, teknoloji detaylarını” içerir.</p>
+<p><strong>Özellikleri:</strong></p>
+<ul>
+<li>Application’daki interface’leri implemente eder.</li>
+<li>DI (Dependency Injection) ile Application’a bağlanır.</li>
+<li>Kolay değiştirilebilir olmalı (örneğin Redis yerine Kafka).</li>
+<li>Testlerde Mock’lanabilir olmalı.</li>
+</ul>
+<p><strong>Alt klasör örneği:</strong></p>
+<pre><code>Infrastructure/
+├── Persistence/
+│   ├── AppDbContext.cs
+│   ├── QuizRepository.cs
+│   └── UnitOfWork.cs
+├── Logging/
+│   └── BufferedLoggerService.cs
+├── Messaging/
+│   └── KafkaEventBus.cs
+├── Scheduler/
+│   └── RedisScheduler.cs
+├── Telegram/
+│   └── TelegramApiClient.cs
+└── DependencyInjection.cs</code></pre>
+<hr>
+<h2>🧩 9️⃣ Sonuç</h2>
+<table>
+<thead>
+<tr>
+<th>Kural</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ Core sadece Domain + Application içerir</td>
+<td>Core, işin kalbidir; dış dünyayı bilmez</td>
+</tr>
+<tr>
+<td>❌ Core içinde Infrastructure olmaz</td>
+<td>Bağımlılık yönü ters olur</td>
+</tr>
+<tr>
+<td>✅ Application sadece abstraction tanımlar</td>
+<td>Dış dünya Application’a değil, interface’lere bağlıdır</td>
+</tr>
+<tr>
+<td>✅ Infrastructure bu interface’leri uygular</td>
+<td>DB, API, Redis gibi detaylar buradadır</td>
+</tr>
+<tr>
+<td>✅ Presentation sadece Application’a bağlıdır</td>
+<td>Controller’lar use-case’leri çağırır</td>
+</tr>
+<tr>
+<td>✅ Shared, cross-cutting konular içindir</td>
+<td>Core’un dışında olabilir</td>
+</tr>
+<tr>
+<td>✅ Modüler Monolith = birden fazla küçük Clean Architecture</td>
+<td>Her modül kendi Domain + Application setine sahiptir</td>
+</tr>
+</tbody>
+</table>
+<hr>

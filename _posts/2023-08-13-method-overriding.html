@@ -1,0 +1,52 @@
+---
+layout: "post"
+title: "Method Overriding"
+date: "2023-08-13 21:48:28 +0000"
+last_modified_at: "2023-08-13 21:50:02 +0000"
+categories: ["net", "softw"]
+description: "İşte C# ile Method Overriding konseptini gösteren bir örnek: Bu, method overriding'in klasik bir örneğidir."
+image: "/wp-content/uploads/2023/08/method-overloading-overriding-loading.png"
+---
+<h2>İşte C# ile Method Overriding konseptini gösteren bir örnek:</h2>
+<pre><code class="language-csharp">using System;
+
+// Üst sınıf (Base class)
+public class Hayvan
+{
+    public virtual void SesCikar()
+    {
+        Console.WriteLine(&quot;Bir hayvan sesi&quot;);
+    }
+}
+
+// Alt sınıf (Derived class)
+public class Kedi : Hayvan
+{
+    // Aynı isimli metodu üst sınıftan miras alıyoruz ve yeniden tanımlıyoruz.
+    public override void SesCikar()
+    {
+        Console.WriteLine(&quot;Miyav&quot;);
+    }
+}
+
+public class Kopek : Hayvan
+{
+    // Bu sınıf için de aynı metodu üst sınıftan miras alıyoruz ve yeniden tanımlıyoruz.
+    public override void SesCikar()
+    {
+        Console.WriteLine(&quot;Hav hav&quot;);
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        Hayvan kedi = new Kedi();
+        kedi.SesCikar();  // Miyav
+
+        Hayvan kopek = new Kopek();
+        kopek.SesCikar();  // Hav hav
+    }
+}</code></pre>
+<p>Bu C# örneğinde de, <strong>'Hayvan'</strong> sınıfında bir <strong>'SesCikar'</strong> metodu tanımlanmıştır. Bu metot <strong>virtual</strong> anahtar kelimesiyle tanımlanmıştır ki alt sınıflar bu metodu override edebilsin. <strong>Kedi</strong> ve <strong>Kopek</strong> sınıfları, <strong>Hayvan</strong> sınıfından miras almaktadır ve her ikisi de <strong>SesCikar</strong> metodunu kendi özelliklerine uygun olarak yeniden tanımlamıştır. Bu, method overriding'in klasik bir örneğidir.</p>

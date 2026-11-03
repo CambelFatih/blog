@@ -1,0 +1,241 @@
+---
+layout: "post"
+title: "IEnumerable, IQueryable ve List arasındaki farklar"
+date: "2025-11-04 18:13:45 +0000"
+last_modified_at: "2025-11-04 19:39:11 +0000"
+categories: ["softw", "tech"]
+description: "IEnumerable, IQueryable ve List kavramları .NET dünyasında veri üzerinde çalışma şeklimizi etkileyen önemli yapılardır. Aralarındaki farkları"
+image: "/wp-content/uploads/2025/11/1_OQnM0CFU3b_IZdqSo9Zxug.png"
+---
+<hr>
+<h2>✅ <strong>1. IEnumerable Nedir?</strong></h2>
+<ul>
+<li><strong>Namespace:</strong> <code>System.Collections</code> veya <code>System.Collections.Generic</code></li>
+<li><strong>Veri Kaynağı:</strong> Bellekte olabilir, veritabanı da olabilir.</li>
+<li><strong>Çalışma Şekli:</strong> Veriyi <strong>satır satır (tek tek)</strong> belleğe çeker.</li>
+<li><strong>Sorgu Tipi:</strong> <strong>Deferred Execution (ertelenmiş)</strong>, ama sorgunun geri kalan kısmı bellekte işlenir.</li>
+<li><strong>Filtreleme Nerede Yapılır?</strong> <strong>Bellekte (In-Memory)</strong></li>
+<li><strong>Kullanım Yeri:</strong> LINQ to Objects, basit liste işlemleri.</li>
+</ul>
+<pre><code class="language-csharp">IEnumerable&lt;Person&gt; people = db.People.ToList(); // Liste çekildi
+var result = people.Where(p =&gt; p.Age &gt; 20);       // Filtreleme bellekte yapılır</code></pre>
+<h3>✔ Artıları:</h3>
+<ul>
+<li>Tüm koleksiyon tiplerinde çalışır.</li>
+<li>Hafif ve basit.</li>
+</ul>
+<h3>✖ Eksileri:</h3>
+<ul>
+<li>Veritabanına sorgu göndermez.</li>
+<li>Filtreleme bellekte yapılacağı için <strong>performans kaybı</strong> olabilir.</li>
+</ul>
+<hr>
+<h2>✅ <strong>2. IQueryable Nedir?</strong></h2>
+<ul>
+<li><strong>Namespace:</strong> <code>System.Linq</code></li>
+<li><strong>Veri Kaynağı:</strong> Genelde veritabanı (Entity Framework, LINQ to SQL, MongoDb vs).</li>
+<li><strong>Çalışma Şekli:</strong> Sorgu <strong>SQL'e dönüştürülüp veritabanında çalıştırılır</strong>.</li>
+<li><strong>Filtreleme Nerede Yapılır?</strong> <strong>Veritabanında</strong></li>
+<li><strong>Çalıştırma Zamanı:</strong> <strong>Gerçek veri çekme</strong>, döngüye girildiğinde veya <code>.ToList()</code>, <code>.First()</code>, <code>.Count()</code> çağrıldığında.</li>
+</ul>
+<pre><code class="language-csharp">IQueryable&lt;Person&gt; people = db.People;
+var result = people.Where(p =&gt; p.Age &gt; 20); // SQL sorgusuna çevrilir</code></pre>
+<h3>✔ Artıları:</h3>
+<ul>
+<li>Filtre/veri işlemleri veritabanında yapılır → <strong>Daha az veri belleğe çekilir</strong>.</li>
+<li>Büyük verilerde yüksek performans sağlar.</li>
+</ul>
+<h3>✖ Eksileri:</h3>
+<ul>
+<li>Sadece sorgulanabilir veri kaynaklarında çalışır.</li>
+<li>Karmaşık yapısı nedeniyle hata ayıklaması IEnumerable kadar kolay değildir.</li>
+</ul>
+<hr>
+<h2>✅ <strong>3. List<t> Nedir?</t></strong></h2>
+<ul>
+<li><strong>Namespace:</strong> <code>System.Collections.Generic</code></li>
+<li><strong>Tür:</strong> Somut (concrete) bir koleksiyondur.</li>
+<li><strong>Veri Nerede?</strong> Tamamı <strong>RAM (bellek)</strong> üzerindedir.</li>
+<li><strong>Yazılabilir mi?</strong> Evet (<code>Add</code>, <code>Remove</code> gibi yöntemlerle değiştirilebilir).</li>
+</ul>
+<pre><code class="language-csharp">List&lt;Person&gt; people = db.People.ToList(); // Tüm veriler belleğe çekildi
+people.Add(new Person { Name = &quot;Ali&quot; });</code></pre>
+<h3>✔ Artıları:</h3>
+<ul>
+<li>Veri tamamen bellekte → hızlı erişim.</li>
+<li>Değiştirilebilir (mutable).</li>
+</ul>
+<h3>✖ Eksileri:</h3>
+<ul>
+<li>Büyük veri kümelerinde belleği çok tüketir.</li>
+<li>Veritabanıyla direkt bağlantısı yoktur.</li>
+</ul>
+<hr>
+<h2>🎯 <strong>Karşılaştırma Tablosu</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Özellik</th>
+<th>IEnumerable</th>
+<th>IQueryable</th>
+<th>List<t></t></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Çalışma Yeri</td>
+<td>Bellek (In-Memory)</td>
+<td>Veritabanı (Remote)</td>
+<td>Bellek</td>
+</tr>
+<tr>
+<td>SQL Sorgusu</td>
+<td>❌ Hayır</td>
+<td>✅ Evet</td>
+<td>❌ Hayır</td>
+</tr>
+<tr>
+<td>Lazy Execution</td>
+<td>✅ Evet</td>
+<td>✅ Evet</td>
+<td>❌ Hayır (hemen çalışır)</td>
+</tr>
+<tr>
+<td>Veri Değiştirilebilir mi?</td>
+<td>❌ Hayır (Sadece okuma)</td>
+<td>❌ Evet (ama genelde sorgu amaçlı)</td>
+<td>✅ Evet</td>
+</tr>
+<tr>
+<td>Performans Bazlı Kullanım</td>
+<td>Küçük veriler</td>
+<td>Büyük/veritabanı verileri</td>
+<td>Bellekte çalışmak istediğinde</td>
+</tr>
+<tr>
+<td>Modifikasyon</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧠 <strong>Bir cümleyle özetlersen:</strong></h2>
+<ul>
+<li><strong>IEnumerable:</strong> Veriyi belleğe çek ve orada işle.</li>
+<li><strong>IQueryable:</strong> Veriyi veritabanında işle ve sadece gerekli kısmı belleğe getir.</li>
+<li><strong>List<t>:</t></strong> Veriyi tamamen belleğe al, üzerinde serbestçe değişiklik yap.</li>
+</ul>
+<hr>
+<h2>✅ <strong>Lazy Execution (Ertelenmiş Çalıştırma) Nedir?</strong></h2>
+<p><strong>Lazy Execution</strong>, bir sorgunun <strong>tanımlandığı anda değil</strong>, ona <strong>gerçekte ihtiyaç duyulduğu anda çalıştırılmasıdır</strong>.</p>
+<p>📌 Yani:</p>
+<ul>
+<li>Kodda <code>.Where()</code>, <code>.Select()</code> gibi sorgular yazarsın ama <strong>henüz veritabanına gitmez veya bellekte çalışmaz.</strong></li>
+<li>Ancak <code>.ToList()</code>, <code>.First()</code>, <code>.Count()</code>, <code>foreach</code> gibi işlemler yapıldığında <strong>sorgu o anda çalıştırılır</strong>.</li>
+</ul>
+<hr>
+<h2>🔍 <strong>Örneğin:</strong></h2>
+<pre><code class="language-csharp">var people = db.People.Where(p =&gt; p.Age &gt; 20); // Daha sorgu yapılmadı! (Lazy)
+var list = people.ToList();                   // İşte şimdi SQL sorgusu gönderilir!</code></pre>
+<blockquote>
+<p><strong>İlk satırda sadece sorguyu tanımladın.<br>
+İkinci satırda sorguyu “çalıştırdın” ve veriler çekildi.</strong></p>
+</blockquote>
+<hr>
+<h2>✅ <strong>Lazy Execution'ın Avantajları:</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Avantaj</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ Performans</td>
+<td>Gereksiz veri çekmez, sadece gerçekten ihtiyaç olduğunda çalışır.</td>
+</tr>
+<tr>
+<td>✅ Sorgu birleştirme</td>
+<td>Birden fazla <code>.Where()</code>, <code>.Select()</code> ard arda eklersen hepsi sonunda tek sorguya dönüşür.</td>
+</tr>
+<tr>
+<td>✅ Hafıza tasarrufu</td>
+<td>Özellikle IQueryable’da, sadece ihtiyaç duyulan veri çekilir.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>❗ <strong>Lazy Execution’ın Devreye Girmesi:</strong></h2>
+<p><strong>Aşağıdaki işlemler yapıldığında sorgu artık çalışır (yani veri çekilir / SQL gönderilir):</strong></p>
+<h3>✅ &quot;Sorguyu tetikleyen&quot; işlemler:</h3>
+<table>
+<thead>
+<tr>
+<th>Tetikleyici</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.ToList()</code></td>
+<td>Veriyi tamamen belleğe alır.</td>
+</tr>
+<tr>
+<td><code>.First()</code>  / <code>.FirstOrDefault()</code></td>
+<td>Sadece ilk kaydı çeker ama yine sorguyu çalıştırır.</td>
+</tr>
+<tr>
+<td><code>.Count()</code></td>
+<td>Kaç kayıt var diye sorgular.</td>
+</tr>
+<tr>
+<td><code>foreach (var item in people)</code></td>
+<td>Döngüye girildiği anda sorgu çalışır.</td>
+</tr>
+<tr>
+<td><code>.Any()</code>, <code>.Max()</code>, <code>.Min()</code>, <code>.Sum()</code></td>
+<td>Tümü sorguyu tetikler.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>⚡ <strong>Eager Execution (Hemen Çalıştırma) Ne?</strong></h2>
+<p>Lazy’in tam tersidir.</p>
+<ul>
+<li>Sorguyu yazdığın anda çalışır.</li>
+<li>Örneğin List<t> oluştururken:</t></li>
+</ul>
+<pre><code class="language-csharp">var people = db.People.ToList(); // Sorgu hemen çalışır, veri çekilir
+var result = people.Where(p =&gt; p.Age &gt; 20); // Artık bellekte filtreleme</code></pre>
+<hr>
+<h2>🎯 <strong>Kısa Özet:</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Kavram</th>
+<th>Açıklaması</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Lazy Execution</strong></td>
+<td>Sorgu tanımlanır ama çalışmaz, <strong>ancak ihtiyaç olunca</strong> çalışır.</td>
+</tr>
+<tr>
+<td><strong>IQueryable</strong></td>
+<td>Lazy execution + SQL veritabanında çalışır.</td>
+</tr>
+<tr>
+<td><strong>IEnumerable</strong></td>
+<td>Lazy execution + veri belleğe çekildikten sonra çalışır.</td>
+</tr>
+<tr>
+<td><strong>Eager Execution</strong></td>
+<td>Sorgu hemen çalışır, veri belleğe çekilir.</td>
+</tr>
+</tbody>
+</table>
+<hr>

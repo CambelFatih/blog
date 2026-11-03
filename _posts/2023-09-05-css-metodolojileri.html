@@ -1,0 +1,147 @@
+---
+layout: "post"
+title: "Popüler CSS Metodolojilerine Derinlemesine Bir Bakış"
+date: "2023-09-05 11:25:46 +0000"
+last_modified_at: "2023-09-10 11:36:32 +0000"
+categories: ["softw", "tech"]
+description: "Popüler CSS metodolojileri OOCSS, ACSS, BEM ve SMACSS hakkında hızlı bir rehber. Web tasarımında yeni yaklaşımlar."
+image: "/wp-content/uploads/2023/09/d22d.png"
+---
+<p><!-- Başlık --></p>
+<h1>Popüler CSS Metodolojilerine Derinlemesine Bir Bakış</h1>
+<p><!-- İçerik Başlangıcı --></p>
+<p>CSS metodolojileri Web tasarımının sürekli gelişen dünyasında, elimizdeki <strong>CSS metodolojilerini</strong> anlamak gerçek bir oyun değiştirici olabilir. OOCSS, ACSS, BEM ve SMACSS gibi dört ana oyuncuyu keşfedelim.</p>
+<p><!-- OOCSS Bölümü --></p>
+<h2>OOCSS (Nesne-Yönelimli CSS)</h2>
+<p>Nicole Sullivan tarafından tanıtılan OOCSS, yeniden kullanılabilirliğe odaklanmamızı önerir. Yapıyı tasarımdan ayırmayı önerir. Bu ayrım, daha az kod tekrarına yol açar, böylece siteler daha hızlıdır ve bakımı daha kolaydır.</p>
+<h3>OOCSS Kodlama Örneği</h3>
+<p>OOCSS'de, yapı ve stil ayrılır. Örneğin, bir butonu ele alalım:</p>
+<pre><code class="language-css">
+&lt;div class="box btn"&gt;Tıkla&lt;/div&gt;
+
+/* CSS */
+.box {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.btn {
+  background-color: blue;
+  color: white;
+  text-align: center;
+}
+</code></pre>
+
+<!-- ACSS Bölümü -->
+<h2>ACSS (Atomik CSS)</h2>
+<p>Atomik tasarım prensiplerinin bir sonucu olan ACSS, tek amaçlı sınıfları teşvik eder. Her sınıf bir şey yapar, böylece yüksek yeniden kullanılabilirlik sağlar. ACSS ile kullanıcı arayüzünüzü oluşturmak, çok sayıda atomik sınıfı kullanarak daha çok kompozisyon hakkındadır.</p>
+
+<!-- ACSS Örneği -->
+<h3>ACSS Kodlama Örneği</h3>
+<p>ACSS'de, her sınıf sadece bir stil özelliğini tanımlar:</p>
+<pre><code class="language-css">
+&lt;div class="bg-blue txt-white txt-center"&gt;Tıkla&lt;/div&gt;
+
+/* CSS */
+.bg-blue {
+  background-color: blue;
+}
+
+.txt-white {
+  color: white;
+}
+
+.txt-center {
+  text-align: center;
+}
+</code></pre>
+<p><!-- BEM Bölümü --></p>
+<h2>BEM (Blok, Eleman, Modifikatör)</h2>
+<p>Yandex'in sayesinde BEM'i temin ediyoruz - HTML ve CSS arasında açıklık getiren bir metodoloji. <code>.blok__eleman--modifikatör</code> isimlendirme kurallı, BEM'in yapılandırılmış yaklaşımına bir tanıklıktır ve stillerin şeffaf ve anlaşılır olmasını sağlar.</p>
+<p><!-- BEM Örneği --></p>
+<h3>BEM Kodlama Örneği</h3>
+<p>BEM, blok, eleman ve modifikatör olmak üzere üç ana bileşene sahiptir:</p>
+<pre><code class="language-css">
+&lt;button class="btn btn--large"&gt;&lt;span class="btn__text"&gt;Tıkla&lt;/span&gt;&lt;/button&gt;
+
+/* CSS */
+.btn {
+  background-color: blue;
+  color: white;
+}
+
+.btn--large {
+  padding: 15px 30px;
+}
+
+.btn__text {
+  font-size: 16px;
+}
+</code></pre>
+<p><!-- SMACSS Bölümü --></p>
+<h2>SMACSS (Ölçeklenebilir ve Modüler CSS Mimarisi)</h2>
+<p>Jonathan Snook'un SMACSS'ı, CSS'nin ölçeklenebilirliği ve modülerliği üzerine odaklanan bir rehber sunar. Temel, Düzen ve Modül gibi kategorilerle, tüm amacınız CSS'nizin organize ve bakımı kolay olmasını sağlamaktır.</p>
+<p><!-- İçerik Sonu --></p>
+<p>Bu <strong>CSS metodolojilerini</strong> anlamak, modern web geliştiricileri için esastır. Her metodolojinin kendine özgü güçlü yanları vardır ve proje ihtiyaçlarına göre seçilir. Onları benimsemek, stil sayfalarınızın kalitesini ve iş akışınızın verimliliğini gerçekten artırabilir.</p>
+<p><!-- SMACSS Örneği --></p>
+<h3>SMACSS Kodlama Örneği</h3>
+<p>SMACSS'ta stiller kategorilere ayrılır. Örneğin, temel stiller ve modül stilleri:</p>
+<pre><code class="language-css">
+/* Temel stil */
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Modül stil */
+.lt;div class="card"&gt;
+  &lt;h2 class="card__title"&gt;Başlık&lt;/h2&gt;
+  &lt;p class="card__text"&gt;İçerik&lt;/p&gt;
+&lt;/div&gt;
+
+/* CSS */
+.card {
+  border: 1px solid black;
+}
+
+.card__title {
+  font-size: 20px;
+}
+
+.card__text {
+  font-size: 14px;
+}
+</code></pre>
+<p><!-- Farklılıklar ve Karşılaştırmalar Bölümü --></p>
+<h2>CSS Metodolojileri Arasındaki Farklar ve Karşılaştırmalar</h2>
+<p><!-- OOCSS Farklılıkları --></p>
+<h3>OOCSS Avantajları ve Dezavantajları</h3>
+<p>OOCSS, stilin ve yapının ayrılmasına odaklanır.</p>
+<ul>
+<li><strong>Avantajları:</strong> Yeniden kullanılabilir kod, daha hızlı sayfa yüklemeleri, daha az stil çakışması.</li>
+<li><strong>Dezavantajları:</strong> Büyük projelerde yapı ve stilin ayrılması karmaşıklaşabilir.</li>
+</ul>
+<p><!-- ACSS Farklılıkları --></p>
+<h3>ACSS Avantajları ve Dezavantajları</h3>
+<p>ACSS, atomik tasarım prensipleri üzerine kuruludur.</p>
+<ul>
+<li><strong>Avantajları:</strong> Yeniden kullanılabilirlik, esneklik ve modülerlik.</li>
+<li><strong>Dezavantajları:</strong> CSS sınıf adlarının fazlalığı, belirli bir öğrenme eğrisi gereksinimi.</li>
+</ul>
+<p><!-- BEM Farklılıkları --></p>
+<h3>BEM Avantajları ve Dezavantajları</h3>
+<p>BEM, isimlendirme konvansiyonu ve yapısal tutarlılık üzerine odaklanır.</p>
+<ul>
+<li><strong>Avantajları:</strong> Sürdürülebilirlik, büyük ekiplerle çalışma uyumluluğu, açık ve tutarlı kod yapısı.</li>
+<li><strong>Dezavantajları:</strong> Sınıf isimlerinin uzunluğu, bazen karmaşıklık oluşturabilir.</li>
+</ul>
+<p><!-- SMACSS Farklılıkları --></p>
+<h3>SMACSS Avantajları ve Dezavantajları</h3>
+<p>SMACSS, stil kategorileri oluşturma üzerine odaklanır.</p>
+<ul>
+<li><strong>Avantajları:</strong> Organize edilmiş yapı, ölçeklenebilirlik, modülerlik.</li>
+<li><strong>Dezavantajları:</strong> Öğrenme eğrisi, bazen aşırı yapılandırma gereksinimi.</li>
+</ul>
+<p>Özetle, hangi CSS metodolojisinin seçileceği, projenin ihtiyaçlarına, ekibin büyüklüğüne ve geliştirme sürecine bağlıdır. Her metodolojinin kendine özgü güçlü yönleri vardır, bu nedenle projeye en uygun olanı seçmek önemlidir.</p>
+<h2>Ek kaynaklar</h2>
+<p>Detaylı bilgi için <a href="https://www.creativebloq.com/features/a-web-designers-guide-to-css-methodologies#section-oocss" target="_blank" rel="noopener noreferrer">Creative Bloq'un CSS metodolojileri rehberine</a> göz atabilirsiniz.</p>
+<p><a href="https://cambelfatih.github.io/blog/category/softw/">for more information</a></p>

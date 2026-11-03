@@ -1,0 +1,204 @@
+---
+layout: "post"
+title: "Dead Code ve Forgotten Code"
+date: "2025-10-29 22:01:12 +0000"
+last_modified_at: "2025-10-29 22:05:10 +0000"
+categories: ["softw", "tech"]
+description: "Bir yazılım projesi geliştikçe, büyüdükçe ve evrildikçe bazı kod parçaları artık kullanılmıyor, işlevsizleşiyor veya tamamen unutuluyor."
+image: "/wp-content/uploads/2025/10/deadcode-logo-readme.png"
+thumbnail: "/wp-content/uploads/2025/10/deadcode-logo-readme-800x450.png"
+---
+<hr>
+<h1>⚰️ Dead Code vs Forgotten Code — Yazılımın Sessiz Tehlikeleri</h1>
+<blockquote>
+<p><em>“Kod yazmak kolay, ama hangi kodun artık gereksiz olduğunu fark etmek ustalık ister.”</em><br>
+— DotNet Senior Developer (C#)</p>
+</blockquote>
+<hr>
+<h2>🎯 Giriş</h2>
+<p>Bir yazılım projesi geliştikçe, büyüdükçe ve evrildikçe bazı kod parçaları artık <strong>kullanılmıyor</strong>, <strong>işlevsizleşiyor</strong> veya <strong>tamamen unutuluyor</strong>.<br>
+Bu kodlar genellikle zararsız görünür ama zamanla sistemin hızını, bakım maliyetini ve güvenilirliğini ciddi şekilde etkiler.</p>
+<p>İşte bu yazıda, yazılım dünyasının iki gizli düşmanını tanıyacağız:<br>
+👉 <strong>Dead Code (Ölü Kod)</strong> ve <strong>Forgotten Code (Unutulmuş Kod)</strong></p>
+<hr>
+<h2>🧩 1. Dead Code Nedir?</h2>
+<p><strong>Dead code</strong>, projede <strong>hiçbir zaman çalışmayan veya referans edilmeyen</strong> kod parçalarıdır.<br>
+Derlenir, proje içinde yer alır ama asla çağrılmaz.</p>
+<h3>💻 Örnek:</h3>
+<pre><code class="language-csharp">public class QuizHelper
+{
+    public int CalculateScore(int correct, int total)
+    {
+        return (int)((double)correct / total * 100);
+    }
+
+    // ⚰️ Dead code - Hiçbir yerden çağrılmıyor
+    private void LogInternalState()
+    {
+        Console.WriteLine(&quot;Debug info&quot;);
+    }
+}</code></pre>
+<p>Buradaki <code>LogInternalState()</code> fonksiyonu ne testlerde, ne runtime’da hiçbir şekilde kullanılmıyorsa “ölü kod”dur.</p>
+<hr>
+<h3>🔍 Dead Code’un Ortaya Çıkma Nedenleri</h3>
+<ol>
+<li><strong>Refactoring sonrası</strong> kaldırılmayan metotlar</li>
+<li><strong>Kullanımdan kalkmış (deprecated)</strong> özellikler</li>
+<li><strong>Yanlış dependency injection</strong></li>
+<li><strong>Feature flag</strong> sistemlerinde kapatılmış kod yolları</li>
+</ol>
+<hr>
+<h3>⚙️ Dead Code Tespiti</h3>
+<p>Modern .NET araçları bu konuda oldukça güçlü:</p>
+<ul>
+<li>🧠 <strong>Roslyn Analyzers</strong> → <code>CA1801</code>, <code>S1144</code> gibi kurallar</li>
+<li>🧩 <strong>SonarQube</strong> → “Unused private methods”, “Dead stores” uyarıları</li>
+<li>🧰 <strong>ReSharper / Rider</strong> → “Method is never used” uyarısı</li>
+<li>🧪 <strong>Code Coverage Raporları</strong> → Hiç test edilmeyen kod yolları genellikle ölüdür</li>
+</ul>
+<hr>
+<h3>🧹 Dead Code Nasıl Temizlenir?</h3>
+<ol>
+<li>Önce analiz et, <strong>silmeden önce emin ol</strong></li>
+<li><code>git grep</code> veya IDE search ile çağrım var mı bak</li>
+<li>Feature flag ise, önce feature tamamen kaldırıldı mı kontrol et</li>
+<li><code>git blame</code> ile son değişiklik tarihini incele</li>
+</ol>
+<blockquote>
+<p>🧩 <em>Kural:</em> “Emin olmadığın kodu silme, ama not et.”<br>
+Bir sonraki refactoring’de geri dön.</p>
+</blockquote>
+<hr>
+<h2>💀 2. Forgotten Code Nedir?</h2>
+<p><strong>Forgotten code</strong>, projede <strong>hala var olan ama artık işlevsel olarak anlamını yitirmiş</strong> kodlardır.<br>
+Kimi zaman çalışır, kimi zaman da yıllardır kimse dokunmamıştır.</p>
+<p>Bu kodlar genellikle <em>legacy feature’lar</em>, <em>geçici çözümler</em> veya <em>deneysel modüller</em>dir.</p>
+<hr>
+<h3>💻 Örnek:</h3>
+<pre><code class="language-csharp">if (FeatureFlags.UseLegacyQuizFlow)
+{
+    RunLegacyQuizFlow(); // ☠️ Forgotten code
+}</code></pre>
+<p>Eğer <code>UseLegacyQuizFlow</code> feature flag’i 2 yıldır kapalıysa ama hâlâ production’da deploy ediliyorsa, bu “unutulmuş kod”dur.</p>
+<hr>
+<h3>🔍 Forgotten Code Nasıl Ortaya Çıkar?</h3>
+<ul>
+<li>Uzun süredir <strong>dokunulmayan feature flag’ler</strong></li>
+<li>Artık <strong>hiç kullanılmayan endpoint’ler</strong></li>
+<li><strong>Migration sonrası kaldırılmayan modeller</strong></li>
+<li><strong>Eski versiyon API’leri</strong></li>
+<li>“TODO: remove after v2” tarzı notlar</li>
+</ul>
+<hr>
+<h3>⚠️ Forgotten Code’un Tehlikeleri</h3>
+<table>
+<thead>
+<tr>
+<th>Etki</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>💣 <strong>Karmaşıklık artar</strong></td>
+<td>Yeni geliştiriciler hangi kodun aktif olduğunu anlamakta zorlanır</td>
+</tr>
+<tr>
+<td>🧩 <strong>Bakım zorluğu</strong></td>
+<td>Gereksiz bağımlılıklar, build süresini artırır</td>
+</tr>
+<tr>
+<td>🧱 <strong>Güvenlik riski</strong></td>
+<td>Unutulmuş admin endpoint’leri ciddi açık yaratabilir</td>
+</tr>
+<tr>
+<td>🧮 <strong>Performans kaybı</strong></td>
+<td>Gereksiz initialization ve konfigürasyon yükü</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3>🔍 Forgotten Code Tespiti</h3>
+<p>Bu kod türü statik analizle değil, <strong>domain bilgisiyle</strong> tespit edilir:</p>
+<ul>
+<li><code>git log</code> → 2 yıldır değişmemiş dosyaları incele</li>
+<li><code>git grep</code> → Feature flag’lerin nerede geçtiğini bul</li>
+<li><strong>Configuration audit</strong> → appsettings veya environment variable karşılaştır</li>
+<li><strong>Code ownership analizi</strong> → Kimse sahiplenmiyorsa muhtemelen unutulmuş</li>
+</ul>
+<hr>
+<h3>🧹 Forgotten Code Temizleme Stratejisi</h3>
+<ol>
+<li><strong>Feature cleanup sprint</strong> planla</li>
+<li><strong>Product owner</strong> ile birlikte doğrula: kullanılmıyor mu?</li>
+<li>Kaldırmadan önce <strong>telemetri</strong> ile emin ol<br>
+(örnek: endpoint kullanım oranı %0 mı?)</li>
+<li>
+<p>Kod yorumları yerine <strong>deprecated attribute</strong> kullan:</p>
+<pre><code class="language-csharp">[Obsolete("This flow will be removed in Q4 2025")]
+public void RunLegacyQuizFlow() { }</code></pre>
+</li>
+</ol>
+<hr>
+<h2>⚔️ Dead Code vs Forgotten Code — Karşılaştırma Tablosu</h2>
+<table>
+<thead>
+<tr>
+<th>Özellik</th>
+<th>Dead Code</th>
+<th>Forgotten Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tanım</strong></td>
+<td>Hiç çalışmayan veya çağrılmayan kod</td>
+<td>Hâlâ erişilebilir ama artık işe yaramayan kod</td>
+</tr>
+<tr>
+<td><strong>Tespit yöntemi</strong></td>
+<td>Statik analiz, coverage</td>
+<td>Domain bilgisi, Git geçmişi</td>
+</tr>
+<tr>
+<td><strong>Etkisi</strong></td>
+<td>Performans ve derleme yükü</td>
+<td>Karmaşıklık, güvenlik riski</td>
+</tr>
+<tr>
+<td><strong>Temizleme şekli</strong></td>
+<td>Otomatik analiz araçları</td>
+<td>Manuel inceleme ve onay</td>
+</tr>
+<tr>
+<td><strong>Zorluk seviyesi</strong></td>
+<td>Kolay</td>
+<td>Zor</td>
+</tr>
+<tr>
+<td><strong>Risk</strong></td>
+<td>Düşük</td>
+<td>Yüksek</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧭 Sonuç</h2>
+<p>Yazılımda “fazla kod” genellikle “fazla risk” anlamına gelir.<br>
+Kodun değer üretmediği noktada, onu korumak değil, <strong>temizlemek</strong> gerekir.</p>
+<blockquote>
+<p><strong>Dead Code</strong> sistemini yavaşlatır.<br>
+<strong>Forgotten Code</strong> sistemini tehlikeye sokar.</p>
+</blockquote>
+<p>Temiz bir kod tabanı, sadece okunabilirlik değil, aynı zamanda <strong>güvenilirlik ve sürdürülebilirlik</strong> demektir.<br>
+Unutma: <em>“Silmek de bir mühendislik becerisidir.”</em> 🧹</p>
+<hr>
+<h2>💡 Ekstra: Önerilen Araçlar</h2>
+<ul>
+<li>🔍 <strong>SonarQube</strong> — Ölü kod analizi</li>
+<li>🧰 <strong>ReSharper / Rider</strong> — Unused member tespiti</li>
+<li>📊 <strong>OpenTelemetry / Application Insights</strong> — Endpoint kullanım takibi</li>
+<li>🧪 <strong>Coverlet / ReportGenerator</strong> — Test coverage raporları</li>
+<li>🧭 <strong>GitLens / SourceGraph</strong> — Kod geçmişi ve ownership analizi</li>
+</ul>
+<hr>
