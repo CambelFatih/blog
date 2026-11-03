@@ -12,6 +12,8 @@ author:
 logo: /assets/icon-512.png
 twitter:
   card: summary_large_image
+webmaster_verifications:   # jekyll-seo-tag renders <meta name="google-site-verification">; keep alongside google40725d501500b265.html
+  google: EiSHkrvFt6jie1Ytj7ztN6Dk1KmmL9uCfpWXIZrdR9w
 
 permalink: /:year/:month/:day/:title/
 future: true          # posts dated later today still publish
