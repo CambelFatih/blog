@@ -1,0 +1,133 @@
+---
+layout: "post"
+title: "CI/CD Pipeline Nedir?"
+date: "2026-04-08 16:17:13 +0000"
+last_modified_at: "2026-04-08 16:20:00 +0000"
+categories: ["softw"]
+description: "CD (Continuous Delivery / Continuous Deployment)"
+image: "/wp-content/uploads/2026/04/1_WBRCowph3GrOW_-0oiR9RQ.webp"
+thumbnail: "/wp-content/uploads/2026/04/1_WBRCowph3GrOW_-0oiR9RQ-800x450.webp"
+---
+<p>Evet — yaptığın şeyin genel adı <strong>CI/CD pipeline kurmak</strong>.</p>
+<p>Ama daha net ve doğru isimlendirelim, çünkü herkes her şeye “CI/CD” diyor:</p>
+<hr>
+<h2>🔹 1) Senin yaptığın şeyin tam adı</h2>
+<p>Senin senaryon:</p>
+<blockquote>
+<p>Kod yaz → build → Docker image → ECR → ECS deploy → rollout</p>
+</blockquote>
+<p>Bunun teknik adı:</p>
+<h3>👉 <strong>CD (Continuous Delivery / Continuous Deployment)</strong></h3>
+<p>Yani:</p>
+<ul>
+<li>uygulamayı <strong>otomatik olarak deploy etme sistemi</strong></li>
+</ul>
+<hr>
+<h2>🔹 2) CI vs CD farkı (kafa karıştıran kısım)</h2>
+<h3>✅ CI (Continuous Integration)</h3>
+<p>Kod tarafı:</p>
+<ul>
+<li>build</li>
+<li>test</li>
+<li>lint</li>
+<li>artifact üretme</li>
+</ul>
+<p>Örnek:</p>
+<ul>
+<li><code>dotnet build</code></li>
+<li><code>docker build</code></li>
+<li>testlerin çalışması</li>
+</ul>
+<p>👉 “Kod doğru mu?” kısmı</p>
+<hr>
+<h3>✅ CD (Continuous Delivery / Deployment)</h3>
+<p>Deploy tarafı:</p>
+<ul>
+<li>image’ı ECR’a push etme</li>
+<li>ECS task definition güncelleme</li>
+<li>service rollout</li>
+<li>production’a alma</li>
+</ul>
+<p>👉 “Bu kodu canlıya nasıl alırım?” kısmı</p>
+<hr>
+<h2>🔹 3) Senin yaptığın iş daha spesifik olarak ne?</h2>
+<p>Sen şu anda:</p>
+<h3>👉 <strong>Container-based deployment pipeline (ECS)</strong> kuruyorsun</h3>
+<p>Daha teknik söylersek:</p>
+<blockquote>
+<p><strong>AWS ECS üzerinde containerized application için CI/CD pipeline</strong></p>
+</blockquote>
+<hr>
+<h2>🔹 4) Biraz daha “mühendis diliyle” isimlendirelim</h2>
+<p>CV’ye yazılacak seviyede ifade:</p>
+<ul>
+<li><strong>CI/CD pipeline for Dockerized .NET application on AWS ECS</strong></li>
+<li><strong>Automated deployment pipeline using GitHub Actions + ECR + ECS</strong></li>
+<li><strong>Container orchestration deployment flow (ECS Fargate)</strong></li>
+</ul>
+<hr>
+<h2>🔹 5) Senin kurduğun sistemin parçaları (çok net)</h2>
+<p>Sen aslında şu sistemi kuruyorsun:</p>
+<ol>
+<li><strong>Source control</strong> → GitHub</li>
+<li><strong>CI tool</strong> → GitHub Actions</li>
+<li><strong>Container registry</strong> → AWS ECR</li>
+<li><strong>Orchestrator</strong> → AWS ECS</li>
+<li><strong>Load balancing</strong> → ALB</li>
+<li><strong>Infrastructure glue</strong> → IAM, Secrets</li>
+</ol>
+<p>Bu bütün olarak:</p>
+<h3>👉 <strong>Modern cloud-native deployment pipeline</strong></h3>
+<hr>
+<h2>🔹 6) “Rollout, task definition vs” bunlar ne diye geçiyor?</h2>
+<p>Bunlar CD’nin alt parçaları:</p>
+<ul>
+<li>
+<p><strong>Deployment strategy</strong></p>
+<ul>
+<li>rolling update (ECS default)</li>
+</ul>
+</li>
+<li>
+<p><strong>Infrastructure as code (hafif hali)</strong></p>
+<ul>
+<li>JSON task definition</li>
+</ul>
+</li>
+<li>
+<p><strong>Release management</strong></p>
+<ul>
+<li>image tag, revision</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>🔹 7) En sade cümleyle</h2>
+<p>Eğer biri sana sorarsa:</p>
+<blockquote>
+<p>“Ne yapıyorsun?”</p>
+</blockquote>
+<p>şu cevap doğru olur:</p>
+<p>👉 <strong>“AWS ECS üzerinde Docker tabanlı bir CI/CD deployment pipeline kuruyorum.”</strong></p>
+<p>Daha sade:</p>
+<p>👉 <strong>“Projeyi otomatik şekilde build edip AWS’e deploy eden sistem kuruyorum.”</strong></p>
+<hr>
+<h2>🔹 8) Küçük ama önemli nüans</h2>
+<p>Şunu da bil:</p>
+<ul>
+<li>Sadece deploy otomasyonu kurarsan → <strong>CD</strong></li>
+<li>Build + test + deploy hepsi varsa → <strong>CI/CD</strong></li>
+</ul>
+<p>Senin anlattıkların:</p>
+<ul>
+<li>büyük ölçüde <strong>CD ağırlıklı</strong></li>
+<li>ama Docker build varsa → CI kısmı da var</li>
+</ul>
+<hr>
+<h2>🔚 Özet</h2>
+<ul>
+<li>Evet → buna <strong>CI/CD</strong> denir</li>
+<li>Daha doğru ifade → <strong>CD (deployment pipeline)</strong></li>
+<li>Teknik bağlam → <strong>ECS + Docker + GitHub Actions deployment sistemi</strong></li>
+</ul>
+<hr>

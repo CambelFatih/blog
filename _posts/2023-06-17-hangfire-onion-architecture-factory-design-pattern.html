@@ -1,0 +1,116 @@
+---
+layout: "post"
+title: "Hangfire, Onion Architecture, Adapter Design Pattern, Design Pattern - Factory Pattern"
+date: "2023-06-17 19:34:02 +0000"
+last_modified_at: "2023-06-17 20:02:18 +0000"
+categories: ["softw", "tech"]
+image: "/wp-content/uploads/2023/06/1_0Pg6_UsaKiiEqUV3kf2HXg.png"
+---
+<h1>Soğan Mimarisi (Onion Architecture)</h1>
+<p>yazılım uygulamalarının katmanlı bir şekilde tasarlanmasını sağlayan bir mimari yaklaşımdır. Temel amacı, uygulamanın iş mantığını ve işlemlerini bağımsız ve yeniden kullanılabilir hale getirmektir.</p>
+<p>Soğan Mimarisi, bir soğanın katmanlarına benzer şekilde, iç içe geçmiş katmanlarla tanımlanır. Her katmanın belirli bir sorumluluğu vardır ve dış katmanlar, iç katmanları bilmekte ve bağımlı olmaktadır. Bu tasarım prensibi, yüksek bağımsızlık, kolay test edilebilirlik ve değişikliklere daha dirençli bir yapı sağlamayı amaçlar.</p>
+<p>Soğan Mimarisi genellikle aşağıdaki katmanları içerir:</p>
+<ol>
+<li>
+<p>Kullanıcı Arayüzü Katmanı (Presentation Layer): Bu katman, kullanıcıyla etkileşim halinde olan bileşenleri içerir. Genellikle web veya mobil uygulamanın kullanıcı arayüzüne (UI) ve kullanıcı etkileşimine odaklanır.</p>
+</li>
+<li>
+<p>Uygulama Katmanı (Application Layer): Bu katman, iş mantığı ve iş süreçlerini uygulayan bileşenleri içerir. Gelen istekleri alır, gerekli işlemleri başlatır ve ilgili servislerle iletişim kurarak iş mantığını yürütür.</p>
+</li>
+<li>
+<p>Domain Katmanı (Domain Layer): Bu katman, uygulamanın temel iş mantığını ve kurallarını içerir. İş süreçlerini tanımlayan ve iş domainine özgü nesneleri barındıran en merkezi katmandır.</p>
+</li>
+<li>
+<p>Altyapı Katmanı (Infrastructure Layer): Bu katman, veritabanı erişimi, harici servislerle iletişim, dosya işlemleri gibi altyapısal ihtiyaçları karşılar. Dış kaynaklara erişim sağlayan bileşenleri içerir.</p>
+</li>
+</ol>
+<p>Soğan Mimarisi, dıştan içe doğru bir bağımlılık düzeni oluşturarak, bağımlılıkların yönünü kontrol eder. Bu sayede iç katmanlar, dış katmanlardan bağımsızdır ve dış katmanlardaki değişiklikler iç katmanları etkilemez. Bu yapı, kodun daha kolay test edilmesini, bakımının yapılmasını ve yeniden kullanılmasını sağlar.</p>
+<p>Soğan Mimarisi, temiz bir kod yazma prensibi olan SOLID prensiplerine uygunluğuyla da dikkat çeker. Kodun düzenli, okunabilir ve sürdürülebilir olmasını sağlayarak uzun vadeli proje başarılarına katkıda bulunur.</p>
+<p>Bu şekilde Soğan Mimarisi, yazılım uygulamalarını modüler, esnek ve sürdürülebilir hale getiren bir yaklaşımdır. Uygulamanın iş mantığını, bağımsızlık ve test edilebilirlik ilkelerine dayanarak tasarlamayı hedefler.</p>
+<h1>Adapter Design Pattern</h1>
+<p>Adapter (Adaptör) Tasarım Deseni, farklı arayüze sahip olan sınıfların birbirleriyle uyumlu çalışmasını sağlamak için kullanılan bir tasarım desenidir. Bu desen, uyumsuz arayüzleri olan sınıfları bir araya getirerek işbirliği yapmalarını sağlayan bir adaptör sınıfı kullanır.</p>
+<p>Adapter Tasarım Deseni'nin temel amacı, bir sınıfın arabirimini başka bir sınıfın beklediği arabirime dönüştürmektir. Bu sayede, uyumlu olmayan sınıfların birlikte çalışabilmesi sağlanır. Adaptör, bir sınıfın işlevselliğini değiştirmeden, onu beklenen arayüze uyacak şekilde sarar.</p>
+<p>Adapter Tasarım Deseni genellikle aşağıdaki bileşenleri içerir:</p>
+<ol>
+<li>
+<p>Hedef Arayüz (Target Interface): İstemcinin kullanmak istediği ve beklediği arayüzü tanımlar.</p>
+</li>
+<li>
+<p>Uyumlu Olmayan Sınıf (Incompatible Class): Adaptör tarafından uyumlu hale getirilmek istenen sınıf veya bileşen.</p>
+</li>
+<li>
+<p>Adaptör (Adapter): Uyumlu olmayan sınıfın arayüzünü hedef arayüze dönüştüren bir adaptör sınıfıdır. İstemcinin hedef arayüzle etkileşim kurmasını sağlar ve istemcinin uyumlu olmayan sınıfı doğrudan kullanmasını engeller.</p>
+</li>
+</ol>
+<p>Adapter Tasarım Deseni'nin avantajları şunlardır:</p>
+<ul>
+<li>Uyumlu olmayan sınıfların birbirleriyle etkileşimini sağlar.</li>
+<li>Mevcut bir sisteme yeni bir bileşenin entegre edilmesini kolaylaştırır.</li>
+<li>Uyumlu olmayan sınıfların koduna müdahale etmeden uyumluluk sağlar.</li>
+<li>Kod tekrarını önler ve daha esnek bir yapı oluşturur.</li>
+</ul>
+<p>Adapter Tasarım Deseni, mevcut bir kod tabanında veya farklı bileşenlerin bir araya  gelmesi gereken senaryolarda kullanılır. Örneğin, bir uygulama farklı bir dış API ile iletişim kurarken veya mevcut bir sınıf başka bir çerçeve veya kütüphane ile entegre olurken Adapter Tasarım Deseni kullanılabilir.</p>
+<h1>Factory Tasarım Deseni (Factory design pattern)</h1>
+<p>nesne oluşturma işlemlerini soyutlamak ve bu işlemleri alt sınıflara bırakmak için kullanılan bir tasarım desenidir. Bu desen, bir süper sınıfın alt sınıflarının nasıl oluşturulacağını belirleyen bir fabrika işlevi (factory method) kullanır.</p>
+<p>Factory Tasarım Deseni'nin temel amacı, nesne oluşturma sürecini bir istemciden soyutlayarak esneklik ve genişletilebilirlik sağlamaktır. Bu sayede, istemcilerin doğrudan nesneleri oluşturmasını engelleyerek, nesnelerin oluşturma sürecindeki karmaşıklığı gizleyebilir ve istemciyi sadece oluşturulan nesneye odaklanmasını sağlayabiliriz.</p>
+<p>Factory Tasarım Deseni genellikle aşağıdaki bileşenleri içerir:</p>
+<ol>
+<li>
+<p>Üst Sınıf (Super Class): Nesnelerin soyutlanmış bir temsilini sağlayan ve oluşturma işlemini belirleyen bir üst sınıf veya arayüz tanımlar.</p>
+</li>
+<li>
+<p>Alt Sınıflar (Sub Classes): Üst sınıfın tanımladığı arayüzü uygulayan ve gerçek nesnelerin oluşturulduğu alt sınıflardır.</p>
+</li>
+<li>
+<p>Fabrika (Factory): Üst sınıfın nesne oluşturma işlemini gerçekleştiren bir fabrika metodu veya sınıfıdır. Bu metot, hangi alt sınıfın nesneyi oluşturacağına karar verir ve ilgili nesneyi döndürür.</p>
+</li>
+</ol>
+<p>Factory Tasarım Deseni'nin avantajları şunlardır:</p>
+<ul>
+<li>Nesne oluşturma işlemleri istemciden soyutlandığı için istemci kodu daha basit ve sade hale gelir.</li>
+<li>Nesne oluşturma sürecindeki değişiklikler sadece fabrika sınıfında yapılır, bu da istemci kodunu etkilemeden yeni nesnelerin eklenmesini veya mevcut nesnelerin değiştirilmesini sağlar.</li>
+<li>Kod tekrarını önler ve yeniden kullanılabilirlik sağlar.</li>
+<li>İstemci, oluşturulan nesnelerin gerçek sınıflarını bilmek zorunda değildir, sadece üst sınıfın arayüzüne odaklanır.</li>
+</ul>
+<p>Factory Tasarım Deseni, karmaşık nesne oluşturma süreçlerinin yönetimi için idealdir. Örneğin, veritabanı bağlantı nesneleri, dosya işleme nesneleri veya ağ bağlantısı nesneleri gibi durumlarda kullanılabilir. Nesne oluşturma sürecinin soyutlanması, uygulamanın genel mimarisini geliştirmeye ve bakımını kolaylaştırmaya yardımcı olur.</p>
+<h1>Hangfire</h1>
+<p>.NET tabanlı bir açık kaynaklı iş sırası (job queue) yöneticisi ve arka plan görevleri yönetimi çözümüdür. Hangfire, uzun süren veya zamanlanmış görevleri arka planda çalıştırmanızı sağlar ve bu görevleri güvenilir bir şekilde planlamanıza, takip etmenize ve yönetmenize yardımcı olur.</p>
+<p>Hangfire'in temel özellikleri şunlardır:</p>
+<ol>
+<li>
+<p>Basit Entegrasyon: Hangfire, .NET projelerine kolayca entegre edilebilir. NuGet paketi olarak kullanılabilir ve kod tabanında kolaylıkla uygulanabilir.</p>
+</li>
+<li>
+<p>Görevlerin Zamanlama ve Planlama: Hangfire, belirli bir zamanda veya periyodik olarak çalışması gereken görevleri planlamanızı sağlar. Cron tabanlı ifadeleri kullanarak karmaşık zamanlama senaryolarını da destekler.</p>
+</li>
+<li>
+<p>Arka Plan İşlemleri: Uzun süren veya yoğun işlem gerektiren görevleri arka planda çalıştırmanızı sağlar. Bu, kullanıcıya kesintisiz bir kullanıcı deneyimi sunarken, sistem üzerinde yoğun iş yapan işlemlerin performansını artırır.</p>
+</li>
+<li>
+<p>Görev İlerleme Takibi: Hangfire, çalışan görevlerin ilerlemesini ve durumunu takip etmenize olanak tanır. Bu sayede görevlerin ne zaman başladığını, tamamlandığını veya başarısız olduğunu görebilirsiniz.</p>
+</li>
+<li>
+<p>Ölçeklenebilirlik: Hangfire, sunucu tabanlı bir mimariye sahiptir ve birden çok sunucu üzerinde çalışabilir. Bu sayede yüksek trafikli veya büyük iş yükü gerektiren projelerde ölçeklenebilirlik sağlar.</p>
+</li>
+</ol>
+<p>Hangfire, web uygulamalarında arka plan görevleri yönetmek için yaygın olarak kullanılan bir araçtır. Örneğin, e-posta gönderme işlemleri, rapor oluşturma, dosya senkronizasyonu gibi işlemleri arka planda ve asenkron olarak gerçekleştirebilirsiniz.</p>
+<p>Bu şekilde Hangfire, .NET geliştiricilerine iş sırası yönetimi ve arka plan görevleri için güvenilir bir çözüm sunar ve uygulamalarınızda daha iyi performans ve kullanıcı deneyimi sağlar.</p>
+<h3>Yaygın olarak kullanılan diğer yaklaşımlar:</h3>
+<ol>
+<li>
+<p>Model-View-Controller (MVC) Tasarım Deseni: MVC, kullanıcı arayüzünü, iş mantığını ve veri tabanı etkileşimini birbirinden bağımsız olarak organize eden bir tasarım desenidir. Bu tasarım deseni, uygulamanın parçalarını ayrı tutarak yeniden kullanılabilirlik, sürdürülebilirlik ve test edilebilirlik sağlar.</p>
+</li>
+<li>
+<p>RESTful Web Hizmetleri: Representational State Transfer (REST), web tabanlı hizmetlerin etkileşimini tanımlayan bir mimari stil ve tasarım prensipleri bütünüdür. RESTful web hizmetleri, kaynaklar üzerinde standart HTTP protokolünü kullanarak işlemler gerçekleştirir ve hafif, esnek ve ölçeklenebilir bir şekilde iletişim sağlar.</p>
+</li>
+<li>
+<p>Dependency Injection (Bağımlılık Enjeksiyonu): Bağımlılık enjeksiyonu, bir nesnenin diğer nesnelerle olan bağlantılarının dışarıdan sağlandığı bir tasarım prensibidir. Bu yöntem, bağımlılıkların sıkı bir şekilde bağlı olmadığı, daha gevşek bağlı ve test edilebilir kodlar yazmayı sağlar.</p>
+</li>
+<li>
+<p>ORM (Object-Relational Mapping): ORM, nesne tabanlı programlama dilleri ile ilişkisel veritabanları arasında veri dönüşümünü otomatikleştiren bir tekniktir. Bu yöntem, veritabanı tablolarını nesnelerle eşleştirerek veritabanı işlemlerini daha kolay ve etkili bir şekilde gerçekleştirmeyi sağlar.</p>
+</li>
+<li>
+<p>Reactive Programming: Reaktif programlama, olay temelli ve asenkron programlama tekniklerini kullanarak sistemlerin yanıt verimliliğini, ölçeklenebilirliğini ve dirençliliğini artırmayı hedefleyen bir programlama paradigmadır. Bu yaklaşım, olay akışları ve veri akışları üzerinde işlem yapmayı kolaylaştırır ve hızlı yanıt veren, esnek sistemlerin oluşturulmasına olanak tanır.</p>
+</li>
+</ol>
+<p>Bu yöntemler, farklı ihtiyaçlara ve projelere göre tercih edilen ve yaygın olarak kullanılan yaklaşımlardır. Ancak, her proje ve senaryo için en uygun olanı belirlemek, gereksinimlere ve tasarım hedeflerine bağlıdır.</p>

@@ -1,0 +1,431 @@
+---
+layout: "post"
+title: "Clean Architecture + CQRS + Event Sourcing"
+date: "2025-10-28 17:49:31 +0000"
+last_modified_at: "2025-10-28 17:52:43 +0000"
+categories: ["softw", "tech"]
+description: "Event’ler geçmişi anlatır, CQRS akışı düzenler, Clean Architecture sınırları korur. Event Sourcing’in geçmiş izlenebilirliğini birleştirir."
+image: "/wp-content/uploads/2025/10/modular_monolith-scaled.png"
+thumbnail: "/wp-content/uploads/2025/10/modular_monolith-scaled-768x407.png"
+---
+<hr>
+<h1>⚙️ Clean Architecture + CQRS + Event Sourcing</h1>
+<h2>Modern Uygulamaların Üç Kutsal Mimarisi</h2>
+<blockquote>
+<p>“Bir sistemin kalitesi, değişimi kaldırma kabiliyetiyle ölçülür.”<br>
+— <em>Greg Young (CQRS &amp; Event Sourcing’in yaratıcısı)</em></p>
+</blockquote>
+<hr>
+<h2>🧱 1️⃣ Clean Architecture Temeli: Zemin Oluşturma</h2>
+<p>Clean Architecture, bağımlılık akışını tanımlar:</p>
+<pre><code>Infrastructure → Application → Domain
+Presentation  → Application → Domain</code></pre>
+<p>Bu yapı <strong>bağımlılıkları dıştan içe</strong> yönlendirir.<br>
+Ancak kendi başına <em>veri yönünü</em> tanımlamaz.<br>
+İşte tam burada <strong>CQRS</strong> devreye girer.</p>
+<hr>
+<h2>🔀 2️⃣ CQRS: Komutlar ve Sorguların Ayrılığı</h2>
+<p>CQRS (Command and Query Responsibility Segregation) şunu söyler:</p>
+<blockquote>
+<p>“Yazmak (Command) ile okumak (Query) farklı problemlerdir;<br>
+bu yüzden aynı modeli paylaşmamalıdırlar.”</p>
+</blockquote>
+<h3>📚 Geleneksel yaklaşım:</h3>
+<pre><code>Service → Repository → Database</code></pre>
+<h3>⚙️ CQRS yaklaşımı:</h3>
+<pre><code>Command → Aggregate (Domain) → Event Store / Outbox  
+Query → ReadModel → Database / Cache</code></pre>
+<p>Yani artık tek bir <code>OrderService</code> yoktur.<br>
+Onun yerine iki farklı akış vardır:</p>
+<ul>
+<li><strong>Komut akışı</strong>: Davranışı değiştirir. (<code>CreateOrderCommand</code>)</li>
+<li><strong>Sorgu akışı</strong>: Durumu okur. (<code>GetOrderByIdQuery</code>)</li>
+</ul>
+<hr>
+<h2>🧩 3️⃣ Event Sourcing: Durumu Olaylarla Saklamak</h2>
+<p>Event Sourcing, sistemin durumunu klasik “tablolar” yerine <strong>geçmiş olayların toplamı</strong> olarak saklar.</p>
+<blockquote>
+<p>“Event Store, sistemin zaman makinesidir.”</p>
+</blockquote>
+<h3>Örnek:</h3>
+<pre><code class="language-plaintext">UserRegistered
+UserProfileUpdated
+UserEmailChanged</code></pre>
+<p>Bu event’leri sırayla uygularsan:</p>
+<pre><code class="language-csharp">var user = new User();
+user.Apply(new UserRegistered(...));
+user.Apply(new UserProfileUpdated(...));
+user.Apply(new UserEmailChanged(...));</code></pre>
+<p>Sonuç: Kullanıcının güncel hali.<br>
+Ama aynı zamanda geçmişin <strong>tüm versiyonlarına</strong> erişebilirsin.</p>
+<hr>
+<h2>🧠 4️⃣ Üç Mimari Nasıl Birleşir?</h2>
+<table>
+<thead>
+<tr>
+<th>Katman</th>
+<th>Clean Architecture Rolü</th>
+<th>CQRS Rolü</th>
+<th>Event Sourcing Rolü</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Domain</strong></td>
+<td>Saf iş kuralları</td>
+<td>Aggregates / Entities</td>
+<td>Event’leri üretir ve uygular</td>
+</tr>
+<tr>
+<td><strong>Application</strong></td>
+<td>Use Case’leri yönetir</td>
+<td>Command &amp; Query Handler’lar</td>
+<td>Event’leri Outbox’a yazar</td>
+</tr>
+<tr>
+<td><strong>Infrastructure</strong></td>
+<td>Teknik detayları barındırır</td>
+<td>Read Model DB, Outbox, Message Bus</td>
+<td>Event Store implementasyonu</td>
+</tr>
+<tr>
+<td><strong>Presentation</strong></td>
+<td>UI / API / Controller</td>
+<td>Komut &amp; Sorgu endpoint’leri</td>
+<td>Kullanıcıyla etkileşim noktası</td>
+</tr>
+</tbody>
+</table>
+<p>Bu üç mimari <strong>aynı hedefe farklı yollardan gider</strong>:</p>
+<ul>
+<li>Clean Architecture: Bağımlılık yönünü temizler</li>
+<li>CQRS: Veri akışını ayırır</li>
+<li>Event Sourcing: Durumu izlenebilir hale getirir</li>
+</ul>
+<p>Birlikte kullanıldığında:</p>
+<blockquote>
+<p>“Değişim yönetilebilir, geçmiş izlenebilir, kod test edilebilir hale gelir.”</p>
+</blockquote>
+<hr>
+<h2>⚙️ 5️⃣ Gerçek Dünya Akışı</h2>
+<p>Aşağıda modern .NET sistemlerinde sıkça gördüğümüz tam akış modeli yer alıyor:</p>
+<pre><code class="language-plaintext">[API Controller]
+    ↓
+[Command Handler (Application)]
+    ↓
+[Aggregate (Domain)]
+    ↓
+[Domain Events Raised]
+    ↓
+[Outbox (Infrastructure)]
+    ↓
+[Event Bus → Kafka / Redis Stream]
+    ↓
+[Projection Handler → Read Database]
+    ↓
+[Query Handler (Application)]
+    ↓
+[Read Model Returned]</code></pre>
+<p>Her adımın görevi açık, bağımlılıklar ters:</p>
+<ul>
+<li>Domain → event üretir</li>
+<li>Application → event’i kaydeder</li>
+<li>Infrastructure → event’i taşır</li>
+<li>Query → yeni durumu gösterir</li>
+</ul>
+<hr>
+<h2>💾 6️⃣ Outbox Pattern: Mimari Tutkal</h2>
+<p>Event Sourcing sistemlerinde <em>en kritik problem</em>,<br>
+“event’in kaydedilip yayınlanmama riski”dir.</p>
+<blockquote>
+<p>Çözüm: Outbox Pattern<br>
+(Transactional Outbox olarak da bilinir.)</p>
+</blockquote>
+<h3>🧩 Ne işe yarar?</h3>
+<ul>
+<li>Event, Domain işlemiyle aynı transaction’da <strong>Outbox tablosuna</strong> yazılır.</li>
+<li>Background worker (ör. <code>OutboxDispatcher</code>) bu kaydı alır,<br>
+<strong>Kafka, RabbitMQ, Redis</strong> gibi sisteme gönderir.</li>
+<li>Event başarılı şekilde yayıldığında Outbox’tan silinir.</li>
+</ul>
+<h3>📄 Örnek Tablo:</h3>
+<table>
+<thead>
+<tr>
+<th>Id</th>
+<th>AggregateId</th>
+<th>EventName</th>
+<th>Payload</th>
+<th>Published</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1234</td>
+<td>UserCreated</td>
+<td>{JSON}</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<h3>📦 Uygulama</h3>
+<pre><code class="language-csharp">public class UserAggregate : AggregateRoot
+{
+    public void Register(string email)
+    {
+        AddEvent(new UserRegisteredEvent(email));
+    }
+}</code></pre>
+<pre><code class="language-csharp">public class OutboxWriter : IOutboxWriter
+{
+    public async Task SaveAsync(DomainEvent evt)
+    {
+        _context.Outbox.Add(new OutboxMessage(evt));
+        await _context.SaveChangesAsync();
+    }
+}</code></pre>
+<hr>
+<h2>🧩 7️⃣ Projection (Read Model) Tarafı</h2>
+<p>Event Sourcing’in “okuma” tarafında klasik bir tablo yerine<br>
+<strong>projection</strong> bulunur: Event’lerin sonucu olarak oluşan,<br>
+okuma için optimize edilmiş yapı.</p>
+<h3>Örnek:</h3>
+<pre><code class="language-csharp">public class UserProjectionHandler :
+    IEventHandler&lt;UserRegistered&gt;,
+    IEventHandler&lt;UserEmailChanged&gt;
+{
+    private readonly ReadDbContext _readDb;
+    public async Task Handle(UserRegistered e) =&gt;
+        await _readDb.Users.AddAsync(new UserReadModel { Id = e.Id, Email = e.Email });
+
+    public async Task Handle(UserEmailChanged e)
+    {
+        var user = await _readDb.Users.FindAsync(e.Id);
+        user.Email = e.NewEmail;
+        await _readDb.SaveChangesAsync();
+    }
+}</code></pre>
+<blockquote>
+<p>Projection’lar <em>idempotent</em> olmalı, yani aynı event birden fazla gelse bile sonuç değişmemeli.</p>
+</blockquote>
+<hr>
+<h2>🔀 8️⃣ CQRS + Event Sourcing + Clean Architecture Entegrasyon Örneği</h2>
+<pre><code>src/
+├── Core/
+│   ├── Domain/
+│   │   ├── Aggregates/
+│   │   │   └── QuizAggregate.cs
+│   │   ├── Events/
+│   │   │   └── QuizStartedEvent.cs
+│   │   └── Shared/
+│   │       └── Entity.cs
+│   ├── Application/
+│   │   ├── Commands/
+│   │   │   └── StartQuizCommand.cs
+│   │   ├── Queries/
+│   │   │   └── GetQuizByIdQuery.cs
+│   │   ├── Handlers/
+│   │   │   ├── StartQuizCommandHandler.cs
+│   │   │   └── GetQuizByIdQueryHandler.cs
+│   │   └── Interfaces/
+│   │       └── IQuizRepository.cs
+├── Infrastructure/
+│   ├── Persistence/
+│   │   ├── EventStoreDbContext.cs
+│   │   └── OutboxDispatcher.cs
+│   ├── Messaging/
+│   │   └── KafkaProducer.cs
+│   └── Projections/
+│       └── QuizProjectionHandler.cs
+├── Presentation/
+│   └── Controllers/
+│       └── QuizController.cs
+└── Shared/
+    └── BuildingBlocks/
+        ├── Result.cs
+        └── IClock.cs</code></pre>
+<p>Bu yapı:</p>
+<ul>
+<li>Clean Architecture’ın bağımlılık yönünü korur.</li>
+<li>CQRS’in “Command vs Query” ayrımını uygular.</li>
+<li>Event Sourcing ile sistemin geçmişini saklar.</li>
+<li>Outbox ile dağıtık güvenliği sağlar.</li>
+</ul>
+<hr>
+<h2>🧠 9️⃣ Gelişmiş Konseptler</h2>
+<table>
+<thead>
+<tr>
+<th>Kavram</th>
+<th>Açıklama</th>
+<th>Uygulama Katmanı</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Snapshotting</strong></td>
+<td>Uzun geçmişi kısaltmak için ara durum kaydı</td>
+<td>Infrastructure</td>
+</tr>
+<tr>
+<td><strong>Saga / Process Manager</strong></td>
+<td>Birden fazla Aggregate’i koordine eder</td>
+<td>Application</td>
+</tr>
+<tr>
+<td><strong>Idempotency</strong></td>
+<td>Aynı event birden fazla işlense bile sonuç değişmez</td>
+<td>Projection / Infrastructure</td>
+</tr>
+<tr>
+<td><strong>Event Versioning</strong></td>
+<td>Event şemalarının geriye dönük uyumluluğu</td>
+<td>Domain / Serializer</td>
+</tr>
+<tr>
+<td><strong>Feature Flags</strong></td>
+<td>Strateji değişimini konfigürasyona taşır</td>
+<td>Application</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>📈 10️⃣ Ölçeklenebilirlik ve Performans</h2>
+<p>Bu üçlünün birleşimi sadece kod kalitesini değil,<br>
+<strong>sistem ölçeklenebilirliğini</strong> de doğrudan etkiler.</p>
+<table>
+<thead>
+<tr>
+<th>Özellik</th>
+<th>Faydası</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Buffered Logging (IBufferedLogger)</strong></td>
+<td>Async loglama, düşük latency</td>
+</tr>
+<tr>
+<td><strong>Outbox + Retry mekanizması</strong></td>
+<td>Event kaybı olmadan asenkron yayılım</td>
+</tr>
+<tr>
+<td><strong>CQRS Query cache</strong></td>
+<td>Okuma performansını artırır</td>
+</tr>
+<tr>
+<td><strong>Snapshot’lar</strong></td>
+<td>Event replay süresini azaltır</td>
+</tr>
+<tr>
+<td><strong>Idempotent projection</strong></td>
+<td>Network partition durumlarında güvenlik</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧩 11️⃣ Neden Bu Üçlü En Güçlü Kombinasyondur?</h2>
+<table>
+<thead>
+<tr>
+<th>Özellik</th>
+<th>Clean Architecture</th>
+<th>CQRS</th>
+<th>Event Sourcing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bağımlılık Kontrolü</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Veri Akışı Ayrımı</strong></td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Zaman Tabanlı Durum Yönetimi</strong></td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Test Edilebilirlik</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Değişime Dayanıklılık</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Auditability (Geçmiş Takibi)</strong></td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Üçü bir araya geldiğinde:<br>
+“Test edilebilir, geçmişi izlenebilir, değişime dayanıklı bir sistem” ortaya çıkar.</p>
+</blockquote>
+<hr>
+<h2>🧠 12️⃣ Sonuç: Modern .NET Mimarisi = Clean + CQRS + Event Sourcing</h2>
+<p>Bu üçlü;</p>
+<ul>
+<li>Clean Architecture’ın <strong>bağımlılık izolasyonunu</strong>,</li>
+<li>CQRS’in <strong>veri akışı netliğini</strong>,</li>
+<li>Event Sourcing’in <strong>geçmiş izlenebilirliğini</strong> birleştirir.</li>
+</ul>
+<p>Sonuç:</p>
+<blockquote>
+<p>Zamanla bozulmayan, ölçeklenebilen, değişime uyumlu bir sistem.</p>
+</blockquote>
+<hr>
+<h2>🧩 13️⃣ TL;DR (Kısa Özet)</h2>
+<table>
+<thead>
+<tr>
+<th>Katman</th>
+<th>Sorumluluk</th>
+<th>Teknoloji</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Domain</strong></td>
+<td>İş mantığı, Aggregate, Event üretimi</td>
+<td>Pure C#</td>
+</tr>
+<tr>
+<td><strong>Application</strong></td>
+<td>Command/Query işleyiciler, Outbox yazımı</td>
+<td>MediatR, FluentValidation</td>
+</tr>
+<tr>
+<td><strong>Infrastructure</strong></td>
+<td>Event Store, DB, Kafka, Redis, Projection</td>
+<td>EF Core, Redis, Kafka</td>
+</tr>
+<tr>
+<td><strong>Presentation</strong></td>
+<td>API, Controller, DTO</td>
+<td>ASP.NET Core, GraphQL</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<blockquote>
+<p>“Event’ler geçmişi anlatır, CQRS akışı düzenler, Clean Architecture sınırları korur.”<br>
+— <em>DotNet Senior Developer (C#)</em></p>
+</blockquote>
+<hr>

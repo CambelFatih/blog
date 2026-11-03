@@ -1,0 +1,259 @@
+---
+layout: "post"
+title: "EF Core Sayfalama(Pagination) Stratejileri"
+date: "2025-09-30 13:43:10 +0000"
+last_modified_at: "2025-09-30 13:43:34 +0000"
+categories: ["softw", "net"]
+description: "Offset (Skip/Take) ve Keyset (cursor) farkları, performans etkileri, EF Core örnekleri, implementasyon ipuçları ve karar tablosu."
+image: "/wp-content/uploads/2025/09/pagination-screen-size.png"
+thumbnail: "/wp-content/uploads/2025/09/pagination-screen-size-768x330.png"
+---
+<h2>Giriş — Neden sayfalama (pagination) önemli?</h2>
+<p>EF Core ile büyük veri kümeleriyle çalışırken <strong>sayfalama</strong> veri taşımını, gecikmeyi ve kullanıcı deneyimini doğrudan etkiler. Örneğin bir API ya da sonsuz kaydırma (infinite scroll) uygulamasında yanlış strateji seçmek:</p>
+<ul>
+<li>Sorgu performansını düşürür,</li>
+<li>Sunucu maliyetini artırır,</li>
+<li>Kullanıcıya tutarsız sonuçlar gösterebilir.</li>
+</ul>
+<p>Öncelikle, iki yaygın yaklaşımı ele alacağız: <strong>Offset Pagination</strong> (Skip + Take) ve <strong>Keyset Pagination</strong> (cursor-based, seek). Ardından, nasıl uygulayacağınızı, hangi senaryolarda hangi yöntemi seçmeniz gerektiğini ve dikkat etmeniz gereken ayrıntıları göstereceğim.</p>
+<hr>
+<h2>İçindekiler (kısa)</h2>
+<ol>
+<li>Offset Pagination nedir? (Artıları / Eksileri)</li>
+<li>Keyset Pagination nedir? (Artıları / Eksileri)</li>
+<li>EF Core ile örnekler (kod)</li>
+<li>Keyset implementasyonu adım adım (cursor oluşturma, composite key, descending)</li>
+<li>Geriye doğru sayfalama / previous page sorunları</li>
+<li>Performans ve indeksleme notları</li>
+<li>Edge-case’ler: silinme/ekleme, tutarlılık, transaction</li>
+<li>API tasarımı önerileri (nextCursor, hasMore)</li>
+<li>Karar tablosu: hangi yöntemi seçmeli?</li>
+<li>Özet ve uygulanabilir kontrol listesi</li>
+</ol>
+<hr>
+<h2>1) Offset Pagination (Skip + Take) — Nedir ve neden kolaydır?</h2>
+<p><strong>Tanım:</strong> Veritabanı sonuçlarından <code>OFFSET</code> (atlanan satır sayısı) kadar atlar, sonra <code>LIMIT</code>/<code>FETCH</code> kadar alır. EF Core’da <code>Skip()</code> ve <code>Take()</code> şeklinde kullanılır.</p>
+<p><strong>EF Core örneği:</strong></p>
+<pre><code class="language-csharp">var customers = await db.Customers
+    .AsNoTracking()
+    .OrderBy(c =&gt; c.Id)
+    .Skip((pageNumber - 1) * pageSize)
+    .Take(pageSize)
+    .ToListAsync(ct);</code></pre>
+<p><strong>Avantajlar</strong></p>
+<ul>
+<li>Kod basit ve anlaşılır.</li>
+<li>Sayfa numarası mantığı (page 1, 2, 3) doğrudur; SEO / public sayfalarda URL’lerle kolay uyum sağlar.</li>
+<li>Küçük datasetlerde performans ve karmaşıklık sorunu yoktur.</li>
+</ul>
+<p><strong>Dezavantajlar</strong></p>
+<ul>
+<li><strong>Performans:</strong> Veritabanı genellikle atlanan tüm satırları okur; büyük offset’lerde sorgu yavaşlar.</li>
+<li><strong>Tutarlılık:</strong> Veri değişirse (insert/delete) sayfalar kayabilir; aynı sorguya farklı sonuçlar gelebilir.</li>
+<li><strong>Ölçeklenebilirlik:</strong> API veya sonsuz kaydırma (infinite scroll) için kötüleşir.</li>
+<li><strong>Kaynak tüketimi:</strong> Özellikle yüksek sayfalı isteklerde CPU/IO artar.</li>
+</ul>
+<p><strong>SQL örneği (Postgres/MySQL):</strong></p>
+<pre><code class="language-sql">SELECT * FROM Customers
+ORDER BY Id
+OFFSET 10000 LIMIT 20;</code></pre>
+<hr>
+<h2>2) Keyset Pagination (Cursor-based / Seek) — Nedir ve neden hızlıdır?</h2>
+<p><strong>Tanım:</strong> Sıralamaya göre “son görülen” kayıt temel alınır ve bundan sonraki kayıtlar getirilir. Skip yok; WHERE ile arama yapılır. Yani <code>WHERE id &gt; lastId</code> veya kompleks durumlarda <code>WHERE (a &lt; lastA) OR (a = lastA AND b &lt; lastB)</code> gibi.</p>
+<p><strong>Basit EF Core örneği (tek sütun):</strong></p>
+<pre><code class="language-csharp">var customers = await db.Customers
+    .AsNoTracking()
+    .OrderBy(c =&gt; c.Id)
+    .Where(c =&gt; c.Id &gt; lastId)
+    .Take(pageSize)
+    .ToListAsync(ct);</code></pre>
+<p><strong>Avantajlar</strong></p>
+<ul>
+<li><strong>Performans:</strong> İndex seek kullanır; milyonlarca satırda bile hızlıdır.</li>
+<li><strong>Tutarlılık:</strong> Veri eklense bile “son görülen” noktadan devam eder; sayfa kaymaları azalır.</li>
+<li><strong>İyi deneyim:</strong> Infinite scroll ve API feed’leri için ideal.</li>
+</ul>
+<p><strong>Dezavantajlar</strong></p>
+<ul>
+<li><strong>URL / SEO:</strong> Sayfa numarası yerine cursor/token kullanmak SEO için daha az okunur.</li>
+<li><strong>Complexity:</strong> Composite ordering, ters yönlü sayfalama (previous) ve cursor yönetimi ek çaba gerektirir.</li>
+<li><strong>Eksik kayıt riski:</strong> Eğer kullanıcı bir sayfayı kaydedip daha sonra geri gelirse, aradaki yeni kayıtlar gösterilmeyebilir — ama bu genelde feed senaryolarında kabul edilir.</li>
+</ul>
+<hr>
+<h2>3) Keyset’in doğru uygulanması: temel kurallar</h2>
+<ol>
+<li><strong>Deterministik sıralama</strong> kullanın. Yani <code>ORDER BY</code> mutlaka unique tie-breaker içermeli (ör. <code>CreatedAt DESC, Id DESC</code>).</li>
+<li><strong>Indexed columns</strong>: ORDER BY yaptığınız sütun(lar) üzerinde uygun indeks olmalı.</li>
+<li><strong>Cursor</strong>: API client’a yalnızca &quot;son görülen&quot; değerleri verin (ör. <code>lastCreatedAt</code> + <code>lastId</code>) ya da güvenli bir token (Base64 + imza) kullanın.</li>
+<li><strong>Direction</strong>: Yükselen/azalan sıralama uyumlu WHERE koşulları hazırlayın.</li>
+<li><strong>Sayfa boyutu</strong> sabit kalmalı ve mantıklı limit koyun.</li>
+</ol>
+<hr>
+<h2>4) EF Core: Kompozit sıralama (tarih + id) örneği</h2>
+<p>Feed'lerde genelde timestamp kullanılır. Ancak aynı timestamp’e sahip birden çok kayıt olabilir. Bu yüzden Id second key olarak eklenir.</p>
+<p><strong>Descending örnek (yeni olan en başta):</strong></p>
+<pre><code class="language-csharp">// lastCursor: { lastCreatedAt: DateTime, lastId: long }
+var results = await db.Posts
+    .AsNoTracking()
+    .Where(p =&gt; p.CreatedAt &lt; lastCreatedAt
+                || (p.CreatedAt == lastCreatedAt &amp;&amp; p.Id &lt; lastId))
+    .OrderByDescending(p =&gt; p.CreatedAt)
+    .ThenByDescending(p =&gt; p.Id)
+    .Take(pageSize)
+    .ToListAsync(ct);</code></pre>
+<p><strong>Not:</strong> DateTime karşılaştırmalarında UTC kullanın. Ayrıca <code>==</code> DateTime karşılaştırması güvenli mi diye kontrol edin; genelde CreatedAt veritabanında kesin bir değerse güvenlidir.</p>
+<hr>
+<h2>5) Cursor token oluşturma ve güvenli taşıma (C# örneği)</h2>
+<p>Açık ID yerine token kullanmak isteyebilirsiniz. Aşağıda basit, URL-safe Base64 token örneği:</p>
+<pre><code class="language-csharp">using System;
+using System.Text;
+using System.Text.Json;
+
+public record CursorDto(DateTime CreatedAt, long Id);
+
+public static class CursorHelper
+{
+    public static string Encode(CursorDto cursor)
+    {
+        var json = JsonSerializer.Serialize(cursor);
+        var bytes = Encoding.UTF8.GetBytes(json);
+        return Convert.ToBase64String(bytes)
+            .Replace('+','-').Replace('/','_').TrimEnd('=');
+    }
+
+    public static CursorDto Decode(string token)
+    {
+        string padded = token.Length % 4 == 0 ? token : token + new string('=', 4 - token.Length % 4);
+        var base64 = padded.Replace('-','+').Replace('_','/');
+        var bytes = Convert.FromBase64String(base64);
+        var json = Encoding.UTF8.GetString(bytes);
+        return JsonSerializer.Deserialize&lt;CursorDto&gt;(json)!;
+    }
+}</code></pre>
+<p><strong>Kullanım:</strong> <code>nextCursor = CursorHelper.Encode(new CursorDto(last.CreatedAt, last.Id));</code></p>
+<p><strong>Güvenlik:</strong> Daha güvenli hale getirmek için token’ı HMAC ile imzalayın ve sunucu tarafında doğrulayın.</p>
+<hr>
+<h2>6) Geriye doğru sayfalama (previous page) — nasıl yapılır?</h2>
+<p>Keyset doğal olarak ileri (next) sayfalama için uygundur. Ancak önceki sayfayı desteklemek isterseniz:</p>
+<ol>
+<li>Ters sıralama ile <code>pageSize</code> kadar kayıt çekin (ör. <code>OrderByCreatedAt ASC</code>),</li>
+<li>Sonra sonuçları tersine çevirip istemciye gönderin.</li>
+<li><code>prevCursor</code> oluşturmak için ters sorguda dönen verinin son öğesini kullanın.</li>
+</ol>
+<p><strong>Örnek akış (descending feed için &quot;geri&quot;):</strong></p>
+<ul>
+<li>Client: <code>prevCursor</code> gönderir.</li>
+<li>Server: <code>WHERE (CreatedAt &gt; prevCreatedAt) OR (CreatedAt == prevCreatedAt AND Id &gt; prevId)</code>, <code>OrderBy</code> ascending on keys, <code>Take(pageSize)</code>, <strong>reverse results</strong> before returning.</li>
+</ul>
+<p>Bu yaklaşım iki sorgu tipini yönetmeyi gerektirir. Kod karmaşıklığı artar ama kullanıcı deneyimi düzelir.</p>
+<hr>
+<h2>7) Performans: OFFSET vs KEYSET — ne fark eder?</h2>
+<ul>
+<li><strong>Offset</strong>: Çok büyük <code>OFFSET</code> değerleri veritabanının atladığı satırları taramasına neden olur. İndex olsa bile genelde DB engine O(N + pageSize) çalışır. Bu, sayfa numarası arttıkça maliyet artar.</li>
+<li><strong>Keyset</strong>: İndex seek ile çalışır. Maliyet genelde O(log N + pageSize) civarındadır. Yani büyük veri setlerinde sabit ve düşük gecikme sunar.</li>
+</ul>
+<p><strong>Ölçek örneği:</strong> Bir tablo 10 milyon satırsa ve kullanıcı 1000. sayfayı isterse, offset bazlı sorgu 1000 * pageSize satırı atlamak zorunda kalabilir; keyset ise doğrudan index üzerinden devam eder.</p>
+<p><strong>Ölçüm önerisi:</strong> <code>EXPLAIN ANALYZE</code>, <code>SET STATISTICS IO ON</code>, Query Plan’ı inceleyin. Böylece offset’in tarama yaptığını ve keyset’in seek kullandığını görebilirsiniz.</p>
+<hr>
+<h2>8) İndeksleme ipuçları</h2>
+<ul>
+<li><code>ORDER BY</code> yapılan sütun(lar) için <strong>bileşik indeks</strong> oluşturun. Örn: <code>(CreatedAt DESC, Id DESC)</code>.</li>
+<li>Eğer sorguda <code>WHERE</code> koşulunda farklı sütunlar kullanıyorsanız, uygun filtrelemeyi kapsayan indeksler eklemeyi düşünün.</li>
+<li>Kaplayan indeks (covering index) kullanmak, disk okumasını azaltır.</li>
+</ul>
+<hr>
+<h2>9) Edge-case’ler ve tutarlılık</h2>
+<ul>
+<li><strong>Yeni kayıtlar</strong>: Keyset, zaten görülen kaydın “sonraki” öğelerinden devam eder. Yani, oturum sırasında ortaya çıkan yeni kayıtlar bazen kullanıcının sayfalarında görünmeyebilir. Bunun feed için genellikle kabul edilebilir.</li>
+<li><strong>Silinmiş kayıtlar</strong>: Eğer bir kayıt silinirse, cursor’da verilen son id silinmiş olabilir; bu durumda sorgu yine normal çalışır; sadece aynı kaydı tekrar görmezsiniz.</li>
+<li><strong>Atomic snapshot gereksinimi</strong>: Kesin bir, sabit snapshot istiyorsanız (örneğin raporlama), transaction snapshot isolation kullanın. Ancak bu performansı etkileyebilir.</li>
+<li><strong>Veri türü hassasiyeti</strong>: Tarihlerde kellik olmaması için UTC ve yeterli hassasiyette timestamp kullanın.</li>
+</ul>
+<hr>
+<h2>10) API Tasarımı: Örnek JSON yanıt</h2>
+<p>Kullanıcıya döndüğünüz API cevabında şunlar olsun:</p>
+<pre><code class="language-json">{
+  &quot;items&quot;: [ /* array of resources */ ],
+  &quot;pageSize&quot;: 20,
+  &quot;nextCursor&quot;: &quot;eyJ... (token)&quot;,
+  &quot;prevCursor&quot;: &quot;eyJ... (token) or null&quot;,
+  &quot;hasMore&quot;: true
+}</code></pre>
+<p><strong>Açıklama:</strong></p>
+<ul>
+<li><code>nextCursor</code>: sonraki sayfanın başlangıcı için gerekli token.</li>
+<li><code>prevCursor</code>: eğer destekliyorsanız; yoksa null.</li>
+<li><code>hasMore</code>: küçük bir optimizasyon, istemcinin cursor sorgulamadan önce bileceği bilgi.</li>
+</ul>
+<hr>
+<h2>11) Hangi yöntemi ne zaman seçmeli? (Karar tablosu)</h2>
+<ul>
+<li><strong>Küçük veri / admin panel / raporlama / SEO amaçlı paginasyon</strong> → <strong>Offset</strong> tercih edilebilir.</li>
+<li><strong>Büyük veri, API feed, sonsuz kaydırma, düşük gecikme gerektiren servisler</strong> → <strong>Keyset</strong> tercih edilmeli.</li>
+<li><strong>Karma kullanım (ör. public statik listeler + internal feed)</strong> → Her ikisini de destekleme seçeneğini düşünün; farklı endpoint’ler kullanın.</li>
+</ul>
+<hr>
+<h2>12) Pratik kontrol listesi (Checklist before switching)</h2>
+<ul>
+<li>[ ] ORDER BY sütunları kesin ve deterministik mi?</li>
+<li>[ ] Bu sütun(lar) üzerinde uygun indeks var mı?</li>
+<li>[ ] Cursor’ı nasıl taşıyacağımı (plain values mı, token mı) belirledim mi?</li>
+<li>[ ] Prev page ihtiyacı var mı? Varsa implement planı hazır mı?</li>
+<li>[ ] Token’ları HMAC ile imzalamak istiyor muyum? (güvenlik)</li>
+<li>[ ] Test: EXPLAIN/EVALUATE ile query planlarını karşılaştırdınız mı?</li>
+</ul>
+<hr>
+<h2>13) Örnek: EF Core’da hem Offset hem Keyset gösteren kısa karşılaştırma</h2>
+<pre><code class="language-csharp">// Offset
+var page = await db.Posts
+    .OrderBy(p =&gt; p.Id)
+    .Skip((pageNumber - 1) * pageSize)
+    .Take(pageSize)
+    .ToListAsync();
+
+// Keyset (ascending id)
+var page = await db.Posts
+    .Where(p =&gt; p.Id &gt; lastId)
+    .OrderBy(p =&gt; p.Id)
+    .Take(pageSize)
+    .ToListAsync();</code></pre>
+<p><strong>Composite descending örnek (kısa):</strong></p>
+<pre><code class="language-csharp">// lastCursor holds lastCreatedAt and lastId
+var page = await db.Posts
+    .Where(p =&gt; p.CreatedAt &lt; lastCreatedAt
+             || (p.CreatedAt == lastCreatedAt &amp;&amp; p.Id &lt; lastId))
+    .OrderByDescending(p =&gt; p.CreatedAt)
+    .ThenByDescending(p =&gt; p.Id)
+    .Take(pageSize)
+    .ToListAsync();</code></pre>
+<hr>
+<h2>14) Sonuç — Özet ve tavsiyeler</h2>
+<ul>
+<li><strong>Offset</strong>: Basit, okunur ve küçük datasetler için uygundur. Ancak büyük veride ölçeklenmez.</li>
+<li><strong>Keyset</strong>: Yüksek performans, tutarlılık ve ölçeklenebilirlik sağlar. Karmaşık ama güçlüdür.</li>
+<li><strong>Karar</strong>: Uygulamanızın kullanım şekline göre karar verin. API feed ve infinite scroll varsa <strong>keyset</strong> büyük ihtimalle daha iyi seçimdir. Yönetici panellerinde ve sayfa numarasının gerektiği yerlerde <strong>offset</strong> yeterlidir.</li>
+<li><strong>Uygulama ipucu:</strong> Mümkünse test ortamında her iki yöntemi de denetleyin. Query planlarını, gecikmeyi ve kaynak tüketimini ölçün. Gerçek dünya verisiyle test etmek kritik öneme sahiptir.</li>
+</ul>
+<hr>
+<h2>Ek kaynak önerileri (okuma)</h2>
+<ul>
+<li>Microsoft EF Core: Querying &amp; Pagination (docs) — <code>https://learn.microsoft.com/ef/core/querying/pagination</code></li>
+<li>Use The Index, Luke! — derin SQL indeks rehberleri (örn. keyset/seek hakkında iyi makaleler) — <code>https://use-the-index-luke.com/</code></li>
+<li>Pagination patterns for APIs — birçok blog ve makale var; “keyset vs offset pagination” diye arama yapabilirsiniz.</li>
+</ul>
+<hr>
+<h2>Uygulanabilir hızlı ipuçları (kısa)</h2>
+<ul>
+<li>Yeni projelerde feed API’leri için baştan keyset planlayın.</li>
+<li>ORDER BY’da daima benzersiz ikinci anahtar (ID) kullanın.</li>
+<li>Cursor token’ları URL-safe ve imzalı tutun.</li>
+<li>Index’leri kontrol edin. <code>EXPLAIN</code> ile doğrulayın.</li>
+<li>Prev page gerekliyse ters sorguyu ve reversing tekniğini uygulayın.</li>
+</ul>
+<hr>
+<p>Eğer istersen:</p>
+<ul>
+<li>Senin veri modeline göre <strong>pratik bir EF Core implementasyonu</strong> yazayım (ör. <code>Posts</code> tablosu, createdAt+id ile keyset) ve API endpoint örneği oluşturayım.</li>
+<li>Ya da performans testi için <strong>örnek SQL/benchmark komutlarını</strong> hazırlayıp nasıl ölçüm yapacağını göstereyim.</li>
+</ul>
+<p>Hangi adımı istersin — örnek kod + endpoint, yoksa token imzalama ve prev page implementasyonu mu?</p>

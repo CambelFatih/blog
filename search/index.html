@@ -1,0 +1,17 @@
+---
+layout: default
+title: Arama
+description: Kuyza'daki yazılarda ara.
+---
+<section class="container narrow">
+  <header class="page-header">
+    <h1>Arama</h1>
+  </header>
+  <form class="search-form" action="" method="get" role="search">
+    <input type="search" name="q" id="search-input" placeholder="Başlık, konu veya etiket yaz…" aria-label="Ara" autofocus>
+    <button type="submit">Ara</button>
+  </form>
+  <p class="muted" id="search-status" aria-live="polite"></p>
+  <ul class="search-results" id="search-results"></ul>
+</section>
+<script>window.SEARCH_INDEX = "{{ '/search.json' | relative_url }}";</script>

@@ -1,0 +1,392 @@
+---
+layout: "post"
+title: "Modüler Monolith Mimarisi: Clean, Bounded, Scalable"
+date: "2025-10-28 17:08:04 +0000"
+last_modified_at: "2025-10-29 22:06:51 +0000"
+categories: ["softw", "tech"]
+description: "Birçok ekip Microservice’lere geçmeden önce Clean Architecture + Modüler Monolith kombinasyonunu tercih ediyor."
+image: "/wp-content/uploads/2025/10/Moduler-Monolitik-Mimari-Modular-Monolith-Architecture-Nedir-1-scaled.png"
+thumbnail: "/wp-content/uploads/2025/10/Moduler-Monolitik-Mimari-Modular-Monolith-Architecture-Nedir-1-scaled-768x432.png"
+---
+<p>Hadi biraz kafa yoralım. 🧠<br>
+Bu mimari doküman, <em>mükemmel Clean Architecture prensiplerine sahip bir modüler monolith için sağlam bir temel oluşturuyor.</em><br>
+Şimdi bunu rehber niteliğinde, herkesin anlayabileceği ama derinlemesine teknik bir <strong>blog yazısı</strong>na dönüştürelim.</p>
+<p>Aşağıdaki yazı:</p>
+<ul>
+<li>👷‍♂️ <em>Gerçek bir modüler monolith nasıl inşa edilir?</em></li>
+<li>🧩 <em>Her modül kendi “mini-core”una nasıl sahip olur?</em></li>
+<li>🏗️ <em>Katmanlar nasıl ayrılır, ama sistem tek bir bütün olarak nasıl kalır?</em></li>
+<li>⚙️ <em>BufferedLogger, Scheduler, Redis, Kafka gibi altyapılar modüler düzende nasıl yer alır?</em></li>
+</ul>
+<p>Tüm bu soruların cevabını verir.<br>
+Hazırsan başlayalım 👇</p>
+<hr>
+<h1>🧱 <a href="https://www.gencayyildiz.com/blog/moduler-monolitik-mimari-modular-monolith-architecture-nedir-derinlemesine-inceleyelim/">Modüler Monolith</a> Mimarisi: Clean, Bounded, Scalable</h1>
+<blockquote>
+<p>“Monolith ölmedi. Sadece <strong>modülerleşti</strong>.”<br>
+— <em>Kamil Grzybek, Modular Monoliths with DDD</em></p>
+</blockquote>
+<hr>
+<h2>🎯 1️⃣ Neden Modüler Monolith?</h2>
+<p>Birçok ekip Microservice’lere geçmeden önce <strong>Clean Architecture + Modüler Monolith</strong> kombinasyonunu tercih ediyor.<br>
+Çünkü:</p>
+<table>
+<thead>
+<tr>
+<th>Mimari</th>
+<th>Avantaj</th>
+<th>Dezavantaj</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Monolith</strong></td>
+<td>Basit, tek deploy</td>
+<td>Kod karmaşası, domain çakışması</td>
+</tr>
+<tr>
+<td><strong>Microservices</strong></td>
+<td>Bağımsız ölçeklenebilirlik</td>
+<td>Operasyonel karmaşa</td>
+</tr>
+<tr>
+<td><strong>Modular Monolith</strong></td>
+<td>Tek deploy, bağımsız domainler</td>
+<td>⚡ <em>en iyi denge noktası</em></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧩 2️⃣ Temel Felsefe</h2>
+<blockquote>
+<p>“Her modül kendi küçük <strong>Clean Architecture Core’una</strong> sahiptir.”</p>
+</blockquote>
+<p>Yani:</p>
+<ul>
+<li>Her modülün <strong>Domain</strong> ve <strong>Application</strong> katmanı kendi içindedir.</li>
+<li><strong>Infrastructure</strong> katmanı ortaktır ama <em>her modülün Interface’i üzerinden</em> erişir.</li>
+<li><strong>Presentation (API)</strong> katmanı modülleri sadece Application arabirimlerinden çağırır.</li>
+<li><strong>Cross-cutting concerns (auth, logging, caching)</strong> gibi bileşenler <code>Shared</code> veya <code>BuildingBlocks</code> içinde yaşar.</li>
+</ul>
+<hr>
+<h2>🧠 3️⃣ Genel Yapı</h2>
+<pre><code>src/
+├── BuildingBlocks/
+│   ├── Shared/
+│   │   ├── Abstractions/
+│   │   ├── Logging/
+│   │   ├── Messaging/
+│   │   └── Time/
+│   └── Infrastructure/
+│       ├── Outbox/
+│       ├── EventBus/
+│       ├── Redis/
+│       └── Kafka/
+│
+├── Modules/
+│   ├── Quiz/
+│   │   ├── Quiz.Domain/
+│   │   ├── Quiz.Application/
+│   │   └── Quiz.Infrastructure/
+│   │
+│   ├── Scheduler/
+│   │   ├── Scheduler.Domain/
+│   │   ├── Scheduler.Application/
+│   │   └── Scheduler.Infrastructure/
+│   │
+│   ├── Logging/
+│   │   ├── Logging.Domain/
+│   │   ├── Logging.Application/
+│   │   └── Logging.Infrastructure/
+│
+└── Api/
+    ├── Program.cs
+    ├── ModulesRegistration.cs
+    └── Controllers/</code></pre>
+<p>🧭 <strong>Her modül kendi bounded context’ine sahip</strong>:</p>
+<ul>
+<li><code>Quiz</code> → quiz oluşturma, başlatma, sonuç toplama</li>
+<li><code>Scheduler</code> → Redis/Kafka zamanlayıcı</li>
+<li><code>Logging</code> → BufferedLogger servisleri</li>
+</ul>
+<hr>
+<h2>🧩 4️⃣ Katmanların Rolü (Her Modül İçin)</h2>
+<table>
+<thead>
+<tr>
+<th>Katman</th>
+<th>Sorumluluk</th>
+<th>Örnek</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Domain</strong></td>
+<td>Saf iş kuralları, entity, aggregate</td>
+<td><code>Quiz</code>, <code>Question</code>, <code>QuizScheduledEvent</code></td>
+</tr>
+<tr>
+<td><strong>Application</strong></td>
+<td>Use case’ler, handler’lar</td>
+<td><code>ScheduleQuizHandler</code>, <code>StartQuizHandler</code></td>
+</tr>
+<tr>
+<td><strong>Infrastructure</strong></td>
+<td>Veri erişimi, dış servis bağlantıları</td>
+<td><code>RedisScheduler</code>, <code>EventStoreQuizRepository</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Domain (örnek)</h3>
+<pre><code class="language-csharp">// Modules/Quiz/Quiz.Domain/Entities/Quiz.cs
+public class Quiz : AggregateRoot
+{
+    public Guid Id { get; private set; }
+    public string Title { get; private set; }
+    private readonly List&lt;Question&gt; _questions = new();
+
+    public void Schedule(DateTime scheduledAtUtc, IClock clock)
+    {
+        if (scheduledAtUtc &lt; clock.UtcNow)
+            throw new InvalidOperationException(&quot;Cannot schedule quiz in the past.&quot;);
+
+        AddDomainEvent(new QuizScheduledEvent(Id, scheduledAtUtc));
+    }
+}</code></pre>
+<h3>Application (örnek)</h3>
+<pre><code class="language-csharp">// Modules/Quiz/Quiz.Application/UseCases/ScheduleQuiz/ScheduleQuizHandler.cs
+public class ScheduleQuizHandler : ICommandHandler&lt;ScheduleQuizCommand&gt;
+{
+    private readonly IQuizRepository _quizRepository;
+    private readonly IScheduler _scheduler;
+    private readonly IBufferedLogger _logger;
+
+    public async Task Handle(ScheduleQuizCommand command, CancellationToken ct)
+    {
+        var quiz = await _quizRepository.GetAsync(command.QuizId);
+        quiz.Schedule(command.ScheduledAtUtc, SystemClock.Instance);
+
+        await _scheduler.ScheduleAsync(command.QuizId, command.ScheduledAtUtc);
+        await _quizRepository.SaveAsync(quiz);
+
+        _logger.Enqueue(new LogEvent($&quot;Quiz {command.QuizId} scheduled at {command.ScheduledAtUtc}&quot;));
+    }
+}</code></pre>
+<h3>Infrastructure (örnek)</h3>
+<pre><code class="language-csharp">// Modules/Quiz/Quiz.Infrastructure/Repositories/QuizRepository.cs
+public class QuizRepository : IQuizRepository
+{
+    private readonly EventStoreContext _context;
+    public QuizRepository(EventStoreContext context) =&gt; _context = context;
+
+    public Task&lt;Quiz&gt; GetAsync(Guid id) =&gt; _context.Aggregates.FindAsync&lt;Quiz&gt;(id);
+    public Task SaveAsync(Quiz quiz) =&gt; _context.SaveAsync(quiz);
+}</code></pre>
+<hr>
+<h2>🧱 5️⃣ Bağımlılık Yönetimi</h2>
+<blockquote>
+<p>🎯 “Katmanlar bağımlı değil, <em>abstraction</em>’lara bağımlı olmalı.”</p>
+</blockquote>
+<h3>Örnek referans yönü (projeler arası):</h3>
+<pre><code>Quiz.Application  →  Quiz.Domain
+Quiz.Infrastructure  →  Quiz.Application (interfaces)
+Api  →  Quiz.Application (commands)</code></pre>
+<p><strong>Infrastructure</strong>, <code>Application</code>’da tanımlanmış arabirimleri uygular:</p>
+<pre><code class="language-csharp">// Application katmanında
+public interface IQuizRepository
+{
+    Task&lt;Quiz&gt; GetAsync(Guid id);
+    Task SaveAsync(Quiz quiz);
+}</code></pre>
+<p><strong>Infrastructure katmanında</strong> implement edilir:</p>
+<pre><code class="language-csharp">public class QuizRepository : IQuizRepository { ... }</code></pre>
+<hr>
+<h2>🧩 6️⃣ Paylaşılan Katmanlar</h2>
+<h3>BuildingBlocks/Shared</h3>
+<ul>
+<li><code>IBufferedLogger</code>, <code>IClock</code>, <code>IEventBus</code>, <code>IScheduler</code></li>
+<li>Ortak <code>Result&lt;T&gt;</code>, <code>PaginatedList&lt;T&gt;</code> gibi generic yapılar</li>
+</ul>
+<h3>BuildingBlocks/Infrastructure</h3>
+<ul>
+<li>
+<p>Gerçek implementasyonlar:</p>
+<ul>
+<li><code>RedisScheduler</code></li>
+<li><code>KafkaEventBus</code></li>
+<li><code>SystemClock</code></li>
+<li><code>BufferedLoggerService</code></li>
+</ul>
+</li>
+</ul>
+<p>Her modül bu BuildingBlocks’taki abstraction’ları kullanır.</p>
+<hr>
+<h2>⚙️ 7️⃣ Modül Kaydı (Composition Root)</h2>
+<p>Tüm modüller API projesi tarafından runtime’da yüklenir.<br>
+Startup’ta modüller register edilir:</p>
+<pre><code class="language-csharp">// Api/ModulesRegistration.cs
+public static class ModulesRegistration
+{
+    public static IServiceCollection AddModules(this IServiceCollection services, IConfiguration config)
+    {
+        services.AddQuizModule(config);
+        services.AddSchedulerModule(config);
+        services.AddLoggingModule(config);
+        return services;
+    }
+}</code></pre>
+<p>Her modül kendi bağımlılıklarını tanımlar:</p>
+<pre><code class="language-csharp">// Modules/Quiz/Quiz.Infrastructure/DependencyInjection.cs
+public static class QuizModule
+{
+    public static IServiceCollection AddQuizModule(this IServiceCollection services, IConfiguration config)
+    {
+        services.AddScoped&lt;IQuizRepository, QuizRepository&gt;();
+        services.AddScoped&lt;IQuizService, QuizService&gt;();
+        return services;
+    }
+}</code></pre>
+<hr>
+<h2>🧠 8️⃣ Database &amp; Transaction Yönetimi</h2>
+<blockquote>
+<p>“Tek database, ama her modül kendi şemasında yaşar.”</p>
+</blockquote>
+<p>Önerilen yapı:</p>
+<ul>
+<li>Tek <strong>SQL Server veya PostgreSQL</strong></li>
+<li>Her modül kendi şeması (<code>quiz</code>, <code>scheduler</code>, <code>logging</code>)</li>
+<li>Transaction’lar Application servis seviyesinde yönetilir.</li>
+<li>Outbox pattern kullanılır (Event Store ile tutarlılık için).</li>
+</ul>
+<hr>
+<h2>🧩 9️⃣ Cross-cutting Concerns (Logging, Caching, Auth)</h2>
+<h3>BufferedLogger (örnek entegrasyon)</h3>
+<ul>
+<li><code>IBufferedLogger.Enqueue()</code> Application seviyesinde çağrılır.</li>
+<li>Gerçek log işlemi <code>BufferedLoggerService</code> tarafından background’da yapılır.</li>
+<li><strong>Hiçbir modül doğrudan <code>ILogger</code> kullanmaz.</strong></li>
+</ul>
+<h3>Scheduler (örnek)</h3>
+<ul>
+<li><code>IScheduler.ScheduleAsync()</code> Application katmanında çağrılır.</li>
+<li>Redis veya Kafka implementasyonu sadece Infrastructure’da.</li>
+</ul>
+<hr>
+<h2>🚀 10️⃣ Modüler Monolith + Clean Architecture = DDD için Mükemmel Zemin</h2>
+<table>
+<thead>
+<tr>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DDD uyumlu</strong></td>
+<td>Her modül kendi bounded context’ine sahip</td>
+</tr>
+<tr>
+<td><strong>Bağımsız geliştirme</strong></td>
+<td>Modüller birbirinden izole</td>
+</tr>
+<tr>
+<td><strong>Test edilebilir</strong></td>
+<td>Domain/Application bağımsız</td>
+</tr>
+<tr>
+<td><strong>Modüler büyüme</strong></td>
+<td>Mikroservise geçiş kolay</td>
+</tr>
+<tr>
+<td><strong>Performant</strong></td>
+<td>Tek deploy, minimal network hop</td>
+</tr>
+<tr>
+<td><strong>Observability-ready</strong></td>
+<td>BufferedLogger, Prometheus, OTEL entegre</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧩 11️⃣ Geleceğe Hazırlık: Microservice Geçişi</h2>
+<blockquote>
+<p>Modular Monolith → Microservice geçişi sadece <strong>deployment sınırı</strong> değiştirir, <strong>domain sınırı</strong> değil.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Durum</th>
+<th>Modular Monolith</th>
+<th>Microservice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deployment</td>
+<td>Tek binary</td>
+<td>Her modül ayrı container</td>
+</tr>
+<tr>
+<td>Communication</td>
+<td>In-process</td>
+<td>gRPC / HTTP / Message Bus</td>
+</tr>
+<tr>
+<td>State</td>
+<td>Tek DB, farklı schema</td>
+<td>Ayrı DB per service</td>
+</tr>
+<tr>
+<td>Logging</td>
+<td>Shared (BufferedLogger)</td>
+<td>Distributed logging</td>
+</tr>
+</tbody>
+</table>
+<p>Bu nedenle <strong>her modül</strong>, potansiyel olarak kendi microservice’ine dönüşebilir.</p>
+<hr>
+<h2>📘 12️⃣ Özet</h2>
+<table>
+<thead>
+<tr>
+<th>Katman</th>
+<th>İçerik</th>
+<th>Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Core (Domain + Application)</strong></td>
+<td>İş mantığı, use case’ler</td>
+<td>Her modül için ayrı</td>
+</tr>
+<tr>
+<td><strong>Infrastructure</strong></td>
+<td>Teknik detaylar</td>
+<td>Paylaşılan</td>
+</tr>
+<tr>
+<td><strong>BuildingBlocks</strong></td>
+<td>Cross-cutting abstractions</td>
+<td>Paylaşılan</td>
+</tr>
+<tr>
+<td><strong>Presentation (API)</strong></td>
+<td>HTTP endpoints</td>
+<td>Ortak giriş noktası</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧭 13️⃣ Sonuç</h2>
+<p>Modüler Monolith:</p>
+<ul>
+<li>Clean Architecture’ın bağımlılık kurallarını uygular,</li>
+<li>Her modülü bir bounded context olarak ele alır,</li>
+<li>Geliştirme hızını artırır,</li>
+<li>Gelecekte Microservices dönüşümünü sorunsuz hale getirir.</li>
+</ul>
+<p>Ve bu tarz projelerde <strong>senin BufferedLogger mimarin</strong>, <strong>Event Sourcing + CQRS + Redis Scheduler</strong> yapısıyla birleştiğinde,<br>
+aslında modern bir <em>Cloud-Native Modular Monolith</em> elde ediyorsun —<br>
+yani tek binary ama microservice mimarisi kadar güçlü bir sistem.</p>
+<hr>

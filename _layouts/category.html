@@ -1,0 +1,17 @@
+---
+layout: default
+---
+{%- assign c = site.data.categories[page.category] -%}
+{%- assign posts = site.categories[page.category] -%}
+<section class="container">
+  <header class="page-header">
+    <p class="eyebrow"><a href="{{ '/category/' | relative_url }}">Kategoriler</a></p>
+    <h1>{{ c.name | default: page.category }}</h1>
+    <p class="lead">{{ c.description }} <span class="muted">{{ posts.size }} yazı</span></p>
+  </header>
+  <div class="grid">
+    {%- for post in posts %}
+    {% include card.html post=post %}
+    {%- endfor %}
+  </div>
+</section>

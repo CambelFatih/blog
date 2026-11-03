@@ -1,0 +1,1093 @@
+---
+layout: "post"
+title: "C#’ta sık sorulan veya bilinmesi gereken özel yapıların (special classes / types) listesi"
+date: "2025-11-04 19:37:58 +0000"
+last_modified_at: "2025-11-04 19:39:04 +0000"
+categories: ["softw", "tech"]
+description: "C#’ta koleksiyon yapıları (List, Dictionary, HashSet), thread-safe sınıflar (ConcurrentDictionary, BlockingCollection),> immutable"
+image: "/wp-content/uploads/2025/11/61bb05edca00197f2e7a19cf_Csharp_Logo.png"
+thumbnail: "/wp-content/uploads/2025/11/61bb05edca00197f2e7a19cf_Csharp_Logo-512x450.png"
+---
+{% raw %}
+			<hr>
+<h2>🧩 1. <strong>Koleksiyonlar (Collections)</strong></h2>
+<p>C#’ta <code>System.Collections.Generic</code> içinde en sık kullanılan yapılar 👇</p>
+<table>
+<thead>
+<tr>
+<th>Koleksiyon</th>
+<th>Açıklama</th>
+<th>Kullanım Örneği</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>List&lt;T&gt;</code></td>
+<td>Dinamik boyutlu dizi</td>
+<td><code>var list = new List&lt;int&gt; {1,2,3};</code></td>
+</tr>
+<tr>
+<td><code>Dictionary&lt;TKey, TValue&gt;</code></td>
+<td>Anahtar-değer (key-value) yapısı</td>
+<td><code>var dict = new Dictionary&lt;string,int&gt;{{&quot;a&quot;,1}};</code></td>
+</tr>
+<tr>
+<td><code>HashSet&lt;T&gt;</code></td>
+<td>Tekil (unique) değer kümesi</td>
+<td><code>var set = new HashSet&lt;int&gt;{1,2,2}; // {1,2}</code></td>
+</tr>
+<tr>
+<td><code>Queue&lt;T&gt;</code></td>
+<td>FIFO (ilk giren ilk çıkar)</td>
+<td><code>queue.Enqueue(1); queue.Dequeue();</code></td>
+</tr>
+<tr>
+<td><code>Stack&lt;T&gt;</code></td>
+<td>LIFO (son giren ilk çıkar)</td>
+<td><code>stack.Push(1); stack.Pop();</code></td>
+</tr>
+<tr>
+<td><code>LinkedList&lt;T&gt;</code></td>
+<td>Çift yönlü bağlı liste</td>
+<td><code>list.AddFirst(10); list.AddLast(20);</code></td>
+</tr>
+<tr>
+<td><code>SortedList&lt;TKey, TValue&gt;</code></td>
+<td>Sıralı key-value</td>
+<td><code>new SortedList&lt;int,string&gt;{{2,&quot;b&quot;},{1,&quot;a&quot;}};</code></td>
+</tr>
+<tr>
+<td><code>SortedDictionary&lt;TKey,TValue&gt;</code></td>
+<td>Dictionary ama key’ler sıralı</td>
+<td><code>foreach(var kv in dict)</code></td>
+</tr>
+<tr>
+<td><code>ObservableCollection&lt;T&gt;</code></td>
+<td>Değişiklikleri event olarak bildiren liste (WPF’de sık)</td>
+<td><code>collection.CollectionChanged += ...;</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>⚙️ 2. <strong>Non-Generic (Eski) Koleksiyonlar</strong></h2>
+<p>Eski ama hâlâ bazı legacy projelerde görürsün.</p>
+<table>
+<thead>
+<tr>
+<th>Koleksiyon</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ArrayList</code></td>
+<td>Her türden öğe tutar (boxing/unboxing yapar)</td>
+</tr>
+<tr>
+<td><code>Hashtable</code></td>
+<td>Key-value ama <code>object</code> tabanlı (generic değil)</td>
+</tr>
+<tr>
+<td><code>Queue</code>, <code>Stack</code></td>
+<td>Generic olmayan versiyonlar</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ Bunlar yerine her zaman generic versiyonları (<code>List&lt;T&gt;</code>, <code>Dictionary&lt;TKey,TValue&gt;</code>) tercih edilir.</p>
+<hr>
+<h2>🔐 3. <strong>Thread-Safe (Concurrent) Koleksiyonlar</strong></h2>
+<p>Çok çekirdekli ortamlarda (örneğin senin EventSourcing sisteminde) bunlar önemli.</p>
+<table>
+<thead>
+<tr>
+<th>Sınıf</th>
+<th>Özellik</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ConcurrentDictionary&lt;TKey, TValue&gt;</code></td>
+<td>Thread-safe dictionary</td>
+</tr>
+<tr>
+<td><code>ConcurrentQueue&lt;T&gt;</code></td>
+<td>Thread-safe FIFO</td>
+</tr>
+<tr>
+<td><code>ConcurrentStack&lt;T&gt;</code></td>
+<td>Thread-safe LIFO</td>
+</tr>
+<tr>
+<td><code>ConcurrentBag&lt;T&gt;</code></td>
+<td>Rastgele thread-safe koleksiyon</td>
+</tr>
+<tr>
+<td><code>BlockingCollection&lt;T&gt;</code></td>
+<td>Thread-safe producer/consumer pattern (queue tabanlı)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧠 4. <strong>İleri Seviye Generic Yapılar</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Yapı</th>
+<th>Açıklama</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Tuple&lt;T1, T2, …&gt;</code></td>
+<td>Çoklu değer döndürme</td>
+<td><code>return Tuple.Create(1, &quot;abc&quot;);</code></td>
+</tr>
+<tr>
+<td><code>ValueTuple</code></td>
+<td>Daha modern tuple</td>
+<td><code>(int id, string name) = (1, &quot;Ahmet&quot;);</code></td>
+</tr>
+<tr>
+<td><code>KeyValuePair&lt;TKey, TValue&gt;</code></td>
+<td>Dictionary entry temsilcisi</td>
+<td><code>foreach(var kv in dict)</code></td>
+</tr>
+<tr>
+<td><code>Nullable&lt;T&gt;</code> (<code>T?</code>)</td>
+<td>Null olabilen value type</td>
+<td><code>int? age = null;</code></td>
+</tr>
+<tr>
+<td><code>Span&lt;T&gt;</code> / <code>Memory&lt;T&gt;</code></td>
+<td>Bellek üzerinde yüksek performanslı slice işlemleri (C# 7.2+)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>⚡ 5. <strong>LINQ ile Kullanılan Özel Türler</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Sınıf / Yapı</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IEnumerable&lt;T&gt;</code></td>
+<td>Tembel yüklemeli koleksiyonlar için temel arayüz</td>
+</tr>
+<tr>
+<td><code>IQueryable&lt;T&gt;</code></td>
+<td>LINQ to SQL/EF için sorgulanabilir yapı</td>
+</tr>
+<tr>
+<td><code>Lookup&lt;TKey, TValue&gt;</code></td>
+<td>Dictionary gibi ama aynı key’e birden fazla value</td>
+</tr>
+<tr>
+<td><code>GroupBy()</code> sonucu</td>
+<td><code>IGrouping&lt;TKey, TValue&gt;</code> türündedir</td>
+</tr>
+<tr>
+<td><code>SelectMany()</code></td>
+<td>İç içe koleksiyonları düzleştirir</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🔄 6. <strong>Immutable Koleksiyonlar</strong></h2>
+<p>C# 9+ ve <code>System.Collections.Immutable</code> kütüphanesinde gelir.</p>
+<table>
+<thead>
+<tr>
+<th>Yapı</th>
+<th>Özellik</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ImmutableList&lt;T&gt;</code></td>
+<td>Değiştirilemez liste</td>
+</tr>
+<tr>
+<td><code>ImmutableDictionary&lt;TKey,TValue&gt;</code></td>
+<td>Değiştirilemez dictionary</td>
+</tr>
+<tr>
+<td><code>ImmutableHashSet&lt;T&gt;</code></td>
+<td>Değiştirilemez set</td>
+</tr>
+</tbody>
+</table>
+<p>Bunlar <strong>multi-threaded</strong> veya <strong>event sourcing</strong> yapılarında side effect’i önlemek için kullanılır.</p>
+<hr>
+<h2>🧰 7. <strong>Helper / Utility Türler</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Tür</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>StringBuilder</code></td>
+<td>Performanslı string birleştirme</td>
+</tr>
+<tr>
+<td><code>Stopwatch</code></td>
+<td>Zaman ölçümü (performans testi için)</td>
+</tr>
+<tr>
+<td><code>Random</code> / <code>RandomNumberGenerator</code></td>
+<td>Rastgele sayı üretimi</td>
+</tr>
+<tr>
+<td><code>Guid</code></td>
+<td>Global benzersiz kimlik</td>
+</tr>
+<tr>
+<td><code>DateTime</code>, <code>DateTimeOffset</code>, <code>TimeSpan</code></td>
+<td>Zaman yapıları</td>
+</tr>
+<tr>
+<td><code>Regex</code></td>
+<td>Düzenli ifadelerle metin eşleştirme</td>
+</tr>
+<tr>
+<td><code>CancellationToken</code></td>
+<td>Async işlemleri iptal etme</td>
+</tr>
+<tr>
+<td><code>Task</code>, <code>ValueTask</code></td>
+<td>Async yapılar</td>
+</tr>
+<tr>
+<td><code>Lazy&lt;T&gt;</code></td>
+<td>Nesneyi sadece gerektiğinde üretir</td>
+</tr>
+<tr>
+<td><code>WeakReference</code></td>
+<td>Garbage Collector’a izin veren referans türü</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧩 8. <strong>Reflection ve Dynamic Yapılar</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Tür</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Type</code>, <code>PropertyInfo</code>, <code>MethodInfo</code></td>
+<td>Reflection API’si</td>
+</tr>
+<tr>
+<td><code>Activator.CreateInstance()</code></td>
+<td>Dinamik nesne oluşturma</td>
+</tr>
+<tr>
+<td><code>ExpandoObject</code></td>
+<td>Runtime’da dinamik property ekleme</td>
+</tr>
+<tr>
+<td><code>DynamicObject</code></td>
+<td>Custom dynamic tip üretimi</td>
+</tr>
+<tr>
+<td><code>Assembly</code></td>
+<td>Yüklü derlemeler hakkında bilgi</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧮 9. <strong>Threading / Parallelism Yapıları</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Yapı</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Thread</code>, <code>ThreadPool</code></td>
+<td>Temel thread yönetimi</td>
+</tr>
+<tr>
+<td><code>Task</code>, <code>Task.Run()</code></td>
+<td>Modern async işlemler</td>
+</tr>
+<tr>
+<td><code>Parallel.For</code>, <code>Parallel.ForEach</code></td>
+<td>Çok çekirdekli işlem</td>
+</tr>
+<tr>
+<td><code>SemaphoreSlim</code>, <code>Mutex</code>, <code>Monitor</code>, <code>lock</code></td>
+<td>Eşzamanlılık kontrolü</td>
+</tr>
+<tr>
+<td><code>Channel&lt;T&gt;</code> (C# 8+)</td>
+<td>Producer-consumer pipeline</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧠 10. <strong>Yeni C# Özelliklerine Özel Yapılar</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Özellik</th>
+<th>Yapı</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>record</code></td>
+<td>Immutable, value-based class</td>
+</tr>
+<tr>
+<td><code>init</code> accessor</td>
+<td>Nesne oluşturulurken yalnızca set edilebilir property</td>
+</tr>
+<tr>
+<td><code>pattern matching</code></td>
+<td><code>is</code>, <code>switch</code> patternleri</td>
+</tr>
+<tr>
+<td><code>with</code> expression</td>
+<td>Record kopyalama</td>
+</tr>
+<tr>
+<td><code>target-typed new()</code></td>
+<td>Türü çıkarımla <code>new()</code> kullanımı</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>⚙️ 11. <strong>ASP.NET Core / Backend Odaklı Özel Tipler</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Tür</th>
+<th>Nerede Kullanılır</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IActionResult</code>, <code>ActionResult&lt;T&gt;</code></td>
+<td>Controller dönüş tipleri</td>
+</tr>
+<tr>
+<td><code>HttpContext</code>, <code>HttpRequest</code>, <code>HttpResponse</code></td>
+<td>Request-Response erişimi</td>
+</tr>
+<tr>
+<td><code>IConfiguration</code>, <code>IOptions&lt;T&gt;</code></td>
+<td>Config yönetimi</td>
+</tr>
+<tr>
+<td><code>ILogger&lt;T&gt;</code></td>
+<td>Loglama altyapısı</td>
+</tr>
+<tr>
+<td><code>CancellationToken</code></td>
+<td>API işlemlerinde iptal kontrolü</td>
+</tr>
+<tr>
+<td><code>HttpClient</code></td>
+<td>REST API çağrıları</td>
+</tr>
+<tr>
+<td><code>MemoryCache</code>, <code>IMemoryCache</code>, <code>DistributedCache</code></td>
+<td>Cache yönetimi</td>
+</tr>
+<tr>
+<td><code>Channel&lt;T&gt;</code> / <code>BackgroundService</code></td>
+<td>Queue-based async işlemler</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧠 Özet (Mülakatta söyleyebileceğin şekilde)</h2>
+<blockquote>
+<p>“C#’ta koleksiyon yapıları (List, Dictionary, HashSet), thread-safe sınıflar (ConcurrentDictionary, BlockingCollection),<br>
+immutable tipler ve yardımcı yapılar (StringBuilder, Stopwatch, Lazy, Regex, Guid) bulunur.<br>
+Ayrıca Reflection, async/await, ve LINQ’la ilişkili IEnumerable/IQueryable gibi interface’ler de dilin güçlü yönlerindendir.<br>
+Bunların çoğu .NET’te performans, güvenlik ve concurrency kontrolü için optimize edilmiştir.”</p>
+</blockquote>
+<hr>
+<h2>🧩 12. <strong>Stream ve I/O (Girdi-Çıktı) Sınıfları</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Sınıf</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Stream</code></td>
+<td>Akış tabanlı okuma/yazma için temel sınıf</td>
+</tr>
+<tr>
+<td><code>FileStream</code></td>
+<td>Dosyaları byte düzeyinde okuma/yazma</td>
+</tr>
+<tr>
+<td><code>MemoryStream</code></td>
+<td>Bellek üzerinde sanal stream</td>
+</tr>
+<tr>
+<td><code>BufferedStream</code></td>
+<td>Stream performansını artırmak için tampon kullanımı</td>
+</tr>
+<tr>
+<td><code>StreamReader</code>, <code>StreamWriter</code></td>
+<td>Metin tabanlı okuma/yazma</td>
+</tr>
+<tr>
+<td><code>BinaryReader</code>, <code>BinaryWriter</code></td>
+<td>Binary veri okuma/yazma</td>
+</tr>
+<tr>
+<td><code>GZipStream</code>, <code>DeflateStream</code></td>
+<td>Sıkıştırma/dekompresyon işlemleri</td>
+</tr>
+<tr>
+<td><code>FileInfo</code>, <code>DirectoryInfo</code>, <code>DriveInfo</code></td>
+<td>Dosya sistemi yönetimi sınıfları</td>
+</tr>
+<tr>
+<td><code>Path</code></td>
+<td>Dosya yolları işlemleri (<code>Path.Combine</code>, <code>Path.GetExtension</code>)</td>
+</tr>
+<tr>
+<td><code>File</code>, <code>Directory</code></td>
+<td>Statik I/O işlemleri (<code>File.ReadAllText</code>, <code>Directory.CreateDirectory</code>)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>⚙️ 13. <strong>Serialization (Veri Dönüştürme)</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Sınıf / Arayüz</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>System.Text.Json.JsonSerializer</code></td>
+<td>Modern, hızlı JSON serileştirme</td>
+</tr>
+<tr>
+<td><code>Newtonsoft.Json.JsonConvert</code></td>
+<td>En yaygın üçüncü parti JSON kütüphanesi</td>
+</tr>
+<tr>
+<td><code>XmlSerializer</code></td>
+<td>XML serileştirme</td>
+</tr>
+<tr>
+<td><code>BinaryFormatter</code> (⚠️ Deprecated)</td>
+<td>Binary serileştirme (güvenlik nedeniyle artık önerilmez)</td>
+</tr>
+<tr>
+<td><code>DataContractSerializer</code></td>
+<td>WCF ve SOAP için serileştirme</td>
+</tr>
+<tr>
+<td><code>ISerializable</code></td>
+<td>Manuel serileştirme kontrolü</td>
+</tr>
+<tr>
+<td><code>JsonDocument</code>, <code>JsonElement</code></td>
+<td>JSON DOM API (düğümlere erişim için)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧮 14. <strong>Matematik ve Sayısal İşlemler</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Yapı</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Math</code></td>
+<td>Temel matematiksel fonksiyonlar (<code>Pow</code>, <code>Sqrt</code>, <code>Sin</code>, <code>Abs</code> vs.)</td>
+</tr>
+<tr>
+<td><code>Random</code></td>
+<td>Pseudo rastgele sayı üretimi</td>
+</tr>
+<tr>
+<td><code>BitConverter</code></td>
+<td>Byte ↔️ primitive tür dönüşümleri</td>
+</tr>
+<tr>
+<td><code>BigInteger</code></td>
+<td>Çok büyük tamsayılar için sınıf</td>
+</tr>
+<tr>
+<td><code>Complex</code></td>
+<td>Karmaşık sayılar (System.Numerics)</td>
+</tr>
+<tr>
+<td><code>Vector&lt;T&gt;</code></td>
+<td>SIMD (donanım hızlandırmalı) işlemler</td>
+</tr>
+<tr>
+<td><code>Decimal</code></td>
+<td>Yüksek hassasiyetli ondalık değerler (finansal işlemler için)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧠 15. <strong>Attributes ve Metadata</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Sınıf / Kavram</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Attribute</code></td>
+<td>Metadata eklemek için temel sınıf</td>
+</tr>
+<tr>
+<td><code>[Obsolete]</code></td>
+<td>Kullanımdan kalkmış API’leri işaretler</td>
+</tr>
+<tr>
+<td><code>[Serializable]</code></td>
+<td>Serileştirilebilir sınıf</td>
+</tr>
+<tr>
+<td><code>[DataContract]</code>, <code>[DataMember]</code></td>
+<td>WCF için veri sözleşmesi</td>
+</tr>
+<tr>
+<td><code>[JsonPropertyName]</code></td>
+<td>JSON key adını belirleme</td>
+</tr>
+<tr>
+<td><code>[Required]</code>, <code>[StringLength]</code>, <code>[Range]</code></td>
+<td>DataAnnotation validasyonları</td>
+</tr>
+<tr>
+<td><code>Custom Attribute</code></td>
+<td>Kendi attribute’ünü tanımlayabilirsin</td>
+</tr>
+<tr>
+<td><code>AttributeTargets</code></td>
+<td>Hangi öğelere uygulanabileceğini belirler</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧱 16. <strong>Dependency Injection ve Service Lifetimes (ASP.NET Core)</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Kavram</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IServiceCollection</code>, <code>IServiceProvider</code></td>
+<td>DI altyapısı</td>
+</tr>
+<tr>
+<td><code>Transient</code></td>
+<td>Her istekte yeni nesne</td>
+</tr>
+<tr>
+<td><code>Scoped</code></td>
+<td>Request başına tek nesne</td>
+</tr>
+<tr>
+<td><code>Singleton</code></td>
+<td>Uygulama boyunca tek nesne</td>
+</tr>
+<tr>
+<td><code>IHostedService</code></td>
+<td>Arka plan servisi (örnek: queue consumer)</td>
+</tr>
+<tr>
+<td><code>BackgroundService</code></td>
+<td>Sürekli çalışan servisler için base class</td>
+</tr>
+<tr>
+<td><code>ServiceProviderFactory</code></td>
+<td>Custom DI konteyner adaptasyonu</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>⚡ 17. <strong>Memory Management &amp; Garbage Collection</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Yapı / Konsept</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GC</code></td>
+<td>Garbage Collector kontrolü (<code>GC.Collect()</code>)</td>
+</tr>
+<tr>
+<td><code>IDisposable</code></td>
+<td>Kaynak temizleme sözleşmesi</td>
+</tr>
+<tr>
+<td><code>using</code> / <code>await using</code></td>
+<td>Otomatik Dispose yönetimi</td>
+</tr>
+<tr>
+<td><code>finalizer (~ClassName)</code></td>
+<td>Nesne toplanmadan önce son işlem</td>
+</tr>
+<tr>
+<td><code>WeakReference</code></td>
+<td>GC’ye izin veren zayıf referans</td>
+</tr>
+<tr>
+<td><code>Memory&lt;T&gt;</code>, <code>ReadOnlyMemory&lt;T&gt;</code></td>
+<td>Managed memory dilimleri</td>
+</tr>
+<tr>
+<td><code>Span&lt;T&gt;</code>, <code>ReadOnlySpan&lt;T&gt;</code></td>
+<td>Stack-based veri dilimleri (unsafe’siz yüksek performans)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧩 18. <strong>Security / Cryptography</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Sınıf</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SHA256</code>, <code>SHA512</code>, <code>MD5</code></td>
+<td>Hash algoritmaları</td>
+</tr>
+<tr>
+<td><code>HMACSHA256</code></td>
+<td>Key’li hash</td>
+</tr>
+<tr>
+<td><code>RSA</code>, <code>DSA</code>, <code>ECDsa</code></td>
+<td>Asimetrik şifreleme</td>
+</tr>
+<tr>
+<td><code>Aes</code>, <code>TripleDES</code></td>
+<td>Simetrik şifreleme</td>
+</tr>
+<tr>
+<td><code>RNGCryptoServiceProvider</code></td>
+<td>Kriptografik güvenli rastgele sayı üretimi</td>
+</tr>
+<tr>
+<td><code>ProtectedData</code></td>
+<td>Windows DPAPI ile güvenli veri</td>
+</tr>
+<tr>
+<td><code>SecureString</code></td>
+<td>Bellekte gizli string</td>
+</tr>
+<tr>
+<td><code>X509Certificate2</code></td>
+<td>Sertifika işlemleri</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🕸️ 19. <strong>Networking / Communication</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Sınıf</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HttpClient</code></td>
+<td>HTTP istekleri yapmak</td>
+</tr>
+<tr>
+<td><code>HttpListener</code></td>
+<td>Basit HTTP sunucusu oluşturmak</td>
+</tr>
+<tr>
+<td><code>TcpClient</code>, <code>TcpListener</code>, <code>UdpClient</code></td>
+<td>Düşük seviye ağ protokolleri</td>
+</tr>
+<tr>
+<td><code>Socket</code></td>
+<td>TCP/UDP detaylı kontrol</td>
+</tr>
+<tr>
+<td><code>Dns</code>, <code>Ping</code></td>
+<td>Ağ sorgulamaları</td>
+</tr>
+<tr>
+<td><code>WebSocket</code></td>
+<td>Gerçek zamanlı bağlantılar</td>
+</tr>
+<tr>
+<td><code>NamedPipeServerStream</code>, <code>NamedPipeClientStream</code></td>
+<td>IPC (processler arası iletişim)</td>
+</tr>
+<tr>
+<td><code>SignalR</code></td>
+<td>Web tabanlı real-time iletişim framework’ü (ASP.NET Core)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🔄 20. <strong>File System Watcher / Observer Pattern</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Sınıf</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FileSystemWatcher</code></td>
+<td>Dosya değişikliklerini dinleme</td>
+</tr>
+<tr>
+<td><code>INotifyPropertyChanged</code></td>
+<td>Property değişim bildirimleri (MVVM/WPF)</td>
+</tr>
+<tr>
+<td><code>INotifyCollectionChanged</code></td>
+<td>Koleksiyon değişiklikleri bildirimi</td>
+</tr>
+<tr>
+<td><code>IObservable&lt;T&gt;</code> / <code>IObserver&lt;T&gt;</code></td>
+<td>Reactive pattern (Rx.NET temeli)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧠 21. <strong>Expression Trees ve Compiler API</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Sınıf / Kavram</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Expression&lt;TDelegate&gt;</code></td>
+<td>Lambda ifadelerini ifade ağacına dönüştürür</td>
+</tr>
+<tr>
+<td><code>ParameterExpression</code>, <code>MemberExpression</code></td>
+<td>Expression parçaları</td>
+</tr>
+<tr>
+<td><code>Dynamic LINQ</code></td>
+<td>Runtime’da sorgu üretimi</td>
+</tr>
+<tr>
+<td><code>Roslyn API</code></td>
+<td>C# kodunu runtime’da analiz/üretme (<code>Microsoft.CodeAnalysis</code>)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>⚙️ 22. <strong>System.Threading.Channels / Pipelines</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Sınıf</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Channel&lt;T&gt;</code></td>
+<td>Async queue yapısı (producer-consumer pattern)</td>
+</tr>
+<tr>
+<td><code>Pipe</code>, <code>PipeReader</code>, <code>PipeWriter</code></td>
+<td>Yüksek performanslı streaming (Kestrel tabanı)</td>
+</tr>
+<tr>
+<td><code>Dataflow</code> (TPL Dataflow)</td>
+<td>Task tabanlı pipeline işlemleri</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧭 23. <strong>Configuration / Options / Secrets</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Sınıf</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ConfigurationBuilder</code></td>
+<td>JSON, Environment, CommandLine config yükler</td>
+</tr>
+<tr>
+<td><code>IConfiguration</code>, <code>IConfigurationSection</code></td>
+<td>Config erişimi</td>
+</tr>
+<tr>
+<td><code>IOptions&lt;T&gt;</code>, <code>IOptionsMonitor&lt;T&gt;</code></td>
+<td>Tip güvenli config binding</td>
+</tr>
+<tr>
+<td><code>UserSecrets</code></td>
+<td>Development ortamında gizli anahtarlar</td>
+</tr>
+<tr>
+<td><code>Environment.GetEnvironmentVariable()</code></td>
+<td>Ortam değişkenlerine erişim</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧱 24. <strong>Validation ve Model Binding (ASP.NET Core)</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Sınıf</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ModelState</code></td>
+<td>Model doğrulama durumu</td>
+</tr>
+<tr>
+<td><code>ValidationAttribute</code></td>
+<td>Custom validasyon oluşturma</td>
+</tr>
+<tr>
+<td><code>IModelBinder</code>, <code>IModelBinderProvider</code></td>
+<td>Model binding özelleştirme</td>
+</tr>
+<tr>
+<td><code>IValidator&lt;T&gt;</code></td>
+<td>FluentValidation entegrasyonu</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧮 25. <strong>Task Parallel Library (TPL) Ekstraları</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Yapı</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TaskCompletionSource&lt;T&gt;</code></td>
+<td>Manuel olarak task tamamlama</td>
+</tr>
+<tr>
+<td><code>CancellationTokenSource</code></td>
+<td>Async iptal kontrolü</td>
+</tr>
+<tr>
+<td><code>TaskFactory</code></td>
+<td>Task üretimi yönetimi</td>
+</tr>
+<tr>
+<td><code>ContinueWith</code></td>
+<td>Task sonrası zincirleme işlemler</td>
+</tr>
+<tr>
+<td><code>ValueTask</code></td>
+<td>Hafif alternatif, düşük overhead</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧠 26. <strong>Interop / Unsafe / Low-Level</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Yapı</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DllImport</code></td>
+<td>Native (C/C++) kod çağırma</td>
+</tr>
+<tr>
+<td><code>Marshal</code></td>
+<td>Managed ↔ Unmanaged veri dönüşümü</td>
+</tr>
+<tr>
+<td><code>GCHandle</code></td>
+<td>Bellekte nesne sabitleme</td>
+</tr>
+<tr>
+<td><code>unsafe</code>, <code>fixed</code></td>
+<td>Pointer işlemleri (güvenli olmayan kod)</td>
+</tr>
+<tr>
+<td><code>stackalloc</code></td>
+<td>Stack üzerinde array oluşturma</td>
+</tr>
+<tr>
+<td><code>nint</code>, <code>nuint</code></td>
+<td>Native pointer integer türleri (.NET 5+)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧩 27. <strong>Logging &amp; Diagnostics</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Sınıf</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ILogger</code>, <code>ILogger&lt;T&gt;</code></td>
+<td>Standart loglama arabirimi</td>
+</tr>
+<tr>
+<td><code>LoggerFactory</code></td>
+<td>Logger oluşturucu</td>
+</tr>
+<tr>
+<td><code>DiagnosticSource</code>, <code>Activity</code></td>
+<td>Telemetry ve tracing için</td>
+</tr>
+<tr>
+<td><code>Trace</code>, <code>Debug</code></td>
+<td>Runtime loglama ve hata ayıklama</td>
+</tr>
+<tr>
+<td><code>EventSource</code></td>
+<td>High-performance telemetry</td>
+</tr>
+<tr>
+<td><code>EventLog</code></td>
+<td>Windows Event Viewer loglama</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🔧 28. <strong>Testing / Mocking / Benchmarking</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Yapı / Araç</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>xUnit</code>, <code>NUnit</code>, <code>MSTest</code></td>
+<td>Test framework’leri</td>
+</tr>
+<tr>
+<td><code>Moq</code>, <code>NSubstitute</code></td>
+<td>Mocking kütüphaneleri</td>
+</tr>
+<tr>
+<td><code>FluentAssertions</code></td>
+<td>İfade tabanlı assertion</td>
+</tr>
+<tr>
+<td><code>BenchmarkDotNet</code></td>
+<td>Performans ölçümü</td>
+</tr>
+<tr>
+<td><code>TestServer</code> (Microsoft.AspNetCore.Mvc.Testing)</td>
+<td>Entegrasyon testi ortamı</td>
+</tr>
+<tr>
+<td><code>WebApplicationFactory&lt;T&gt;</code></td>
+<td>API testleri için sunucu oluşturma</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>📦 29. <strong>Deployment / Hosting</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Yapı</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IHost</code>, <code>IHostBuilder</code></td>
+<td>Uygulama yaşam döngüsü yöneticisi</td>
+</tr>
+<tr>
+<td><code>WebApplicationBuilder</code>, <code>WebApplication</code></td>
+<td>.NET 6+ minimal API altyapısı</td>
+</tr>
+<tr>
+<td><code>IWebHostEnvironment</code></td>
+<td>Ortam bilgileri (Development, Production)</td>
+</tr>
+<tr>
+<td><code>KestrelServerOptions</code></td>
+<td>Web sunucusu yapılandırması</td>
+</tr>
+<tr>
+<td><code>UseUrls</code>, <code>UseKestrel</code>, <code>UseIISIntegration</code></td>
+<td>Hosting ayarları</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>Bu 29 kategorideki yapıların toplamı, C#’ın <strong>neredeyse tüm temel ve ileri seviye bileşenlerini</strong> kapsıyor.<br>
+Hiçbir önceki maddeyi tekrar etmedim ✅</p>
+<hr>
+<p>💡 <strong>İstersen bir sonraki adımda:</strong></p>
+<ul>
+<li>Bu 29 başlıktan karışık <strong>25 soruluk “pratik C# teknik sınavı”</strong> hazırlayayım.</li>
+<li>Sorular <strong>gerçek mülakat formatında</strong> (örneğin: <code>Dictionary vs ConcurrentDictionary</code>, <code>Task vs Thread</code>, <code>IEnumerable vs IQueryable</code>, <code>Span&lt;T&gt;</code> ne işe yarar gibi).</li>
+<li>Her sorunun sonunda doğru cevabı açıklayarak kısa ve net öğrenmeni sağlar.</li>
+</ul>
+<p>Hazırlayayım mı Fatih?</p>
+{% endraw %}

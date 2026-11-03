@@ -1,0 +1,470 @@
+---
+layout: "post"
+title: "Yazılım Mimarilerinin Evrimi: Monolit’ten Clean Architecture’a Giden 40 Yıllık Yolculuk"
+date: "2025-10-28 15:15:40 +0000"
+last_modified_at: "2025-10-28 15:15:51 +0000"
+categories: ["softw", "tech"]
+description: "“Tüm mimariler aynı problemi çözmeye çalışır: bağımlılık yönetimi, değişime dayanıklılık ve test edilebilirlik.Ama her biri bunu kendi dönemi"
+image: "/wp-content/uploads/2025/10/0_M3dzZrhafi4IHYbf.png"
+thumbnail: "/wp-content/uploads/2025/10/0_M3dzZrhafi4IHYbf-768x665.png"
+---
+<p>Harika istek! 🔥<br>
+Senin istediğin şey aslında:<br>
+👉 Yazılım mimarilerinin <strong>tarihsel gelişimini</strong>,<br>
+👉 <strong>Temel felsefelerini</strong>,<br>
+👉 <strong>Katman anlayışlarını</strong><br>
+ve <strong>hangisinin ne zaman, neden ortaya çıktığını</strong> anlatan <strong>tablolu, derin ama okunabilir</strong> bir teknik blog yazısı.</p>
+<p>Aşağıda sana tam istediğin formatta, modern bir developer audience’a hitap eden bir <strong>teknik makale (blog post)</strong> hazırladım.<br>
+Hem öğretici hem de görsel olarak zengin (tablolar, tarihsel sıralama, özetler).</p>
+<hr>
+<h1>🧭 Yazılım Mimarilerinin Evrimi: Monolit’ten Clean Architecture’a Giden 40 Yıllık Yolculuk</h1>
+<blockquote>
+<p>“Tüm mimariler aynı problemi çözmeye çalışır: <strong>bağımlılık yönetimi, değişime dayanıklılık ve test edilebilirlik.</strong><br>
+Ama her biri bunu kendi dönemi ve ihtiyaçları doğrultusunda farklı yorumlamıştır.”<br>
+— <em>Bir Yazılım Mimarı</em></p>
+</blockquote>
+<hr>
+<h2>🕰️ Mimari Evrim Zaman Çizelgesi</h2>
+<table>
+<thead>
+<tr>
+<th>Dönem</th>
+<th>Mimari Yaklaşım</th>
+<th>Ana Amaç</th>
+<th>Tipik Kullanım Alanı</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1980’ler</td>
+<td><strong>Layered (N-Tier) Architecture</strong></td>
+<td>Uygulamayı katmanlara ayırmak</td>
+<td>Kurumsal uygulamalar</td>
+</tr>
+<tr>
+<td>1990’lar</td>
+<td><strong>Monolithic Architecture</strong></td>
+<td>Tüm kodu tek deploy biriminde toplamak</td>
+<td>Eski web uygulamaları</td>
+</tr>
+<tr>
+<td>1996–2000</td>
+<td><strong>Client–Server Architecture</strong></td>
+<td>İş mantığını sunucuya taşımak</td>
+<td>Masaüstü + Web</td>
+</tr>
+<tr>
+<td>2003–2008</td>
+<td><strong>Hexagonal (Ports &amp; Adapters)</strong></td>
+<td>Framework bağımsız domain</td>
+<td>Domain-driven uygulamalar</td>
+</tr>
+<tr>
+<td>2008</td>
+<td><strong>Onion Architecture</strong></td>
+<td>Katı bağımlılık yönü, domain merkezlilik</td>
+<td>DDD tabanlı monolitler</td>
+</tr>
+<tr>
+<td>2010</td>
+<td><strong>Clean Architecture</strong></td>
+<td>Use case merkezli, bağımsız katmanlar</td>
+<td>Büyük ölçekli sistemler</td>
+</tr>
+<tr>
+<td>2011</td>
+<td><strong>CQRS &amp; Event Sourcing</strong></td>
+<td>Komut/sorgu ayrımı, olay tabanlı doğruluk</td>
+<td>Event-driven sistemler</td>
+</tr>
+<tr>
+<td>2013</td>
+<td><strong>Microservices Architecture</strong></td>
+<td>Küçük bağımsız servisler</td>
+<td>Büyük, ölçeklenebilir sistemler</td>
+</tr>
+<tr>
+<td>2017</td>
+<td><strong>Modular Monolith Architecture</strong></td>
+<td>Monolit içinde modüler yapı</td>
+<td>Geleceğe hazır sistemler</td>
+</tr>
+<tr>
+<td>2020+</td>
+<td><strong>Serverless / Event-driven Hybrid</strong></td>
+<td>Olay-tetiklemeli, cloud-native sistemler</td>
+<td>Dağıtık event tabanlı sistemler</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🧩 1️⃣ Layered (N-Tier) Architecture</h2>
+<p><strong>Dönem:</strong> 1980’ler<br>
+<strong>Öncü:</strong> Kurumsal yazılım dünyası (Java EE, .NET)<br>
+<strong>Amaç:</strong> Uygulamayı mantıksal katmanlara ayırmak.</p>
+<table>
+<thead>
+<tr>
+<th>Katman</th>
+<th>Sorumluluk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Presentation</td>
+<td>UI (Controller, View)</td>
+</tr>
+<tr>
+<td>Application</td>
+<td>İş akışı</td>
+</tr>
+<tr>
+<td>Domain</td>
+<td>İş mantığı / modeller</td>
+</tr>
+<tr>
+<td>Data Access</td>
+<td>Veritabanı erişimi</td>
+</tr>
+</tbody>
+</table>
+<p>🧠 <strong>Felsefe:</strong> “Ayrıştır, test etmesi kolay olsun.”<br>
+⚠️ <strong>Sorun:</strong> Katmanlar arası bağımlılıklar zamanla bulanıklaşır.</p>
+<hr>
+<h2>🧩 2️⃣ Monolithic Architecture</h2>
+<p><strong>Dönem:</strong> 1990’lar<br>
+<strong>Felsefe:</strong> “Her şey tek bir deploy biriminde daha kolaydır.”<br>
+<strong>Avantaj:</strong> Basit deployment, kolay debugging.<br>
+<strong>Dezavantaj:</strong> Büyük kod tabanı → değişiklik riski yüksek.</p>
+<p>💬 <strong>Bugün hâlâ geçerli:</strong> Startup’lar için MVP geliştirirken mükemmel bir başlangıç.</p>
+<hr>
+<h2>🧩 3️⃣ Client–Server Architecture</h2>
+<p><strong>Dönem:</strong> 1996–2000<br>
+<strong>Felsefe:</strong> “İş mantığını istemciden sunucuya taşı.”<br>
+<strong>Yapı:</strong></p>
+<pre><code>Client (UI) ⇄ Server (Business Logic + DB)</code></pre>
+<p>💡 Bu model, web’in temellerini attı ve REST API’lerin doğmasına zemin hazırladı.</p>
+<hr>
+<h2>🧩 4️⃣ Hexagonal (Ports and Adapters)</h2>
+<p><strong>Dönem:</strong> 2003<br>
+<strong>Yaratıcı:</strong> Alistair Cockburn<br>
+<strong>Amaç:</strong> Framework’lere değil, domain’e bağımlı olmak.</p>
+<table>
+<thead>
+<tr>
+<th>Kavram</th>
+<th>Tanım</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ports</strong></td>
+<td>Domain’in dış dünya ile etkileşim noktaları</td>
+</tr>
+<tr>
+<td><strong>Adapters</strong></td>
+<td>Dış sistemlere bağlanan uygulama parçaları</td>
+</tr>
+</tbody>
+</table>
+<p>🧠 <strong>Ana fikir:</strong></p>
+<blockquote>
+<p>Uygulamanın merkezinde domain vardır.<br>
+Tüm dış bağımlılıklar (DB, UI, API) birer <em>adapter</em>’dır.</p>
+</blockquote>
+<p>💬 <strong>Bugünkü Clean Architecture’ın atasıdır.</strong></p>
+<hr>
+<h2>🧩 5️⃣ Onion Architecture</h2>
+<p><strong>Dönem:</strong> 2008<br>
+<strong>Yaratıcı:</strong> Jeffrey Palermo<br>
+<strong>Amaç:</strong> Katmanların yönünü tersine çevirmek — domain merkezde olmalı.</p>
+<table>
+<thead>
+<tr>
+<th>Katman</th>
+<th>Rolü</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Domain Model</strong></td>
+<td>İş kuralları ve nesneler</td>
+</tr>
+<tr>
+<td><strong>Application Services</strong></td>
+<td>İş akışları</td>
+</tr>
+<tr>
+<td><strong>Infrastructure</strong></td>
+<td>Persistence, IO</td>
+</tr>
+<tr>
+<td><strong>UI</strong></td>
+<td>En dış katman</td>
+</tr>
+</tbody>
+</table>
+<p>🧅 <strong>Felsefe:</strong> “Bağımlılıklar içe doğru akar.”<br>
+📘 <strong>Etki:</strong> Clean Architecture’ın teorik temelini oluşturdu.</p>
+<hr>
+<h2>🧩 6️⃣ Clean Architecture</h2>
+<p><strong>Dönem:</strong> 2010<br>
+<strong>Yaratıcı:</strong> Robert C. Martin (Uncle Bob)<br>
+<strong>Amaç:</strong> Her bağımlılığın yönünü <strong>içe çevirmek</strong>, use case’leri izole etmek.</p>
+<table>
+<thead>
+<tr>
+<th>Katman</th>
+<th>Görev</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Entities (Domain)</strong></td>
+<td>Çekirdek iş kuralları</td>
+</tr>
+<tr>
+<td><strong>Use Cases (Application)</strong></td>
+<td>Uygulama mantığı</td>
+</tr>
+<tr>
+<td><strong>Interface Adapters (Infrastructure)</strong></td>
+<td>DB, Web, External I/O</td>
+</tr>
+<tr>
+<td><strong>Frameworks &amp; Drivers (Presentation)</strong></td>
+<td>UI, API, CLI, Web</td>
+</tr>
+</tbody>
+</table>
+<p>🧠 <strong>Temel Felsefe:</strong></p>
+<blockquote>
+<p>“Kodun en önemli kısmı framework değil, domain’dir.”<br>
+“Dış katmanlar değişir, iç katmanlar değişmez.”</p>
+</blockquote>
+<p>💬 Bugün DDD, CQRS, Event Sourcing, Microservices gibi yaklaşımlarla mükemmel uyumlu.</p>
+<hr>
+<h2>🧩 7️⃣ CQRS (Command Query Responsibility Segregation)</h2>
+<p><strong>Dönem:</strong> 2011<br>
+<strong>Yaratıcı:</strong> Greg Young<br>
+<strong>Amaç:</strong> Yazma (Command) ve okuma (Query) işlemlerini ayırarak ölçeklenebilirliği artırmak.</p>
+<table>
+<thead>
+<tr>
+<th>Bölüm</th>
+<th>Sorumluluk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Command Side</strong></td>
+<td>State değiştirir, Event üretir</td>
+</tr>
+<tr>
+<td><strong>Query Side</strong></td>
+<td>Event’lerden projection oluşturur</td>
+</tr>
+</tbody>
+</table>
+<p>💡 Genellikle <strong>Event Sourcing</strong> ve <strong>Clean Architecture</strong> ile birlikte kullanılır.</p>
+<hr>
+<h2>🧩 8️⃣ Microservices Architecture</h2>
+<p><strong>Dönem:</strong> 2013<br>
+<strong>Yaratıcı:</strong> Martin Fowler &amp; James Lewis<br>
+<strong>Amaç:</strong> Her bounded context kendi bağımsız servisidir.</p>
+<table>
+<thead>
+<tr>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bağımsız deploy</strong></td>
+<td>Her servis ayrı</td>
+</tr>
+<tr>
+<td><strong>Bounded context</strong></td>
+<td>Domain odaklı</td>
+</tr>
+<tr>
+<td><strong>Event-driven iletişim</strong></td>
+<td>Async mesajlaşma</td>
+</tr>
+<tr>
+<td><strong>Infra gereksinimi</strong></td>
+<td>CI/CD, API Gateway, Observability</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>Sorun:</strong> Yüksek operasyonel karmaşıklık.<br>
+💬 <strong>Alternatif:</strong> <em>Modular Monolith → Microservices geçişi.</em></p>
+<hr>
+<h2>🧩 9️⃣ Modular Monolith Architecture</h2>
+<p><strong>Dönem:</strong> 2017<br>
+<strong>Yaratıcı:</strong> Kamil Grzybek (ve DDD topluluğu)<br>
+<strong>Amaç:</strong> Monolit içinde modüler, bağımsız bounded context’ler yaratmak.</p>
+<table>
+<thead>
+<tr>
+<th>Modül</th>
+<th>Kapsam</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quiz</td>
+<td>Domain + Application + Infrastructure</td>
+</tr>
+<tr>
+<td>Logging</td>
+<td>Cross-cutting concern</td>
+</tr>
+<tr>
+<td>Scheduler</td>
+<td>Infrastructure abstraction (Redis/Kafka)</td>
+</tr>
+</tbody>
+</table>
+<p>🧩 <strong>Avantaj:</strong> Tek deploy, ama domain’ler bağımsız.<br>
+💬 <strong>Clean Architecture’ın pratik evrimi</strong> diyebiliriz.</p>
+<hr>
+<h2>🧩 🔟 Serverless / Event-driven Hybrid Architecture</h2>
+<p><strong>Dönem:</strong> 2020+<br>
+<strong>Amaç:</strong> Olay tabanlı, bulut-native, yüksek ölçeklenebilir sistemler.</p>
+<table>
+<thead>
+<tr>
+<th>Bileşen</th>
+<th>Rol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Event Source</strong></td>
+<td>Gerçeklik kaynağı (Kafka, EventStoreDB)</td>
+</tr>
+<tr>
+<td><strong>Function</strong></td>
+<td>Event işleyicisi (Lambda, Azure Function)</td>
+</tr>
+<tr>
+<td><strong>Projection</strong></td>
+<td>Sorgu tarafı</td>
+</tr>
+<tr>
+<td><strong>DLQ / Retry</strong></td>
+<td>Dayanıklılık katmanı</td>
+</tr>
+</tbody>
+</table>
+<p>⚡ <strong>Felsefe:</strong></p>
+<blockquote>
+<p>“Sistemin kalbi event’tir.”<br>
+“State ephemeral, event kalıcıdır.”</p>
+</blockquote>
+<p>🧠 <strong>Clean + Event-driven + Cloud-native</strong> → modern mimarinin birleşimi.</p>
+<hr>
+<h2>🧩 Özet Karşılaştırma Tablosu</h2>
+<table>
+<thead>
+<tr>
+<th>Mimari</th>
+<th>Merkezinde Ne Var?</th>
+<th>Felsefe</th>
+<th>Dönem</th>
+<th>Kullanım Alanı</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Layered</td>
+<td>Katmanlar</td>
+<td>Separation of Concerns</td>
+<td>1980s</td>
+<td>Kurumsal sistemler</td>
+</tr>
+<tr>
+<td>Monolithic</td>
+<td>Tek kod tabanı</td>
+<td>Basitlik</td>
+<td>1990s</td>
+<td>MVP, küçük sistemler</td>
+</tr>
+<tr>
+<td>Client–Server</td>
+<td>Network</td>
+<td>UI–Server ayrımı</td>
+<td>1990s</td>
+<td>Masaüstü/Web</td>
+</tr>
+<tr>
+<td>Hexagonal</td>
+<td>Domain</td>
+<td>Ports &amp; Adapters</td>
+<td>2003</td>
+<td>DDD sistemleri</td>
+</tr>
+<tr>
+<td>Onion</td>
+<td>Domain</td>
+<td>Bağımlılık yönü içe</td>
+<td>2008</td>
+<td>DDD monolit</td>
+</tr>
+<tr>
+<td>Clean</td>
+<td>Use Cases</td>
+<td>Abstraction bağımlılığı</td>
+<td>2010</td>
+<td>Büyük sistemler</td>
+</tr>
+<tr>
+<td>CQRS</td>
+<td>Komut/Sorgu</td>
+<td>Ayrıştırma</td>
+<td>2011</td>
+<td>Event-driven sistemler</td>
+</tr>
+<tr>
+<td>Microservices</td>
+<td>Servis</td>
+<td>Dağıtık yapı</td>
+<td>2013</td>
+<td>Büyük ölçekli sistemler</td>
+</tr>
+<tr>
+<td>Modular Monolith</td>
+<td>Bounded Context</td>
+<td>Modüler monolit</td>
+<td>2017</td>
+<td>Kurumsal modern sistemler</td>
+</tr>
+<tr>
+<td>Serverless / Event-driven</td>
+<td>Event</td>
+<td>Olay tabanlı akış</td>
+<td>2020+</td>
+<td>Cloud-native sistemler</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>🎯 Sonuç</h2>
+<p>Bugünün en olgun yaklaşımları:</p>
+<ul>
+<li><strong>Clean Architecture</strong> → Temiz bağımlılık yönetimi</li>
+<li><strong>Modular Monolith</strong> → Geleceğe hazırlık</li>
+<li><strong>Event-driven Hybrid</strong> → Cloud-native dönüşüm</li>
+</ul>
+<p>Ve artık iyi mimarinin sırrı şu:</p>
+<blockquote>
+<p>“Doğru yapı, doğru zamanda, doğru bağlamda seçilen mimaridir.”<br>
+— <em>Yazılım Mimarlarının Altın Kuralı</em></p>
+</blockquote>
+<hr>
+<p>💬 <strong>Ekstra:</strong><br>
+İstersen bu blog yazısını Markdown + görsel (Mermaid diagramlar) formatında sana hazır hâle getirebilirim.<br>
+Yani GitHub veya Medium’a direkt kopyala-yapıştır şeklinde kullanabilirsin.</p>
+<p>Bunu ister misin?</p>

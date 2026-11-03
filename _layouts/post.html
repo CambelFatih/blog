@@ -1,0 +1,66 @@
+---
+layout: default
+---
+{%- assign words = content | strip_html | number_of_words -%}
+{%- assign share = page.url | absolute_url | url_encode -%}
+<article class="post">
+  <header class="post-header container narrow">
+    <div class="chips">
+      {%- for cat in page.categories %}
+      <a class="chip" href="{{ '/category/' | append: cat | append: '/' | relative_url }}">{{ site.data.categories[cat].name | default: cat }}</a>
+      {%- endfor %}
+    </div>
+    <h1 class="post-title">{{ page.title }}</h1>
+    <div class="meta">{% include date.html date=page.date %}<span aria-hidden="true">·</span><span>{{ words | divided_by: 200 | plus: 1 }} dk okuma</span></div>
+  </header>
+
+  {%- if page.image %}
+  <figure class="post-cover container">
+    <img src="{{ page.image | relative_url }}" alt="{{ page.title | escape }}" decoding="async" fetchpriority="high">
+  </figure>
+  {%- endif %}
+
+  <div class="prose container narrow">
+{{ content }}
+  </div>
+
+  <footer class="post-footer container narrow">
+    {%- if page.tags.size > 0 %}
+    <div class="tags">
+      {%- for tag in page.tags %}<a class="tag" href="{{ '/search/' | relative_url }}?q={{ tag | url_encode }}">#{{ tag }}</a>{% endfor %}
+    </div>
+    {%- endif %}
+    <div class="share">
+      <span class="muted">Paylaş:</span>
+      <a href="https://twitter.com/intent/tweet?url={{ share }}&text={{ page.title | url_encode }}" target="_blank" rel="noopener">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ share }}" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://wa.me/?text={{ page.title | append: ' ' | url_encode }}{{ share }}" target="_blank" rel="noopener">WhatsApp</a>
+      <button type="button" class="link-btn" data-copy-url>Bağlantıyı kopyala</button>
+    </div>
+
+    <nav class="post-nav" aria-label="Diğer yazılar">
+      {%- if page.previous %}
+      <a class="post-nav-item" href="{{ page.previous.url | relative_url }}"><span class="muted">← Önceki yazı</span><strong>{{ page.previous.title }}</strong></a>
+      {%- else %}<span></span>{% endif %}
+      {%- if page.next %}
+      <a class="post-nav-item next" href="{{ page.next.url | relative_url }}"><span class="muted">Sonraki yazı →</span><strong>{{ page.next.title }}</strong></a>
+      {%- endif %}
+    </nav>
+  </footer>
+
+  {%- assign cat = page.categories | first -%}
+  {%- if cat %}
+  <section class="related container">
+    <h2 class="section-title">{{ site.data.categories[cat].name | default: cat }} kategorisinden</h2>
+    <div class="grid">
+      {%- assign n = 0 -%}
+      {%- for post in site.categories[cat] -%}
+        {%- if post.url != page.url and n < 3 -%}
+          {% include card.html post=post %}
+          {%- assign n = n | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor %}
+    </div>
+  </section>
+  {%- endif %}
+</article>
