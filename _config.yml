@@ -43,6 +43,8 @@ defaults:
     values: { sitemap: false }
   - scope: { path: "dw" }
     values: { sitemap: false }
+  - scope: { path: "google40725d501500b265.html" }  # Search Console verification
+    values: { sitemap: false }
 
 exclude:
   - CLAUDE.md
