@@ -161,7 +161,7 @@ function activateTooltips() {
 
       tooltipHeader.style.backgroundColor = 'white';
       tooltipIpa.style.color = 'black';
-      tooltipAudio.src = `https://www.kuyza.com/dw/sounds/${tooltipIndex}.mp3`;   //`path/to/audio/file${tooltipIndex}.mp3` https://www.kuyza.com/dw/sounds/   sounds/
+      tooltipAudio.src = `https://cambelfatih.github.io/blog/dw/sounds/${tooltipIndex}.mp3`;   //`path/to/audio/file${tooltipIndex}.mp3` https://cambelfatih.github.io/blog/dw/sounds/   sounds/
       tooltipAudioButton.addEventListener('click', () => {
         tooltipAudio.play();
       });
@@ -184,10 +184,10 @@ var mode = localStorage.getItem("mode");
 
 if (mode === "gece") {
   body.classList.add("gece");
-  icon.src = "https://www.kuyza.com/dw/Ebook-img/dark.png";
+  icon.src = "https://cambelfatih.github.io/blog/dw/Ebook-img/dark.png";
 } else {
   body.classList.add("gunduz");
-  icon.src = "https://www.kuyza.com/dw/Ebook-img/brightness.png";
+  icon.src = "https://cambelfatih.github.io/blog/dw/Ebook-img/brightness.png";
 }
 function toggleMode() {
   var body = document.getElementsByTagName("body")[0];
@@ -197,12 +197,12 @@ function toggleMode() {
   if (mode === "gece") {
     body.classList.remove("gece");
     body.classList.add("gunduz");
-    icon.src = "https://www.kuyza.com/dw/Ebook-img/brightness.png";
+    icon.src = "https://cambelfatih.github.io/blog/dw/Ebook-img/brightness.png";
     localStorage.setItem("mode", "gunduz");
   } else {
     body.classList.remove("gunduz");
     body.classList.add("gece");
-    icon.src = "https://www.kuyza.com/dw/Ebook-img/dark.png";
+    icon.src = "https://cambelfatih.github.io/blog/dw/Ebook-img/dark.png";
     localStorage.setItem("mode", "gece");
   }
 }

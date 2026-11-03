@@ -5,8 +5,8 @@ layout: default
 <section class="hero">
   <div class="container hero-inner">
     <p class="eyebrow">Kişisel blog · {{ site.posts.size }} yazı</p>
-    <h1>Merak ettiklerimi<br><span class="accent">öğrenip yazıyorum.</span></h1>
-    <p class="lead">{{ site.description }}</p>
+    <h1>Merhaba, ben {{ site.title }}.<br><span class="accent">Öğrendiklerimi yazıyorum.</span></h1>
+    <p class="lead">Yazılım geliştirme, İngilizce, finans, bilim ve kişisel gelişim üzerine notlarım ve yazılarım. <a href="{{ '/about/' | relative_url }}">Hakkımda →</a></p>
     <form class="search-form" action="{{ '/search/' | relative_url }}" method="get" role="search">
       <input type="search" name="q" placeholder="Yazılarda ara…" aria-label="Yazılarda ara">
       <button type="submit">Ara</button>

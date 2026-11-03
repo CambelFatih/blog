@@ -1,6 +1,6 @@
-# Kuyza blog: Claude çalışma kılavuzu
+# Fatih Furkan Çambel kişisel blogu: Claude çalışma kılavuzu
 
-Bu site **Claude tarafından yönetilir**. Kullanıcı bir konu ve/veya ham metin verir; Claude yazıyı düzenler, yayına hazırlar, commit'ler ve PR açar. Kullanıcı tasarım ve içerik kararlarını Claude'a bırakmıştır; soru sormak yerine makul kararı ver ve uygula.
+Bu site **Fatih Furkan Çambel'in kişisel blogudur** ve **Claude tarafından yönetilir**. Yazılar yazarın ağzından, birinci tekil şahısla anlatılır; site adı ve yazar `_config.yml` → `title` / `author`. Logo/favicon: `assets/favicon.svg` (FÇ monogramı), `assets/icon-512.png` onun PNG'si. Kullanıcı bir konu ve/veya ham metin verir; Claude yazıyı düzenler, yayına hazırlar, commit'ler ve PR açar. Kullanıcı tasarım ve içerik kararlarını Claude'a bırakmıştır; soru sormak yerine makul kararı ver ve uygula.
 
 ## Site nasıl çalışır
 

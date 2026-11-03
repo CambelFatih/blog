@@ -11,7 +11,7 @@ layout: default
       {%- endfor %}
     </div>
     <h1 class="post-title">{{ page.title }}</h1>
-    <div class="meta">{% include date.html date=page.date %}<span aria-hidden="true">·</span><span>{{ words | divided_by: 200 | plus: 1 }} dk okuma</span></div>
+    <div class="meta"><a class="byline" href="{{ '/about/' | relative_url }}" rel="author">{{ site.author.name }}</a><span aria-hidden="true">·</span>{% include date.html date=page.date %}<span aria-hidden="true">·</span><span>{{ words | divided_by: 200 | plus: 1 }} dk okuma</span></div>
   </header>
 
   {%- if page.image %}

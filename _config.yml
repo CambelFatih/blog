@@ -1,18 +1,22 @@
-# Kuyza — Jekyll site built natively by GitHub Pages (Settings → Pages → Deploy from branch: main).
+# Fatih Furkan Çambel — personal blog. Jekyll site built natively by GitHub Pages (Settings → Pages → Deploy from branch: main).
 # How to add content: see CLAUDE.md.
-title: Kuyza
-tagline: Yazılım, İngilizce, Finans ve Bilim Üzerine Yazılar   # homepage <title> = "Kuyza | tagline"
+title: Fatih Furkan Çambel
+tagline: Yazılım, İngilizce ve Finans Notları   # homepage <title> = "<title> | <tagline>" (keep total ≤ 60 chars)
 motto: No one is in charge of your happiness except you        # shown in the footer
-description: Yazılım, İngilizce, finans, bilim, tarih ve kişisel gelişim üzerine notlar ve yazılar.
+description: Fatih Furkan Çambel'in kişisel blogu. Yazılım, İngilizce, finans, bilim, tarih ve kişisel gelişim üzerine notlar ve yazılar.
 url: https://cambelfatih.github.io
 baseurl: /blog
 lang: tr_TR
 timezone: UTC
 author:
-  name: Kuyza
-  type: Organization
+  name: Fatih Furkan Çambel
+  type: Person
   url: https://cambelfatih.github.io/blog/about/
 logo: /assets/icon-512.png
+social:                # JSON-LD sameAs on the homepage
+  name: Fatih Furkan Çambel
+  links:
+    - https://github.com/CambelFatih
 webmaster_verifications:   # jekyll-seo-tag renders <meta name="google-site-verification">; keep alongside google40725d501500b265.html
   google: EiSHkrvFt6jie1Ytj7ztN6Dk1KmmL9uCfpWXIZrdR9w
 
@@ -68,4 +72,4 @@ nav:
   - { title: Arşiv, url: /archive/ }
   - { title: İngilizce, url: /category/eng/ }
   - { title: Saat, url: /dw/time/clock.html }
-  - { title: Hakkında, url: /about/ }
+  - { title: Hakkımda, url: /about/ }

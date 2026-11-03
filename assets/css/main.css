@@ -1,4 +1,4 @@
-/* Kuyza — single stylesheet. Tokens first; dark mode = OS preference unless the toggle set data-theme. */
+/* Fatih Furkan Çambel blog — single stylesheet. Tokens first; dark mode = OS preference unless the toggle set data-theme. */
 :root {
   --bg: #ffffff;
   --surface: #f7f6f3;
@@ -59,12 +59,9 @@ h1, h2, h3, h4 { line-height: 1.25; letter-spacing: -.015em; margin: 0 0 .5em; }
   border-bottom: 1px solid var(--border);
 }
 .header-inner { display: flex; align-items: center; gap: 24px; height: 64px; }
-.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); font-weight: 800; font-size: 1.2rem; letter-spacing: -.02em; }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); font-weight: 800; font-size: 1.15rem; letter-spacing: -.02em; white-space: nowrap; }
 .brand:hover { text-decoration: none; }
-.brand-mark {
-  display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px;
-  background: var(--brand); color: #fff; font-size: 1rem; font-weight: 800;
-}
+.brand-mark { display: block; width: 32px; height: 32px; border-radius: 9px; flex: none; }
 .site-nav { display: flex; gap: 4px; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
 .site-nav::-webkit-scrollbar { display: none; }
 .site-nav a { color: var(--muted); font-weight: 500; font-size: .95rem; padding: 8px 12px; border-radius: 8px; white-space: nowrap; }
@@ -164,6 +161,7 @@ h1, h2, h3, h4 { line-height: 1.25; letter-spacing: -.015em; margin: 0 0 .5em; }
 .chip:hover { text-decoration: none; filter: brightness(.97); }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
 .meta { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: .86rem; }
+.meta .byline { color: var(--text); font-weight: 600; }
 
 /* Pagination */
 .pagination { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 48px 0 8px; }

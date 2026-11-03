@@ -67,14 +67,14 @@ function toggleMode() {
   if (body.classList.contains("gunduz")) {
     body.classList.remove("gunduz");
     body.classList.add("gece");
-    icon.src = "https://www.kuyza.com/wp-content/uploads/2023/04/dark.png";
+    icon.src = "https://cambelfatih.github.io/blog/dw/Ebook-img/dark.png";
   } else if (body.classList.contains("gece")) {
     body.classList.remove("gece");
     body.classList.add("gunduz");
-    icon.src = "https://www.kuyza.com/wp-content/uploads/2023/04/brightness.png";
+    icon.src = "https://cambelfatih.github.io/blog/dw/Ebook-img/brightness.png";
   } else {
     body.classList.add("gece");
-    icon.src = "https://www.kuyza.com/wp-content/uploads/2023/04/dark.png";
+    icon.src = "https://cambelfatih.github.io/blog/dw/Ebook-img/dark.png";
   }
 }
 
