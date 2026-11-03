@@ -4,25 +4,20 @@ title: "Modüler Monolith Mimarisi: Clean, Bounded, Scalable"
 date: "2025-10-28 17:08:04 +0000"
 last_modified_at: "2025-10-29 22:06:51 +0000"
 categories: ["softw", "tech"]
-description: "Birçok ekip Microservice’lere geçmeden önce Clean Architecture + Modüler Monolith kombinasyonunu tercih ediyor."
+tags: ["Modular Monolith", "Clean Architecture", "Yazılım mimarisi"]
+description: "Mikroservislere geçmeden önce modüler monolith: modüllerin kendi katmanları, bağımlılık yönetimi ve Redis, Kafka gibi altyapıların düzendeki yeri."
 image: "/wp-content/uploads/2025/10/Moduler-Monolitik-Mimari-Modular-Monolith-Architecture-Nedir-1-scaled.png"
 thumbnail: "/wp-content/uploads/2025/10/Moduler-Monolitik-Mimari-Modular-Monolith-Architecture-Nedir-1-scaled-768x432.png"
 ---
-<p>Hadi biraz kafa yoralım. 🧠<br>
-Bu mimari doküman, <em>mükemmel Clean Architecture prensiplerine sahip bir modüler monolith için sağlam bir temel oluşturuyor.</em><br>
-Şimdi bunu rehber niteliğinde, herkesin anlayabileceği ama derinlemesine teknik bir <strong>blog yazısı</strong>na dönüştürelim.</p>
-<p>Aşağıdaki yazı:</p>
+<p>Bu yazı, Clean Architecture prensipleriyle kurulmuş bir modüler monolith için rehber niteliğinde ve şu soruları yanıtlıyor:</p>
 <ul>
 <li>👷‍♂️ <em>Gerçek bir modüler monolith nasıl inşa edilir?</em></li>
 <li>🧩 <em>Her modül kendi “mini-core”una nasıl sahip olur?</em></li>
 <li>🏗️ <em>Katmanlar nasıl ayrılır, ama sistem tek bir bütün olarak nasıl kalır?</em></li>
 <li>⚙️ <em>BufferedLogger, Scheduler, Redis, Kafka gibi altyapılar modüler düzende nasıl yer alır?</em></li>
 </ul>
-<p>Tüm bu soruların cevabını verir.<br>
-Hazırsan başlayalım 👇</p>
 <hr>
-<h1>🧱 <a href="https://www.gencayyildiz.com/blog/moduler-monolitik-mimari-modular-monolith-architecture-nedir-derinlemesine-inceleyelim/">Modüler Monolith</a> Mimarisi: Clean, Bounded, Scalable</h1>
-<blockquote>
+<h2>🧱 <a href="https://www.gencayyildiz.com/blog/moduler-monolitik-mimari-modular-monolith-architecture-nedir-derinlemesine-inceleyelim/">Modüler Monolith</a> Mimarisi: Clean, Bounded, Scalable</h2><blockquote>
 <p>“Monolith ölmedi. Sadece <strong>modülerleşti</strong>.”<br>
 — <em>Kamil Grzybek, Modular Monoliths with DDD</em></p>
 </blockquote>

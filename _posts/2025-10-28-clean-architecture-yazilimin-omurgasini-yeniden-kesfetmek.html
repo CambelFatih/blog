@@ -4,11 +4,11 @@ title: "Clean Architecture: Yazılımın Omurgasını Yeniden Keşfetmek"
 date: "2025-10-28 17:28:46 +0000"
 last_modified_at: "2025-10-29 22:06:26 +0000"
 categories: ["softw", "tech"]
-description: "Birçok geliştirici için “mimari” sadece katmanlardan ibaret görünür:Controller → Service → Repository → Database.Ama bu"
+tags: ["Clean Architecture", "Dependency Rule", "Yazılım mimarisi"]
+description: "Mimari neden vardır? Clean Architecture'ın tarihçesi, Dependency Rule, katmanların sorumlulukları ve gerçek bağımlılık yönleri üzerine kapsamlı yazı."
 image: "/wp-content/uploads/2025/10/Nedir-Bu-Onion-Architecture-1.png"
 ---
 <hr>
-<h1>🧱 <a href="https://www.gencayyildiz.com/blog/nedir-bu-onion-architecture-tam-teferruatli-inceleyelim/">Clean Architecture</a>: Yazılımın Omurgasını Yeniden Keşfetmek</h1>
 <blockquote>
 <p>“Bir mimarinin en büyük amacı, <strong>değişime karşı dayanıklı</strong> olmaktır.”<br>
 — <em>Robert C. Martin (Uncle Bob)</em></p>
@@ -84,7 +84,7 @@ Yönelim sadece <em>bağımlılıkların yönünü değil, sorumlulukların sın
 <p>“Hiçbir şey, <em>merkezdeki</em> katmanlara <em>bağımlı olamaz.</em><br>
 Bağımlılıklar <strong>her zaman içeriye</strong> akar.”</p>
 </blockquote>
-<p><img decoding="async" src="https://mermaid.ink/img/pako%5C:eNplks1uwjAMhl8l5sM2AS4WW6Xb0MQYB8zADZ2SclCk1ElCchH37biBJ2CF_3a__4vEhiwTWprDTGJmfU5lUUb3hSuqKt5Ra2vJhKxBNQw0gNipdo12PMvLaHch9wjSYZVR0tiHgcYyxzzxwgbmWBJUpvKWnK03y8Q64ENyGRIXYtw6fPhOsXfQ7u5oSvfXG7b7_JF0gW9vw7l4aDh3sXuvybD1XOCIF4uJbMNhU4ikIl2ZQ3RZhf_UqS-nv5M-K5xS9J2P2_PAOYtTFA" alt=""></p>
+<p><img loading="lazy" alt="Clean Architecture: Yazılımın Omurgasını Yeniden Keşfetmek" decoding="async" src="https://mermaid.ink/img/pako%5C:eNplks1uwjAMhl8l5sM2AS4WW6Xb0MQYB8zADZ2SclCk1ElCchH37biBJ2CF_3a__4vEhiwTWprDTGJmfU5lUUb3hSuqKt5Ra2vJhKxBNQw0gNipdo12PMvLaHch9wjSYZVR0tiHgcYyxzzxwgbmWBJUpvKWnK03y8Q64ENyGRIXYtw6fPhOsXfQ7u5oSvfXG7b7_JF0gW9vw7l4aDh3sXuvybD1XOCIF4uJbMNhU4ikIl2ZQ3RZhf_UqS-nv5M-K5xS9J2P2_PAOYtTFA"></p>
 <p>Yani:</p>
 <ul>
 <li><strong>Domain</strong> (iş mantığı) hiçbir şeye bağlı değildir.</li>

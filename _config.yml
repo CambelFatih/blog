@@ -1,7 +1,8 @@
 # Kuyza — Jekyll site built natively by GitHub Pages (Settings → Pages → Deploy from branch: main).
 # How to add content: see CLAUDE.md.
 title: Kuyza
-tagline: No one is in charge of your happiness except you
+tagline: Yazılım, İngilizce, Finans ve Bilim Üzerine Yazılar   # homepage <title> = "Kuyza | tagline"
+motto: No one is in charge of your happiness except you        # shown in the footer
 description: Yazılım, İngilizce, finans, bilim, tarih ve kişisel gelişim üzerine notlar ve yazılar.
 url: https://cambelfatih.github.io
 baseurl: /blog
@@ -9,11 +10,13 @@ lang: tr_TR
 timezone: UTC
 author:
   name: Kuyza
+  type: Organization
+  url: https://cambelfatih.github.io/blog/about/
 logo: /assets/icon-512.png
-twitter:
-  card: summary_large_image
 webmaster_verifications:   # jekyll-seo-tag renders <meta name="google-site-verification">; keep alongside google40725d501500b265.html
   google: EiSHkrvFt6jie1Ytj7ztN6Dk1KmmL9uCfpWXIZrdR9w
+
+seo_paginator_message: "Sayfa %<current>s / %<total>s · "
 
 permalink: /:year/:month/:day/:title/
 future: true          # posts dated later today still publish
@@ -37,6 +40,8 @@ feed:
   path: feed.xml
 
 defaults:
+  - scope: { path: "" }
+    values: { image: /assets/og-default.jpg }   # social preview fallback; posts override with their own image
   - scope: { path: "", type: posts }
     values: { layout: post }
   - scope: { path: "wp-content" }

@@ -2,6 +2,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+{%- if page.noindex %}
+<meta name="robots" content="noindex, follow">
+{%- endif %}
 {% seo %}
 {% feed_meta %}
 <link rel="icon" href="{{ '/assets/favicon.svg' | relative_url }}" type="image/svg+xml">
