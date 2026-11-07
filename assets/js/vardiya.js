@@ -16,20 +16,30 @@
   };
   var NONE = { name: "", code: "" };
   var T = function (c) { return TYPES[c] || NONE; };
-  var PRESETS = [
-    ["SSAAGGOO", "2+2+2 · 2 Sabah, 2 Akşam, 2 Gece, 2 Off"],
-    ["DDGGOO", "2+2+2 · 2 Gündüz, 2 Gece, 2 Off"],
-    ["DDGGOOOO", "2+2+4 · 2 Gündüz, 2 Gece, 4 Off"],
-    ["SSSAAAGGGOOO", "3+3+3 · 3 Sabah, 3 Akşam, 3 Gece, 3 Off"],
-    ["SSSSSOOAAAAAOOGGGGGOO", "Haftalık · 5 Sabah, 5 Akşam, 5 Gece, araya 2 Off"],
-    ["DGOO", "12/24–12/48 · Gündüz, Gece, 2 Off"],
-    ["DDDDOOOO", "4+4 · 4 Gündüz, 4 Off"],
-    ["DO", "12/36 · 1 Gündüz, 1 Off"],
-    ["NOO", "24/48 · 1 Nöbet, 2 Off"],
-    ["NOOO", "24/72 · 1 Nöbet, 3 Off"],
-    ["DDDDDDO", "6+1 · 6 Gündüz, 1 Off"],
-    ["DDDDDOO", "5+2 · 5 Gündüz, 2 Off"]
+  var GROUPS = [
+    ["12 saatlik vardiyalar", [
+      ["DDGGOO", "2 Gündüz, 2 Gece, 2 Off · 12 saat"],
+      ["DDGGOOOO", "2 Gündüz, 2 Gece, 4 Off · 12 saat"],
+      ["DGOO", "Gündüz, Gece, 2 Off · 12/24–12/48"],
+      ["DDDDOOOO", "4 Gündüz, 4 Off · 12 saat"],
+      ["DO", "1 Gündüz, 1 Off · 12/36"]
+    ]],
+    ["8 saatlik üçlü vardiyalar", [
+      ["SSAAGGOO", "2 Sabah, 2 Akşam, 2 Gece, 2 Off · 8 saat"],
+      ["SSSAAAGGGOOO", "3 Sabah, 3 Akşam, 3 Gece, 3 Off · 8 saat"],
+      ["SSSSSOOAAAAAOOGGGGGOO", "Haftalık: 5 Sabah, 5 Akşam, 5 Gece, araya 2 Off"]
+    ]],
+    ["24 saatlik nöbet", [
+      ["NOO", "1 Nöbet, 2 Off · 24/48"],
+      ["NOOO", "1 Nöbet, 3 Off · 24/72"]
+    ]],
+    ["Gündüz mesaisi", [
+      ["DDDDDDO", "6 gün çalışma, 1 Off · 6+1"],
+      ["DDDDDOO", "5 gün çalışma, 2 Off · 5+2"]
+    ]]
   ];
+  var PRESETS = GROUPS.reduce(function (all, g) { return all.concat(g[1]); }, []);
+  var MOBILE = "(max-width: 920px)"; // vardiya.css ile aynı kırılım
   var DAY = 864e5, KEY = "vardiya-planlayici", MAX_CYCLE = 60;
 
   var F = function (o) { o.timeZone = "UTC"; return new Intl.DateTimeFormat("tr-TR", o); };
@@ -51,14 +61,14 @@
 
   // Durum: p döngü, r referans tarih, k o gün döngünün kaçıncı günü (0'dan), s/e izin aralığı,
   // n öneri için izin günü, h öneri ufku (gün), v gösterilen ay sayısı.
-  var S = { p: "SSAAGGOO", r: iso(t0), k: 0, s: iso(t0 + 9), e: iso(t0 + 15), n: 6, h: 365, v: matchMedia("(max-width: 640px)").matches ? 1 : 3 };
+  var S = { p: "DDGGOO", r: iso(t0), k: 0, s: iso(t0 + 9), e: iso(t0 + 15), n: 6, h: 365, v: matchMedia("(max-width: 640px)").matches ? 1 : 3 };
   try { var saved = JSON.parse(localStorage.getItem(KEY)); if (saved) Object.keys(S).forEach(function (k) { if (k in saved) S[k] = saved[k]; }); } catch (e) {}
   var q = new URLSearchParams(location.hash.slice(1));
   if (q.has("p")) {
     ["p", "r", "k", "s", "e"].forEach(function (k) { if (q.has(k)) S[k] = q.get(k); });
     history.replaceState(null, "", location.pathname + location.search);
   }
-  S.p = /^[SAGDNO]{0,60}$/.test(S.p) ? S.p : "SSAAGGOO";
+  S.p = /^[SAGDNO]{0,60}$/.test(S.p) ? S.p : "DDGGOO";
   if (isNaN(idx(S.r))) S.r = iso(t0);
   S.k = Math.min(Math.max(parseInt(S.k, 10) || 0, 0), Math.max(S.p.length - 1, 0));
   if (isNaN(idx(S.s))) S.s = "";
@@ -79,15 +89,19 @@
           '<h3 class="vp-h"><span class="vp-num">1</span>Vardiya sistemin</h3>' +
           '<label class="vp-label" for="vp-preset">Hazır sistemler</label>' +
           '<select class="vp-input" id="vp-preset">' +
-            PRESETS.map(function (p) { return '<option value="' + p[0] + '">' + p[1] + "</option>"; }).join("") +
-            '<option value="">Özel döngü</option>' +
+            GROUPS.map(function (g) {
+              return '<optgroup label="' + g[0] + '">' + g[1].map(function (p) { return '<option value="' + p[0] + '">' + p[1] + "</option>"; }).join("") + "</optgroup>";
+            }).join("") +
+            '<option value="">Özel döngü (kendin oluştur)</option>' +
           "</select>" +
           '<p class="vp-label vp-gap">Döngü <span class="vp-cycle-info" data-el="info"></span></p>' +
           '<div class="vp-seq" data-el="seq"></div>' +
-          '<div class="vp-add" role="group" aria-label="Döngünün sonuna gün ekle">' +
-            "SAGDNO".split("").map(function (c) { return '<button type="button" data-add="' + c + '"><i class="vp-dot t-' + c + '"></i>' + TYPES[c].name + "</button>"; }).join("") +
-          "</div>" +
-          '<p class="vp-hint vp-gap">Kendi düzenin listede yoksa günleri sırayla ekle; bir günü çıkarmak için üstüne tıkla. <button type="button" class="vp-link" data-clear>Döngüyü temizle</button></p>' +
+          '<details class="vp-custom" data-el="custom"><summary>Döngüyü düzenle ya da kendi döngünü oluştur</summary>' +
+            '<div class="vp-add" role="group" aria-label="Döngünün sonuna gün ekle">' +
+              "SAGDNO".split("").map(function (c) { return '<button type="button" data-add="' + c + '"><i class="vp-dot t-' + c + '"></i>' + TYPES[c].name + "</button>"; }).join("") +
+            "</div>" +
+            '<p class="vp-hint vp-gap">Günleri sırayla ekle; bir günü çıkarmak için yukarıdaki kutucuğuna dokun. <button type="button" class="vp-link" data-clear>Döngüyü temizle</button></p>' +
+          "</details>" +
         "</section>" +
         '<section class="vp-step">' +
           '<h3 class="vp-h"><span class="vp-num">2</span>Döngüdeki yerin</h3>' +
@@ -95,7 +109,7 @@
             '<label class="vp-field"><span class="vp-label">Tarih</span><input class="vp-input" type="date" id="vp-ref"></label>' +
             '<label class="vp-field"><span class="vp-label">O günkü vardiyan</span><select class="vp-input" id="vp-pos"></select></label>' +
           "</div>" +
-          '<p class="vp-hint vp-gap">Bildiğin herhangi bir günü seç. Örneğin bugün ikinci gecendeysen tarih bugün, vardiya “Gece (2/2)” olmalı. Takvim bu güne göre ileri ve geri hesaplanır.</p>' +
+          '<p class="vp-hint vp-gap">Bildiğin bir günü ve o günkü vardiyanı seç; örneğin bugün ikinci gecendeysen “Gece 2/2”. Takvim buna göre hesaplanır.</p>' +
         "</section>" +
         '<section class="vp-step">' +
           '<h3 class="vp-h"><span class="vp-num">3</span>İzin almak istediğin tarihler</h3>' +
@@ -135,6 +149,7 @@
           '<button type="button" class="vp-btn" data-share>Planı paylaş: bağlantıyı kopyala</button>' +
           '<button type="button" class="vp-btn" data-copy-list>Dökümü kopyala</button>' +
         "</div>" +
+        '<button type="button" class="vp-sticky is-hidden" data-el="sticky" data-to-result></button>' +
       "</div>" +
     "</div>";
 
@@ -144,15 +159,15 @@
 
   // Döngü değiştiğinde: çipler, özet ve "o günkü vardiyan" seçenekleri.
   function renderCycle() {
-    var p = S.p, work = p.replace(/O/g, "").length;
+    var p = S.p, work = p.replace(/O/g, "").length, edit = el.custom.open; // çipler yalnızca düzenleme açıkken silinebilir
     el.seq.innerHTML = p ? p.split("").map(function (c, i) {
-      return '<button type="button" class="vp-chip t-' + c + '" data-rm="' + i + '" title="' + (i + 1) + ". gün: " + TYPES[c].name + ' (çıkarmak için tıkla)">' + TYPES[c].code + "</button>";
+      return '<button type="button" class="vp-chip t-' + c + '" data-rm="' + i + '"' + (edit ? "" : " disabled") + ' title="' + (i + 1) + ". gün: " + TYPES[c].name + (edit ? " (çıkarmak için dokun)" : "") + '">' + TYPES[c].code + "</button>";
     }).join("") : '<span class="vp-hint">Döngü boş. Aşağıdan gün ekle.</span>';
     el.info.textContent = p ? "· " + p.length + " gün: " + work + " çalışma, " + (p.length - work) + " off" : "";
     var html = "";
-    for (var i = 0, j; i < p.length; i = j) { // aynı tipteki ardışık günler: "Gece (2/2)"
+    for (var i = 0, j; i < p.length; i = j) { // aynı tipteki ardışık günler: "Gece 2/2 · 4. gün"
       for (j = i; p[j] === p[i]; j++);
-      for (var x = i; x < j; x++) html += '<option value="' + x + '">' + (x + 1) + ". gün · " + TYPES[p[x]].name + (j - i > 1 ? " (" + (x - i + 1) + "/" + (j - i) + ")" : "") + "</option>";
+      for (var x = i; x < j; x++) html += '<option value="' + x + '">' + TYPES[p[x]].name + (j - i > 1 ? " " + (x - i + 1) + "/" + (j - i) : "") + " · " + (x + 1) + ". gün</option>";
     }
     el.pos.innerHTML = html;
   }
@@ -176,7 +191,19 @@
     return r;
   }
 
-  function msg(title, text) { el.result.className = "vp-result"; el.result.innerHTML = "<h3>" + title + "</h3><p>" + text + "</p>"; }
+  function msg(title, text) { el.result.className = "vp-result"; el.result.innerHTML = "<h3>" + title + "</h3><p>" + text + "</p>"; setSticky(""); }
+
+  // Mobilde sonuç kartı ekranda değilken altta kısa özet çubuğu gösterilir; dokununca karta kaydırır.
+  var resultSeen = false;
+  function setSticky(html) {
+    if (html !== undefined) el.sticky.innerHTML = html;
+    el.sticky.classList.toggle("is-hidden", resultSeen || !el.sticky.innerHTML);
+  }
+  if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { resultSeen = es[0].isIntersecting; setSticky(); }).observe(el.result);
+  function toResult(force) {
+    var top = el.result.getBoundingClientRect().top;
+    if (force || top < 0 || top > innerHeight - 120) el.result.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  }
 
   function renderResult(a, b, r) {
     if (!S.p) return msg("Döngüye en az bir gün ekle", "Hazır bir vardiya sistemi seç ya da kendi döngünü oluştur.");
@@ -203,6 +230,7 @@
         '<div class="vp-tile"><span>İşbaşı</span><b>' + shortD(back).split(" ").slice(0, 2).join(" ") + "</b><small>" + shortD(back).split(" ")[2] + " · " + T(typeAt(back)).name + "</small></div>" +
       "</div>" +
       '<div class="vp-lines">' + lines.map(function (l) { return "<p>" + l + "</p>"; }).join("") + "</div>";
+    setSticky("<span><strong>" + h + "</strong><small>" + block + " gün tatil · İşbaşı " + shortD(back) + "</small></span><span class=\"vp-go\">Sonuca git</span>");
   }
 
   function renderMonths(a, b, r) {
@@ -213,14 +241,14 @@
       var cells = "", w = 0, o = 0;
       for (var j = (new Date(first * DAY).getUTCDay() + 6) % 7; j > 0; j--) cells += '<span aria-hidden="true"></span>';
       for (var d = 0; d < n; d++) {
-        var i = first + d, t = typeAt(i), name = T(t).name, cls = "vp-day t-" + t, label = big ? name : T(t).code, note = "";
+        var i = first + d, t = typeAt(i), name = T(t).name, cls = "vp-day t-" + t, label = T(t).code, note = "";
         if (t === "O") o++; else if (t) w++;
         if (i >= a && i <= b && t !== "O") { cls += " is-leave"; label = "İZİN"; note = ", izin gerekir"; }
         else if (i >= r.bs && i <= r.be) { cls += " in-block"; note = ", tatile denk gelen off"; }
         if (i === t0) cls += " is-today";
         if (i === pick) cls += " is-pick";
         var title = longD(i) + (name ? " · " + name : "") + note;
-        cells += '<button type="button" tabindex="-1" class="' + cls + '" data-d="' + i + '" title="' + title + '" aria-label="' + title + '"><b>' + (d + 1) + "</b><small>" + (big && t === "O" ? "OFF" : label) + "</small></button>";
+        cells += '<button type="button" tabindex="-1" class="' + cls + '" data-d="' + i + '" title="' + title + '" aria-label="' + title + '"><b>' + (d + 1) + "</b><small>" + (big && label !== "İZİN" && t !== "O" ? '<span class="vp-l">' + name + '</span><span class="vp-c">' + label + "</span>" : label) + "</small></button>";
       }
       html += '<section class="vp-month"><header><h4>' + FM.format(first * DAY) + "</h4><span>" + w + " iş · " + o + " off</span></header>" +
         '<div class="vp-wd" aria-hidden="true"><span>Pzt</span><span>Sal</span><span>Çar</span><span>Per</span><span>Cum</span><span>Cmt</span><span>Paz</span></div>' +
@@ -295,7 +323,7 @@
     renderLegend();
     renderBest(a, b);
     renderList(a, b);
-    el.pickHint.textContent = pick === null ? "İpucu: Takvimde önce başlangıç, sonra bitiş gününe tıklayarak da seçebilirsin." : "Şimdi takvimde bitiş gününe tıkla.";
+    el.pickHint.textContent = pick === null ? "İpucu: Takvimde önce başlangıç, sonra bitiş gününe " + TAP + "arak da seçebilirsin." : "Şimdi takvimde bitiş gününe " + TAP + ".";
     app.dataset.view = S.v;
     try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
   }
@@ -310,11 +338,14 @@
     else prompt("Kopyala:", text);
   }
 
+  var TAP = matchMedia("(hover: none)").matches ? "dokun" : "tıkla";
+
   app.addEventListener("click", function (ev) {
-    var t = ev.target.closest("button"), d = t && t.dataset;
+    var t = ev.target.closest("button"), d = t && t.dataset, scroll = false;
     if (!t || !app.contains(t)) return;
+    if ("toResult" in d) { toResult(true); return; }
     if (d.add) { if (S.p.length < MAX_CYCLE) S.p += d.add; }
-    else if (d.rm) S.p = S.p.slice(0, +d.rm) + S.p.slice(+d.rm + 1);
+    else if (d.rm) { if (!el.custom.open) return; S.p = S.p.slice(0, +d.rm) + S.p.slice(+d.rm + 1); }
     else if ("clear" in d) S.p = "";
     else if (d.view) { S.v = +d.view; show(idx(S.s)); }
     else if ("prev" in d) cur -= S.v;
@@ -325,7 +356,7 @@
       if (pick === null) { pick = i; S.s = S.e = iso(i); }
       else { S.s = iso(Math.min(pick, i)); S.e = iso(Math.max(pick, i)); pick = null; }
     }
-    else if (d.apply) { var se = d.apply.split(","); S.s = iso(+se[0]); S.e = iso(+se[1]); pick = null; show(+se[0]); }
+    else if (d.apply) { var se = d.apply.split(","); S.s = iso(+se[0]); S.e = iso(+se[1]); pick = null; show(+se[0]); scroll = true; }
     else if ("share" in d) { copy(location.href.split("#")[0] + "#" + new URLSearchParams({ p: S.p, r: S.r, k: S.k, s: S.s, e: S.e }), t, "Bağlantı kopyalandı ✓"); return; }
     else if ("copyList" in d) {
       var a = idx(S.s), b = Math.max(idx(S.e), a), r = calc(a, b), rows = listRows(a, b);
@@ -337,13 +368,15 @@
     else return;
     sync();
     render();
+    if (scroll) toResult(); // mobilde öneriler takvimin altında; sonucu göster
   });
+  el.custom.addEventListener("toggle", function () { renderCycle(); el.pos.value = S.k; });
 
   function onInput(ev) {
     var t = ev.target, v = t.value, i = idx(v);
     if (t.type === "date" && v && isNaN(i)) return; // tarih henüz yazılıyor
     switch (t.id) {
-      case "vp-preset": if (!v) return; S.p = v; S.k = 0; break;
+      case "vp-preset": if (!v) { el.custom.open = true; return; } S.p = v; S.k = 0; break;
       case "vp-ref": if (!v) return; S.r = v; break;
       case "vp-pos": S.k = +v; break;
       case "vp-start":
