@@ -1,7 +1,7 @@
 ---
 title: "KPSS Deneme Sınavı Zamanlayıcısı: Ücretsiz Sınav Saati"
 date: 2026-11-03 12:00:00 +0000
-categories: [self-improvement, tech]
+categories: [self-improvement, tech, araclar]
 tags: [KPSS, Deneme sınavı, Zamanlayıcı, Sınav hazırlık]
 description: "KPSS deneme sınavı çözerken süreyi gerçek sınav gibi takip etmen için geliştirdiğim ücretsiz zamanlayıcı: geri sayım, analog ve dijital saat, tek sayfa."
 image: /assets/images/posts/kpss-deneme-sinavi-zamanlayicisi.png

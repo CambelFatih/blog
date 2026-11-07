@@ -73,7 +73,7 @@ Bu site **Fatih Furkan Çambel'in kişisel blogudur** ve **Claude tarafından y�
 
 ## Kategoriler
 
-Mevcut slug'lar `_data/categories.yml` içinde: `softw, net, tech, eng, german, finance, entrepreneurship, self-improvement, popular-science, philosophy, history, films, music, art, math, bio, biography`. Önce bunlardan seç.
+Mevcut slug'lar `_data/categories.yml` içinde: `softw, net, tech, eng, german, finance, entrepreneurship, self-improvement, popular-science, philosophy, history, films, music, art, math, bio, biography, araclar`. Önce bunlardan seç. Tarayıcıda çalışan araç yazıları `araclar` kategorisine de eklenir.
 
 Yeni kategori gerekiyorsa:
 1. `_data/categories.yml`'ye ekle (değerleri tırnak içinde yaz; virgüller YAML'ı bozmasın).
@@ -86,6 +86,20 @@ Yeni kategori gerekiyorsa:
    description: "<açıklama>"
    ---
    ```
+
+## Etkileşimli araç yazısı
+
+Uygulama yazının içinde çalışır (örnek: `_posts/2026-11-07-vardiya-takvimi-izin-planlayici.md`). Kendi CSS/JS dosyası yalnızca o yazıda yüklenir; tema dosyalarına eklenmez:
+
+```html
+<link rel="stylesheet" href="{{ '/assets/css/<ad>.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+<section id="<ad>-app" class="..." aria-label="..."><noscript><p>…JavaScript gerekir.</p></noscript></section>
+<script src="{{ '/assets/js/<ad>.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+```
+
+- Arayüzü JS kursun (HTML'i yazıya gömme); böylece form metinleri arama dizinine ve okuma süresine karışmaz.
+- Renkler `main.css` token'larını kullansın; yeni renkleri iki temada da tanımla. Geniş arayüz için `.vp` gibi `margin-left: calc(50% - genişlik / 2)` ile dar sütundan taşır.
+- `.prose` stilleri (p/ol/h3 boşlukları, koyu temadaki `[style*="color"]` ters çevirme filtresi) uygulamaya da değer; uygulamanın CSS'inde sıfırla.
 
 ## Sabit sayfa ekleme
 
@@ -113,6 +127,6 @@ Hata veya uyarı olmamalı. Sonra `_site/` içinde kontrol et:
 
 ## Tasarım ilkeleri
 
-- Tek CSS dosyası, renkler `:root` token'larında; koyu mod hem işletim sistemi tercihini hem `data-theme` anahtarını izler. Yeni renk eklerken iki temayı da tanımla.
+- Tek CSS dosyası (araç yazılarının kendi dosyası hariç, bkz. yukarı), renkler `:root` token'larında; koyu mod hem işletim sistemi tercihini hem `data-theme` anahtarını izler. Yeni renk eklerken iki temayı da tanımla.
 - JS minimum: tema anahtarı, kod kopyalama, tablo sarmalama, arama. Framework ekleme.
 - Arayüz metinleri Türkçe.
