@@ -257,3 +257,5 @@ Bir kodu silme kararından önce şu beş sorunun cevabı "evet" olmalı:
 Ölü kodu bulmak bugün hiç olmadığı kadar kolay; analizörler, kapsam araçları ve dil modelleri saniyeler içinde uzun bir aday listesi çıkarıyor. Zor olan, o listedeki her satır için "eminim" diyebilmek. Bu güveni tek bir araç vermiyor: statik analiz şüpheliyi gösteriyor, üretim verisi ve tombstone tanıklık ediyor, iş birimi ve hukuk onay veriyor, karantina ve atomik silme de olası bir hatanın bedelini küçültüyor.
 
 Benim için en önemli ders şu oldu: ölü kod temizliği bir silme operasyonu değil, bir kanıt toplama sürecidir. Kanıtı sağlam olan kodu gönül rahatlığıyla silersiniz; kanıtı zayıf olanı ise karantinada bekletirsiniz. Her iki durumda da kod tabanı biraz daha okunur, biraz daha güvenli ve biraz daha ucuz hâle gelir.
+
+Bu sürecin büyük organizasyonlardaki yönetim tarafını (kanıt seviyeleri, risk matrisi, RACI, KPI ve 90 günlük uygulama planı) [Kurumsal Ölü Kod Yönetimi]({{ '/2026/11/10/kurumsal-olu-kod-yonetimi/' | relative_url }}) yazısında ayrıca ele aldım.
