@@ -5,6 +5,7 @@ categories: [softw, tech]
 tags: [Dead code, Ölü kod, Refactoring, Teknik borç, Statik analiz, Feature flag, Telemetri]
 description: "Ölü kod nasıl bulunur, gerçekten ölü olduğu nasıl kanıtlanır? Statik analiz, telemetri, tombstone, veritabanı, bağımlılıklar ve güvenli silme süreci."
 image: /assets/images/posts/olu-kod-nasil-bulunur-ve-guvenle-silinir.png
+toc: true
 ---
 Her büyüyen kod tabanı zamanla bir tavan arasına dönüşür. Kaldırılan bir entegrasyondan kalan metotlar, artık kimsenin açmadığı bir rapor ekranı, yıllar önce kapatılmış bir özelliğin bayrağı… Bunların hepsi derlenir, test edilir, güvenlik taramasından geçer ve her yeni geliştiricinin kafasını karıştırır; ama hiçbiri işe yaramaz.
 

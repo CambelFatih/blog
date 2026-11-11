@@ -5,21 +5,25 @@ categories: [softw, tech]
 tags: [Dead code, Ölü kod, Teknik borç, Governance, Risk yönetimi, Feature flag, CI/CD]
 description: "Kurumsal ölçekte ölü kod yönetimi: kanıt seviyeleri, risk matrisi, RACI, expand-contract, canary, CI/CD kalite kapıları, KPI ve 90 günlük uygulama planı."
 image: /assets/images/posts/kurumsal-olu-kod-yonetimi.png
+toc: true
 ---
 [Ölü Kod Nasıl Bulunur ve Güvenle Silinir?]({{ '/2026/11/10/olu-kod-nasil-bulunur-ve-guvenle-silinir/' | relative_url }}) yazısında ölü kodu bulmanın ve teyit etmenin tekniklerini anlatmıştım. Bu yazı onun kurumsal tarafı: yüzlerce servis, onlarca ekip ve sıkı mevzuat altındaki bir yapıda bu işin **nasıl yönetileceği**.
+{: .lead}
 
 Kurumsal ölçekte ölü kod temizliği, kullanılmayan satırları bulup silmekten ibaret değildir. Silinen her parça; yazılımın davranışını, dış sistemlerle yapılan sözleşmeleri, veritabanı nesnelerini, felaket kurtarma yollarını, güvenlik kontrollerini ve yasal yükümlülükleri etkileyebilir. Bu yüzden iş, bir değişiklik yönetimi (change management) sürecine dönüşür. Aşağıda bu süreci kurmak için gereken kavramları, karar kurallarını, rolleri, şablonları ve ölçütleri bir araya getiriyorum.
 
-## Kısaca: Yönetim için dört cümle
+## Yönetici özeti
 
-- **Tek bir sıfır yeterli değildir.** Sıfır trafik ya da sıfır test kapsamı, tek başına silme kararı için yeterli kanıt sayılmaz.
-- **Beş katman birlikte düşünülür:** kaynak kod, çalışma zamanı, veri, platform/yapılandırma ve iş/regülasyon.
-- **Her aday için tek bir kayıt tutulur:** sahibi, kanıtı, riski, onayı, değişikliği ve geri dönüş planı aynı yerde durur.
-- **Fayda ölçülür, varsayılmaz:** bakım yükü, saldırı yüzeyi, maliyet, hata oranı ve değişiklik riski birlikte izlenir.
+- **0** Tek başına sıfır trafik ya da sıfır test kapsamı, silme kararı için yeterli kanıt değildir.
+- **5 katman** Kaynak kod, çalışma zamanı, veri, platform/yapılandırma ve iş/regülasyon birlikte düşünülür.
+- **1 kayıt** Her adayın sahibi, kanıtı, riski, onayı, değişikliği ve geri dönüş planı aynı yerde durur.
+- **Ölçülebilir** Bakım yükü, saldırı yüzeyi, maliyet, hata oranı ve değişiklik riski birlikte izlenir.
+{: .metrics}
 
-Önerim şu: kurum genelinde "şu kadar satır silelim" gibi bir hedef koymak yerine önce bir **aday envanteri** ve bir **kanıt standardı** kurun. Yüksek riskli bileşenlerde çoklu kanıt, iş sahibi ve güvenlik/hukuk onayı olmadan üretimde silmeye izin vermeyin.
+> **Önerilen yönetim kararı:** Kurum genelinde "şu kadar satır silelim" gibi bir hedef koymak yerine önce bir **aday envanteri** ve bir **kanıt standardı** kurun. Yüksek riskli bileşenlerde çoklu kanıt, iş sahibi ve güvenlik/hukuk onayı olmadan üretimde silmeye izin vermeyin.
+{: .callout .success}
 
-## Kapsam ve temel kavramlar
+## 1. Kapsam ve temel kavramlar
 
 Kurumsal bir ölü kod programı yalnızca uygulama koduna bakmaz. Monolitler, mikroservisler, web ve mobil istemciler, batch işleri, veri platformları, veritabanı nesneleri, mesajlaşma altyapısı, bulut kaynakları, altyapı kodu (Infrastructure as Code, IaC), feature flag'ler ve derleme/dağıtım zinciri kapsamın parçasıdır.
 
@@ -34,9 +38,10 @@ Terimleri baştan ayırmak tartışmaları kısaltır:
 | Uyuyan özellik (dormant feature) | Üründe var ama koşul, bayrak, müşteri segmenti ya da takvim yüzünden etkin değil | Bir satış sözleşmesi ya da felaket kurtarma prosedürüyle tetiklenebilir |
 | Eskimiş altyapı | Artık bir iş yüküne hizmet etmeyen kaynak veya IaC tanımı | Boşta sanal makine, eski deployment, kullanılmayan kuyruk ya da DNS kaydı |
 
-En önemli ayrım şu: **"şu an çağrılmıyor" gözlemi, "hiçbir geçerli senaryoda çağrılmayacak" anlamına gelmez.** Silme kararı zamana, kapsama, iş bağlamına ve kanıtın kalitesine bağlıdır.
+> **Önemli ayrım:** "Şu an çağrılmıyor" gözlemi, "hiçbir geçerli senaryoda çağrılmayacak" anlamına gelmez. Silme kararı zamana, kapsama, iş bağlamına ve kanıtın kalitesine bağlıdır.
+{: .callout .warning}
 
-## Temel ilkeler
+## 2. Temel ilkeler
 
 Bütün süreç altı ilkeye dayanıyor:
 
@@ -47,7 +52,7 @@ Bütün süreç altı ilkeye dayanıyor:
 5. **Geri dönüş, değişiklikten önce tasarlanmalı.** `git revert` kodu geri alır; ama veri kaybını, daraltılmış şemayı ya da dış sistemlerdeki yan etkileri kendiliğinden geri getirmez.
 6. **Muafiyetler yönetilmeli.** Her muafiyetin gerekçesi, sahibi, son gözden geçirme tarihi ve sona erme koşulu olmalıdır.
 
-## Keşif yöntemlerinin güçlü ve zayıf yanları
+## 3. Keşif yöntemlerinin güçlü ve zayıf yanları
 
 Keşif tekniklerini önceki yazıda ayrıntılı anlattığım için burada kurumsal açıdan önemli olan tarafa, yani her yöntemin neyi göremediğine odaklanıyorum.
 
@@ -61,7 +66,10 @@ Keşif tekniklerini önceki yazıda ayrıntılı anlattığım için burada kuru
 | Bağımlılık grafiği | Doğrudan ve dolaylı paketleri görünür kılar | Build eklentileri, kod üreticiler, çalışma zamanında yükleme | Manifest temizliği, SBOM sadeleştirme |
 | Binary / bytecode / IL | Dağıtılan pakette gerçekte ne olduğunu doğrular | Kaynak kodun iş açısından ölü olduğunu tek başına kanıtlamaz | Build çıktısı, shrinker/linker davranışı, paket karşılaştırması |
 
-Sık yapılan bir hata: "Derleyici zaten optimize edip attı, demek ki kaynak kod ölü." Bu çıkarım geçerli değildir. Derleyici optimizasyonu belirli bir build yapılandırmasındaki makine kodu üretimiyle ilgilidir. Aynı kaynak kod başka bir hedef platformda, debug build'de, yansıma ile ya da farklı bir derleme sabitiyle anlamlı olabilir. Binary incelemenin amacı kaynak dosyayı "kesin ölü" ilan etmek değil; yayın paketinin içeriğini, linker/shrinker etkisini, giriş noktalarını ve dağıtılan yüzeyi anlamaktır.
+> **Sık yapılan hata:** "Derleyici zaten optimize edip attı, demek ki kaynak kod ölü" çıkarımı geçerli değildir. Derleyici optimizasyonu belirli bir build yapılandırmasındaki makine kodu üretimiyle ilgilidir. Aynı kaynak kod başka bir hedef platformda, debug build'de, yansıma ile ya da farklı bir derleme sabitiyle anlamlı olabilir.
+{: .callout .danger}
+
+Binary incelemenin amacı kaynak dosyayı "kesin ölü" ilan etmek değil; yayın paketinin içeriğini, linker/shrinker etkisini, giriş noktalarını ve dağıtılan yüzeyi anlamaktır.
 
 ### Dinamik analiz ve üretim gözlemi
 
@@ -79,17 +87,17 @@ Sık yapılan bir hata: "Derleyici zaten optimize edip attı, demek ki kaynak ko
 - **Feature flag deneyleri:** Bayrak kapatılmadan veya temizlenmeden önce hedef kullanıcı, tenant ve geri dönüş koşulları belirlenir.
 - **LLM destekli analiz:** Kodu açıklamada, adayları kümelemede ve bağımlılık hipotezi üretmede yardımcı olur. Ama model çıktısı kanıt değildir; her iddia derlenebilir referans, test, telemetri ve insan incelemesiyle doğrulanmalıdır.
 
-## Kanıt modeli: Aday ne zaman silinebilir?
+## 4. Kanıt modeli: Aday ne zaman silinebilir?
 
 Her aday için bir kanıt paketi oluşturulur. Amaç tek bir sinyale güvenmek değil, birbirinden bağımsız kanıtların aynı sonuca varmasını görmektir. Bunun için beş seviyeli bir ölçek işe yarar:
 
 | Seviye | Kanıt | Karar |
 |---|---|---|
-| **E0: Hipotez** | İsim, eski commit, geliştiricinin kanaati ya da basit bir arama sonucu | Yalnızca inceleme kuyruğuna al |
-| **E1: Statik aday** | Referans yok, çağrı grafiğinin köklerinden erişilemiyor, bağımlılık analizörü kullanılmadığını söylüyor | Dinamik ve mimari doğrulama gerekli |
-| **E2: Gözlemsel destek** | Belirlenmiş sürede telemetri, kapsam ya da trafik yok; ölçümün kapsamı belgeli | İş ve mevzuat incelemesine ilerle |
-| **E3: Çoklu doğrulama** | Statik + çalışma zamanı + tüketici envanteri + iş sahibi onayı + test/tombstone sonucu | Risk sınıfına göre kontrollü silme adayı |
-| **E4: Kontrollü kaldırma** | Canary başarılı, SLO etkisi yok, geri dönüş planı çalışır durumda | Kalıcı kapatma ve envanter güncellemesi |
+| **E0**{: .badge} Hipotez | İsim, eski commit, geliştiricinin kanaati ya da basit bir arama sonucu | Yalnızca inceleme kuyruğuna al |
+| **E1**{: .badge} Statik aday | Referans yok, çağrı grafiğinin köklerinden erişilemiyor, bağımlılık analizörü kullanılmadığını söylüyor | Dinamik ve mimari doğrulama gerekli |
+| **E2**{: .badge} Gözlemsel destek | Belirlenmiş sürede telemetri, kapsam ya da trafik yok; ölçümün kapsamı belgeli | İş ve mevzuat incelemesine ilerle |
+| **E3**{: .badge} Çoklu doğrulama | Statik + çalışma zamanı + tüketici envanteri + iş sahibi onayı + test/tombstone sonucu | Risk sınıfına göre kontrollü silme adayı |
+| **E4**{: .badge} Kontrollü kaldırma | Canary başarılı, SLO etkisi yok, geri dönüş planı çalışır durumda | Kalıcı kapatma ve envanter güncellemesi |
 
 Kanıt seviyesi tek başına karar vermez; bileşenin risk sınıfıyla birlikte okunur:
 
@@ -100,9 +108,10 @@ Kanıt seviyesi tek başına karar vermez; bileşenin risk sınıfıyla birlikte
 | Yüksek | Public API, paylaşılan kütüphane, veritabanı şeması/yordamı, event sözleşmesi | Ürün/servis sahibi + mimari + veri sahibi + tüketici geçişi + canary |
 | Kritik | Regüle kayıt, DR, ödeme, kimlik, güvenlik, acil erişim | Güvenlik + uyum/hukuk + iş sahibi + değişiklik kurulu; test veya tatbikat kanıtı |
 
-Gözlem süresi için sabit bir endüstri standardı yoktur. En azından iş döngüsünü, sezonu, mali yılı, yasal raporlama ve kurtarma tatbikatı takvimini kapsamalıdır. Yılda bir ya da birkaç yılda bir yaşanan olaylar için yalnızca log beklemek yerine senaryo testi, runbook doğrulaması ve iş sahibinin beyanı gerekir.
+> **Gözlem süresi:** Sabit bir endüstri standardı yoktur. En azından iş döngüsünü, sezonu, mali yılı, yasal raporlama ve kurtarma tatbikatı takvimini kapsamalıdır. Yılda bir ya da birkaç yılda bir yaşanan olaylar için yalnızca log beklemek yerine senaryo testi, runbook doğrulaması ve iş sahibinin beyanı gerekir.
+{: .callout .warning}
 
-## Katman katman kontrol alanları
+## 5. Katman katman kontrol alanları
 
 ### Uygulama ve API
 
@@ -133,7 +142,7 @@ Terraform, CloudFormation, Ansible, Kubernetes manifestleri, Helm chart'ları, s
 
 Pipeline parametreleri, test fixture'ları, deployment işleri, runbook'lar, dashboard'lar, alarmlar, SLO'lar, nöbet (on-call) prosedürleri ve olay otomasyonları da aday envanterine girer. Kullanılmayan bir alarm ya da runbook kaldırılırken ilgili operasyonel kontrolün başka bir yerde karşılandığı belgelenmelidir.
 
-## Risk, güvenlik ve mevzuat
+## 6. Risk, güvenlik ve mevzuat
 
 ### Risk sınıfları
 
@@ -151,17 +160,25 @@ KVKK, GDPR, HIPAA ya da BDDK düzenlemeleri aynı yükümlülükleri getirmez. H
 
 Hukuk ve uyum ekibi; uygulanabilir mevzuatı, sektör rehberlerini, sözleşmeleri, dava veya inceleme muhafazalarını, kayıt takvimini ve silme yükümlülüklerini teyit etmelidir. Unutulmaması gereken bir ayrım: **kod ile ürettiği kayıt farklı varlıklardır.** Bir kaydı saklama zorunluluğu, onu üreten belirli bir uygulamanın sonsuza dek tutulmasını gerektirmez; ama eşdeğer kontrolün devam ettiği kanıtlanmalıdır.
 
-Kod içine eklenen özel bir etiket (örneğin `@RegulatedCompliance` gibi bir annotation) tek başına mevzuat kanıtı değildir; yalnızca kurum içi araçların tanıdığı bir üst veri (metadata) olabilir. Muafiyet kaydında hukuki dayanak, kontrolün sahibi, kapsam, süre ve periyodik gözden geçirme tarihi bulunmalıdır.
+> **Muafiyet tuzağı:** Kod içine eklenen özel bir etiket (örneğin `@RegulatedCompliance` gibi bir annotation) tek başına mevzuat kanıtı değildir; yalnızca kurum içi araçların tanıdığı bir üst veri (metadata) olabilir. Muafiyet kaydında hukuki dayanak, kontrolün sahibi, kapsam, süre ve periyodik gözden geçirme tarihi bulunmalıdır.
+{: .callout .danger}
 
 ### Güvenlik ve tedarik zinciri
 
 Gereksiz bağımlılıkları kaldırmak saldırı yüzeyini, bakım ve lisans yükünü azaltabilir; ama önce bağımlılık grafiği ve paketin build/çalışma zamanındaki rolü anlaşılmalıdır. NIST'in Güvenli Yazılım Geliştirme Çerçevesi (SSDF), güvenli geliştirme pratiklerini yazılım yaşam döngüsüne yerleştirmeyi önerir. Ölü kod çalıştırılabilir bir saldırı yüzeyi oluşturuyorsa onu kaldırmak riski azaltır; fakat güvenlik kazanımı ölçülmeden varsayılmamalıdır.
 
-## Ölü kod yaşam döngüsü
+## 7. Ölü kod yaşam döngüsü
 
-```text
-Keşif → Triyaj → Sahip atama → Kanıt toplama → Onay → Karantina → Silme → Canary → Kapanış
-```
+- Keşif
+- Triyaj
+- Sahip atama
+- Kanıt toplama
+- Onay
+- Karantina
+- Silme
+- Canary
+- Kapanış
+{: .flow}
 
 1. **Keşif ve envanter.** Tarayıcı çıktıları tekilleştirilir; depo, servis, ortam, dil, bileşen, aday türü, tespit tarihi ve güven seviyesi kaydedilir. Adaylar otomatik silme kuyruğuna değil, **inceleme** kuyruğuna girer.
 2. **Sahiplik eşlemesi.** `CODEOWNERS` dosyası depo sahipliğini ve inceleme sorumluluğunu tanımlar. `git blame` tarihsel katkıyı gösterir ama bugünkü ürün sahipliğini kanıtlamaz. Servis kataloğu, ekip kataloğu, nöbet rotası ve ürün alanı eşlemesiyle doğrulanmalıdır.
@@ -170,7 +187,7 @@ Keşif → Triyaj → Sahip atama → Kanıt toplama → Onay → Karantina → 
 5. **Silme hazırlığı.** Bağımlı kod, yapılandırma, şema, IAM, IaC, test, alarm, dashboard, runbook, doküman ve deployment parametreleri listelenir. Değişiklik küçük, incelenebilir ve mümkünse tek amaçlı bir PR/commit olmalıdır.
 6. **Doğrulama ve kapanış.** CI, entegrasyon, sözleşme, güvenlik, performans ve canary sonuçları kaydedilir. Envanter, servis kataloğu, API kataloğu, CMDB, SBOM, bayrak kaydı ve runbook güncellenir. Muafiyet varsa son kullanma tarihi atanır.
 
-## Yönetişim: Kim neye karar verir?
+## 8. Yönetişim: Kim neye karar verir?
 
 Önerdiğim işleyiş modeli şu: merkezi platform veya mimari ekibi standardı ve görünürlüğü sağlar; alan (domain) ekipleri adaylar hakkında teknik ve iş kararını verir; risk fonksiyonları kritik kontrollerde onay ya da veto hakkına sahiptir. Bunu bir RACI tablosuyla netleştirmek işe yarar:
 
@@ -193,7 +210,7 @@ Karar hakları da açıkça yazılmalı:
 - **Güvenlik / uyum / hukuk:** Kontrol ya da düzenleyici yükümlülük etkisi olan adaylarda onay.
 - **Değişiklik kurulu (CAB):** Kurum politikasına göre kritik üretim değişiklikleri. Düşük riskli standart değişikliklerde önceden onaylanmış otomasyon tercih edilir.
 
-## Güvenli silme
+## 9. Güvenli silme
 
 Silme kapsamı yalnızca kaynak satırlarından oluşmaz. "Atomik silme" de her zaman tek bir transaction ya da tek bir commit anlamına gelmez: dağıtık sistemlerde bileşenler farklı zamanlarda geçiş yapar. Doğru hedef, **uyumlu ara durumlar** üzerinden kontrollü bir söküm yapmaktır.
 
@@ -206,6 +223,7 @@ Silme kapsamı yalnızca kaynak satırlarından oluşmaz. "Atomik silme" de her 
 - Bağımlılık manifesti, lockfile, build eklentileri, container katmanları ve SBOM
 - IaC, Kubernetes, bulut kaynakları, IAM, DNS, kuyruklar, depolama ve yedek ilişkileri
 - Testler, fixture'lar, mock'lar, dashboard'lar, alarmlar, runbook'lar, wiki ve destek dokümanları
+{: .checklist}
 
 ### Veritabanında expand-contract
 
@@ -218,7 +236,7 @@ Silme kapsamı yalnızca kaynak satırlarından oluşmaz. "Atomik silme" de her 
 
 Silme PR'ı ayrı tutulur; değişiklik kaydı, artifact sürümü, migration ve yapılandırma değişiklikleri birbirine bağlanır. `git revert` kodu geri alabilir; ama yıkıcı bir migration'ı, dış sistemde yapılan silmeyi, veri dönüşümünü ya da geri alınamaz yan etkileri geri getirmez. Bu yüzden geri dönüş planı yedekten geri yükleme, ileriye dönük düzeltme (forward-fix), özelliği kapatma, şema uyumluluğu ve veri kurtarma adımlarını ayrı ayrı tanımlamalıdır. AWS Well-Architected'ın operasyonel mükemmellik rehberi de değişikliğin etkisini sınırlamayı, geri dönüş planını belgelemeyi ve dağıtım sonrası izlemeyle geri dönüş kararını hızlandırmayı vurgular.
 
-## Yayına alma ve olay planı
+## 10. Yayına alma ve olay planı
 
 Canary, değişikliğin sistemin sınırlı bir bölümünde ve belirli bir süre boyunca uygulanıp kontrol grubuyla karşılaştırılmasıdır. Google SRE Workbook, ölçümlerin değişikliğe atfedilebilir ve temsil edici olması gerektiğinin altını çizer.
 
@@ -248,7 +266,7 @@ Bir şeyler ters giderse izlenecek sıra:
 4. Olay yöneticisi, servis sahibi, DBA, güvenlik/uyum ve iş birimini etki düzeyine göre çağır.
 5. Olay sonrası kök nedeni, kaçan kanıtı, test boşluğunu ve eklenecek yeni kalite kapısını kaydet.
 
-## CI/CD kalite kapıları
+## 11. CI/CD kalite kapıları
 
 CI/CD'nin buradaki hedefi bütün eski kodu tek seferde temizlemek değil; **yeni ölü kod borcunun birikmesini önlemek** ve yüksek riskli silme değişikliklerini kontrol altında tutmaktır. SonarQube'un quality gate özelliği, analiz sonuçlarını tanımlı koşullarla karşılaştırıp birleştirme ya da yayın kararında kullanılabilir. Ancak quality gate tek başına çalışma zamanındaki kullanımı ya da iş gerekliliğini ölçmez. Pipeline'ın kendisini [CI/CD Pipeline Nedir?]({{ '/2026/04/08/ci-cd-pipline-nedir/' | relative_url }}) yazısında anlatmıştım; buraya eklenecek kapılar şunlar:
 
@@ -280,7 +298,7 @@ if new_feature_flag:
     require(cleanup_issue)
 ```
 
-## Ölçüm: KPI ve iş gerekçesi
+## 12. Ölçüm: KPI ve iş gerekçesi
 
 ### İzlenecek göstergeler
 
@@ -300,6 +318,7 @@ if new_feature_flag:
 Yönetime sunulacak hesabın iskeleti basit:
 
 > **Net yıllık fayda** = doğrulanmış altyapı tasarrufu + lisans/barındırma tasarrufu + bakım eforu kazanımı + risk azaltımının beklenen değeri − analiz, değişiklik, test ve yayına alma maliyeti
+{: .callout}
 
 Risk azaltımının beklenen değeri kabaca **olasılık × etki** ile modellenebilir. Ancak bir güvenlik olayının ya da mevzuat ihlalinin olasılığı belirsizdir; bu sayıları kesin gerçek gibi sunmayın, düşük/orta/yüksek senaryolar ve varsayımlarla gösterin.
 
@@ -310,9 +329,10 @@ Risk azaltımının beklenen değeri kabaca **olasılık × etki** ile modellene
 | Üretkenlik | Build/test süresi, güncelleme ve olay eforu | CI analitiği, iş kayıtları |
 | Operasyonel dayanıklılık | Alarm gürültüsü, başarısız değişiklik, kurtarma süresi | Gözlemlenebilirlik ve olay kayıtları |
 
-"Her sprint'in %10–20'si teknik borca" gibi sabit oranlar sık önerilir ama evrensel bir standart değildir. Kapasiteyi mevcut teknik borca, riske, ürün önceliklerine ve ölçülen bakım yüküne göre portföy bazında ayırmak daha sağlıklıdır.
+> **Kapasite ayırma:** "Her sprint'in %10–20'si teknik borca" gibi sabit oranlar sık önerilir ama evrensel bir standart değildir. Kapasiteyi mevcut teknik borca, riske, ürün önceliklerine ve ölçülen bakım yüküne göre portföy bazında ayırmak daha sağlıklıdır.
+{: .callout .warning}
 
-## 30/60/90 günlük uygulama planı
+## 13. 30/60/90 günlük uygulama planı
 
 | Dönem | Hedef | Çıktılar | Başarı ölçütü |
 |---|---|---|---|
@@ -329,7 +349,7 @@ Risk azaltımının beklenen değeri kabaca **olasılık × etki** ile modellene
 5. Veritabanı yordamları, view'lar ve şema
 6. Public API'ler, kritik kontroller ve altyapı kaynakları
 
-## Şablonlar ve kontrol listeleri
+## 14. Şablonlar ve kontrol listeleri
 
 ### Aday kayıt şablonu
 
@@ -349,17 +369,18 @@ Risk azaltımının beklenen değeri kabaca **olasılık × etki** ile modellene
 
 ### Silmeden önce kontrol listesi
 
-1. Statik analiz ve çağrı grafiği sonuçları incelendi.
-2. Yansıma, DI, eklentiler, event'ler, üretilmiş kod ve çerçeve keşfi kontrol edildi.
-3. Test kapsamı ve üretim telemetrisinin kapsamı ve sürekliliği doğrulandı.
-4. API, SDK, webhook, kuyruk ve depolar arası tüketiciler tarandı.
-5. Batch, dönemsel, yıllık ve manuel tetiklenen işler kontrol edildi.
-6. Veritabanı trigger'ları, yordamlar, view'lar, işler, yetkiler ve dış raporlama tüketicileri kontrol edildi.
-7. Güvenlik, hukuki muhafaza, saklama süresi ve denetim kontrolüne etkisi değerlendirildi.
-8. Sahip, CODEOWNERS ve servis kataloğu üzerinden doğrulandı.
-9. Feature flag, IaC, secret, IAM, alarm, dashboard ve runbook bağımlılıkları listelendi.
-10. Test, canary, SLO eşiği, geri dönüş ve veri kurtarma planı onaylandı.
-11. PR/commit tek amaçlı; kapanışta envanter ve dokümanlar güncellenecek.
+- Statik analiz ve çağrı grafiği sonuçları incelendi.
+- Yansıma, DI, eklentiler, event'ler, üretilmiş kod ve çerçeve keşfi kontrol edildi.
+- Test kapsamı ve üretim telemetrisinin kapsamı ve sürekliliği doğrulandı.
+- API, SDK, webhook, kuyruk ve depolar arası tüketiciler tarandı.
+- Batch, dönemsel, yıllık ve manuel tetiklenen işler kontrol edildi.
+- Veritabanı trigger'ları, yordamlar, view'lar, işler, yetkiler ve dış raporlama tüketicileri kontrol edildi.
+- Güvenlik, hukuki muhafaza, saklama süresi ve denetim kontrolüne etkisi değerlendirildi.
+- Sahip, CODEOWNERS ve servis kataloğu üzerinden doğrulandı.
+- Feature flag, IaC, secret, IAM, alarm, dashboard ve runbook bağımlılıkları listelendi.
+- Test, canary, SLO eşiği, geri dönüş ve veri kurtarma planı onaylandı.
+- PR/commit tek amaçlı; kapanışta envanter ve dokümanlar güncellenecek.
+{: .checklist}
 
 ### Muafiyet kaydı alanları
 
@@ -397,7 +418,7 @@ Revert / geri yükleme / forward-fix; sorumlu kişi
 Envanter, SBOM, servis kataloğu ve runbook güncellendi mi?
 ```
 
-## Teknik örnekler
+## 15. Teknik örnekler
 
 ### PostgreSQL'de fonksiyon kullanımını incelemek
 
@@ -469,7 +490,7 @@ GERİ DÖN:
 - zorunlu bir denetim ya da güvenlik kontrolü kayboldu
 ```
 
-## Sınırlar: Yanlış pozitif ve yanlış negatifler
+## 16. Sınırlar: Yanlış pozitif ve yanlış negatifler
 
 | Hata türü | Örnek | Nasıl azaltılır? |
 |---|---|---|
@@ -479,7 +500,8 @@ GERİ DÖN:
 | Ortam farkı | Prod/staging, bölge, tenant, platform ya da yapılandırma farkları | Yapılandırma matrisi ve temsil edici testler |
 | Gelecek ihtiyacı | Henüz kullanılmayan ama sözleşme ya da yol haritası gereği korunması gereken kod | Ürün yaşam döngüsü ve son kullanma/gözden geçirme mekanizması |
 
-Kısacası genel amaçlı sistemlerde tek bir statik analiz, bytecode incelemesi, kapsam raporu, sıfır API trafiği ya da LLM çıktısı **%100 ölü kod kanıtı** sağlayamaz. Pratikte "kesin tespit"; kapsamı tanımlanmış bir sistem, yeterli bir gözlem süresi, birbirinden bağımsız kanıtlar, bilinen istisnalar ve yetkili onayların birleşimidir.
+> **Kesinlik beyanı:** Genel amaçlı sistemlerde tek bir statik analiz, bytecode incelemesi, kapsam raporu, sıfır API trafiği ya da LLM çıktısı **%100 ölü kod kanıtı** sağlayamaz. Pratikte "kesin tespit"; kapsamı tanımlanmış bir sistem, yeterli bir gözlem süresi, birbirinden bağımsız kanıtlar, bilinen istisnalar ve yetkili onayların birleşimidir.
+{: .callout .danger}
 
 Bu yazı genel bir kurumsal çerçevedir; hukuki görüş, belirli bir teknoloji için araç seçimi ya da canlı bir sistemde silme talimatı değildir. Kurum standardına dönüştürmeden önce araç isimleri, risk eşikleri, gözlem süreleri, onay mercileri, veri saklama takvimi ve geri dönüş hedefleri (RTO/RPO) kurumun kendi politikasıyla doldurulmalıdır.
 
