@@ -35,12 +35,46 @@
     t.parentNode.insertBefore(w, t); w.appendChild(t);
   });
 
+  // Turkish-aware, accent-insensitive: "ogrenme" matches "Öğrenme", "ingilizce" matches "İngilizce".
+  var norm = function (s) { return (s || "").toLocaleLowerCase("tr").replace(/ı/g, "i").normalize("NFD").replace(/[̀-ͯ]/g, ""); };
+
+  // Table of contents (posts with `toc: true`): highlight the section in view, filter sections, print.
+  var toc = document.querySelector(".toc");
+  if (toc) {
+    var links = {}, groups = [], cur = null;
+    toc.querySelectorAll("nav a").forEach(function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+    Array.prototype.forEach.call(document.querySelector(".post-body .prose").children, function (el) {
+      if (el.tagName === "H2") groups.push(cur = { h: el, els: [] });
+      if (cur) cur.els.push(el);
+    });
+    if ("IntersectionObserver" in window) {
+      var spy = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (!e.isIntersecting || !links[e.target.id]) return;
+          toc.querySelectorAll("a.active").forEach(function (a) { a.classList.remove("active"); });
+          links[e.target.id].classList.add("active");
+        });
+      }, { rootMargin: "-80px 0px -70% 0px" });
+      groups.forEach(function (g) { spy.observe(g.h); });
+    }
+    var q = document.getElementById("toc-search"), empty = toc.querySelector(".toc-empty");
+    q.addEventListener("input", function () {
+      var s = norm(q.value.trim()), any = false;
+      groups.forEach(function (g) {
+        var hit = !s || g.els.some(function (el) { return norm(el.textContent).indexOf(s) > -1; });
+        g.els.forEach(function (el) { el.hidden = !hit; });
+        if (links[g.h.id]) links[g.h.id].parentNode.hidden = !hit;
+        any = any || hit;
+      });
+      empty.hidden = any;
+    });
+    toc.querySelector("[data-print]").addEventListener("click", function () { window.print(); });
+  }
+
   // Search page (client-side over /search.json).
   var input = document.getElementById("search-input");
   if (!input || !window.SEARCH_INDEX) return;
   var list = document.getElementById("search-results"), status = document.getElementById("search-status"), data = null;
-  // Turkish-aware, accent-insensitive: "ogrenme" matches "Öğrenme", "ingilizce" matches "İngilizce".
-  var norm = function (s) { return (s || "").toLocaleLowerCase("tr").replace(/ı/g, "i").normalize("NFD").replace(/[̀-ͯ]/g, ""); };
   var esc = function (s) { return s.replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
 
   function render() {

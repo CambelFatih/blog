@@ -58,6 +58,8 @@ Bu site **Fatih Furkan Çambel'in kişisel blogudur** ve **Claude tarafından y�
 - Kod içinde `{{` veya `{%` geçiyorsa o bloğu `{% raw %}` … `{% endraw %}` arasına al, yoksa Liquid derlemeyi bozar.
 - YouTube: `<iframe src="https://www.youtube.com/embed/ID" allowfullscreen></iframe>` (CSS otomatik 16:9 yapar).
 - Geniş tablolar otomatik yatay kaydırılır; ek bir şey gerekmez.
+- **Uzun yazılar** (rapor/rehber): front matter'a `toc: true` ekle. Geniş ekranda solda yapışkan, mobilde üstte açılır içindekiler (`##` başlıklarından), yazı içi bölüm arama ve "Yazdır / PDF" düğmesi çıkar. Bölüm numarası istenirse başlığa yaz (`## 1. Kapsam`).
+- **Bileşenler** (kramdown sınıf ekleri, `main.css`): blok alıntının altına `{: .callout}` / `{: .callout .warning}` / `.danger` / `.success` → renkli not kutusu; listenin altına `{: .metrics}` (her maddenin başındaki `**kalın**` büyük rakam olur, 2×2 kart), `{: .flow}` (oklu adım şeması), `{: .checklist}` (onay kutulu liste); satır içinde `**E0**{: .badge}` → rozet; paragrafın altına `{: .lead}` → giriş paragrafı. Örnek: `_posts/2026-11-10-kurumsal-olu-kod-yonetimi.md`.
 
 ### SEO kuralları (her yeni yazıda uygula)
 
@@ -128,5 +130,5 @@ Hata veya uyarı olmamalı. Sonra `_site/` içinde kontrol et:
 ## Tasarım ilkeleri
 
 - Tek CSS dosyası (araç yazılarının kendi dosyası hariç, bkz. yukarı), renkler `:root` token'larında; koyu mod hem işletim sistemi tercihini hem `data-theme` anahtarını izler. Yeni renk eklerken iki temayı da tanımla.
-- JS minimum: tema anahtarı, kod kopyalama, tablo sarmalama, arama. Framework ekleme.
+- JS minimum: tema anahtarı, kod kopyalama, tablo sarmalama, arama, içindekiler (`toc: true`). Framework ekleme.
 - Arayüz metinleri Türkçe.

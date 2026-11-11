@@ -20,9 +20,36 @@ layout: default
   </figure>
   {%- endif %}
 
+  {%- if page.toc %}
+  <div class="post-body container">
+    <aside class="toc" aria-label="İçindekiler">
+      <details open>
+        <summary>İçindekiler</summary>
+        <div class="toc-tools">
+          <input type="search" id="toc-search" placeholder="Bu yazıda ara…" aria-label="Bu yazıda ara">
+          <button type="button" class="button" data-print>Yazdır / PDF</button>
+        </div>
+        <p class="toc-empty muted" hidden>Eşleşen bölüm yok.</p>
+        <nav><ul>
+          {%- comment %} Server-side TOC from kramdown's <h2 id="…"> output; no JS needed for the links. {% endcomment %}
+          {%- assign parts = content | split: '<h2 id="' %}
+          {%- for part in parts offset: 1 %}
+          {%- assign id = part | split: '"' | first %}
+          {%- assign label = part | split: '</h2>' | first | remove_first: id | remove_first: '">' | strip_html | strip %}
+          <li><a href="#{{ id }}">{{ label }}</a></li>
+          {%- endfor %}
+        </ul></nav>
+      </details>
+    </aside>
+    <div class="prose">
+{{ content }}
+    </div>
+  </div>
+  {%- else %}
   <div class="prose container narrow">
 {{ content }}
   </div>
+  {%- endif %}
 
   <footer class="post-footer container narrow">
     {%- if page.tags.size > 0 %}
